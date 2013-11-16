@@ -1,9 +1,9 @@
-/*Õâ¸ö¼òµ¥µÄ³ÌÐòÊÇÓÃÀ´¸ø´óÑ§ÎïÀíÊµÑé¿Î³ÌÖÐÃûÎª
-ÓÃ²£¶û¹²ÕñÒÇÑÐ¾¿ÊÜÆÈÕñ¶¯µÄÊµÑéËùÐ´µÄÒ»¸ö¼òÒ×¼ÆËãÆ÷
-ÓÃÓÚ¼ÆËãÊµÑéÏîÄ¿¶þÖÐÏàÎ»²î¼ÆËãÒÔ¼°Ç¿ÆÈÁ¦¾ØÖÜÆÚÓëµ¯»É¶ÔÓ¦¹ÌÓÐÖÜÆÚËùÊ¹ÓÃ
+ï»¿/*è¿™ä¸ªç®€å•çš„ç¨‹åºæ˜¯ç”¨æ¥ç»™å¤§å­¦ç‰©ç†å®žéªŒè¯¾ç¨‹ä¸­åä¸º
+ç”¨çŽ»å°”å…±æŒ¯ä»ªç ”ç©¶å—è¿«æŒ¯åŠ¨çš„å®žéªŒæ‰€å†™çš„ä¸€ä¸ªç®€æ˜“è®¡ç®—å™¨
+ç”¨äºŽè®¡ç®—å®žéªŒé¡¹ç›®äºŒä¸­ç›¸ä½å·®è®¡ç®—ä»¥åŠå¼ºè¿«åŠ›çŸ©å‘¨æœŸä¸Žå¼¹ç°§å¯¹åº”å›ºæœ‰å‘¨æœŸæ‰€ä½¿ç”¨
 Ver 0.1.6e Type CTP
-ÒòÎªÊý¾Ý¾Í15¸ö¶øÇÒ¼¸ºõÊÇÒ»´ÎÐÔµÄ²úÎï
-ËùÒÔ¾Í²»ÓÃÊý×éÊ²Ã´µÄÁË*/
+å› ä¸ºæ•°æ®å°±15ä¸ªè€Œä¸”å‡ ä¹Žæ˜¯ä¸€æ¬¡æ€§çš„äº§ç‰©
+æ‰€ä»¥å°±ä¸ç”¨æ•°ç»„ä»€ä¹ˆçš„äº†*/
 #include <stdio.h>
 #include <math.h>
 void line();
@@ -11,24 +11,24 @@ int main()
 {
 	int i;
 	float T0=0,T=0,pi=3.1415926,b,up,dn,tge,rad,anw,TT; 
-	printf("ÊµÑéÊý¾Ý¼ÆËãÓÃ¼òÒ×¼ÆËãÆ÷ Ver 0.1.6e Type CTP\n");
-	printf("Ïà¹ØÊ¹ÓÃËµÃ÷Çë²éÔÄÔ´´úÂë±¸×¢.\n"); 
+	printf("å®žéªŒæ•°æ®è®¡ç®—ç”¨ç®€æ˜“è®¡ç®—å™¨ Ver 0.1.6e Type CTP\n");
+	printf("ç›¸å…³ä½¿ç”¨è¯´æ˜Žè¯·æŸ¥é˜…æºä»£ç å¤‡æ³¨.\n"); 
 	line(); 
-	printf("ÊµÑéÏîÄ¿:ÓÃ²£¶û¹²ÕñÒÇÑÐ¾¿ÊÜÆÈÕñ¶¯\n");
-	printf("Êý¾ÝÀ´Ô´:ÊµÑéÏîÄ¿¶þÏà¹ØÄÚÈÝ.\n");
+	printf("å®žéªŒé¡¹ç›®:ç”¨çŽ»å°”å…±æŒ¯ä»ªç ”ç©¶å—è¿«æŒ¯åŠ¨\n");
+	printf("æ•°æ®æ¥æº:å®žéªŒé¡¹ç›®äºŒç›¸å…³å†…å®¹.\n");
 	line();
-	printf("ÇëÒÔ¿Õ¸ñÎª¼ä¸ô·Ö±ðÊäÈëT¼°T0Öµ,ÒÔ»Ø³µÈ·ÈÏ:\n");
-	printf("ÊäÈë0 0½áÊø¼ÆËã\n");
+	printf("è¯·ä»¥ç©ºæ ¼ä¸ºé—´éš”åˆ†åˆ«è¾“å…¥TåŠT0å€¼,ä»¥å›žè½¦ç¡®è®¤:\n");
+	printf("è¾“å…¥0 0ç»“æŸè®¡ç®—\n");
 	line(); 
-	printf("ÇëÊäÈë×èÄáÏµÊýb:\n");
-	printf("×èÄáÏµÊýb = ");
+	printf("è¯·è¾“å…¥é˜»å°¼ç³»æ•°b:\n");
+	printf("é˜»å°¼ç³»æ•°b = ");
 	scanf("%f",&b); 
 	line(); 
 	for (i=1;i<=500;i++)
 	{
 		printf("Data %d = ",i);
 		scanf("%f %f",&T,&T0);
-		if (T==0&&T0==0)		//ÊäÈë0 0Ìø³öÑ­»· 
+		if (T==0&&T0==0)		//è¾“å…¥0 0è·³å‡ºå¾ªçŽ¯ 
 		{
 			line(); 
 			break; 
@@ -37,15 +37,15 @@ int main()
 		dn=pi*(T*T-T0*T0);
 		tge=up/dn;
 		rad=atan(tge);
-		anw=(rad/pi)*180;		//»¡¶ÈÖÆ×ª»»³É½Ç¶ÈÖµ 
-		if (anw<=0)		//¸º½Ç²¹Õý 
+		anw=(rad/pi)*180;		//å¼§åº¦åˆ¶è½¬æ¢æˆè§’åº¦å€¼ 
+		if (anw<=0)		//è´Ÿè§’è¡¥æ­£ 
 		{ 
 			anw=180+anw; 			
 		} 
 		TT=T0/T;
 		line();
-		printf("ÏàÎ»²î¼ÆËãÖµ: %.1f\n",anw);
-		printf("±ÈÖµ: %1.3f\n",TT); 
+		printf("ç›¸ä½å·®è®¡ç®—å€¼: %.1f\n",anw);
+		printf("æ¯”å€¼: %1.3f\n",TT); 
 		line(); 
 	} 	 
 }

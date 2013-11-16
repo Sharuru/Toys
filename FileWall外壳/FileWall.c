@@ -1,23 +1,23 @@
-/*ÕâÊÇÒ»¸öºÜ×°±ÆµÄFileWallÍâ¿Ç
-ÔËĞĞÇ°»áÉ·ÓĞ½éÊÂµÄÏÔÊ¾³öÒ»Ğ©²»Ã÷¾õÀ÷µÄ¶«Î÷
-È»ºóÔÚ¶ÁÈ¡ºó»áÔËĞĞ³ÌĞò
-Ïà¶ÔÂ·¾¶*/ 
+ï»¿/*è¿™æ˜¯ä¸€ä¸ªå¾ˆè£…é€¼çš„FileWallå¤–å£³
+è¿è¡Œå‰ä¼šç…æœ‰ä»‹äº‹çš„æ˜¾ç¤ºå‡ºä¸€äº›ä¸æ˜è§‰å‰çš„ä¸œè¥¿
+ç„¶ååœ¨è¯»å–åä¼šè¿è¡Œç¨‹åº
+ç›¸å¯¹è·¯å¾„*/ 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 int main(void) 
 { 
 	int i;
-	system("title FileWall");		//ÉèÖÃ±êÌâ 
-	system("mode con cols=55 lines=11");		//ÉèÖÃ´°Ìå´óĞ¡ 
+	system("title FileWall");		//è®¾ç½®æ ‡é¢˜ 
+	system("mode con cols=55 lines=11");		//è®¾ç½®çª—ä½“å¤§å° 
 	printf("\n"); 
 	printf("=======================================================");
 	printf("                FileWall HIBIKI Edition                ");
 	printf("=======================================================");
-	printf("ÕıÔÚÈ·ÈÏÃÜÔ¿...");
+	printf("æ­£åœ¨ç¡®è®¤å¯†é’¥...");
 	Sleep(300); 
-	printf("È·ÈÏ.\n");
-	printf("\nÕıÔÚ³õÊ¼»¯ÔËĞĞ»·¾³...\n");
+	printf("ç¡®è®¤.\n");
+	printf("\næ­£åœ¨åˆå§‹åŒ–è¿è¡Œç¯å¢ƒ...\n");
 	printf("["); 
 	Sleep(100);
 	for (i=0;i<=52;i++)
@@ -26,8 +26,8 @@ int main(void)
 		Sleep(25);
 	}
 	printf("]\n");
-	printf("                    ³õÊ¼»¯Íê±Ï                  \n"); 
+	printf("                    åˆå§‹åŒ–å®Œæ¯•                  \n"); 
 	Sleep(400);
-	system("start "" \\ÉÏ»úÓäÔÃ¼Æ»®\\Others\\FileWall_Portable\\FileWall.exe"); //ÔËĞĞ³ÌĞò 
+	system("start "" \\ä¸Šæœºæ„‰æ‚¦è®¡åˆ’\\Others\\FileWall_Portable\\FileWall.exe"); //è¿è¡Œç¨‹åº 
 	return 0; 
 }
