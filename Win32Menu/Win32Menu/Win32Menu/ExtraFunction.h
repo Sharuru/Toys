@@ -5,10 +5,11 @@ class ExtraFunction
 public:
 	ExtraFunction();
 	~ExtraFunction();
-
-	//HANDLE thisConsole;
+	
+	HANDLE thisConsole;
 	CONSOLE_CURSOR_INFO cursor_info;
 
 	void gotoXY(int x, int y);
+	void setColor(int type);
 };
 
