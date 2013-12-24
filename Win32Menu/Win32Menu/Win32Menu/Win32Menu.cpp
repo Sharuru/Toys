@@ -14,7 +14,8 @@ using namespace std;
 #define LEFT 0x4B
 #define RIGHT 0x4D
 
-char menu[7][100] = { "", "This is Menu 1.", "This is Menu 2.", "This is Menu 3. ", "This is Menu 4.", "This is Menu 5." };
+char menu[7][100] = { "", "This is Menu 1.", "This is Menu 2.", "This is Menu 3. ", "This is Menu 4.", "This is Menu 5.", "" };
+//Caution:Messy Code Problem would happen if you do not declare the first and the last area.
 
 int main(int argc, char* argv[])
 {
@@ -22,7 +23,7 @@ int main(int argc, char* argv[])
 	int x, y;
 	char key;
 	/*	Program Start	*/
-	cout << "Use UP and DOWN to choose, RIGHT to confirm, Left to exit." ;
+	cout << "Use UP and DOWN to choose, RIGHT to confirm, LEFT to exit." ;
 	extra.gotoXY(2, 2); cout << "-> " ;
 	extra.setColor(1);
 	cout << menu[1] << endl;
@@ -33,8 +34,8 @@ int main(int argc, char* argv[])
 	{		
 		_getch();	//Throw first four code		
 		key = _getch();
-		extra.gotoXY(17, 5); cout << "                   ";	//Clean Exit Notice For Debug
-		extra.gotoXY(16, 5); cout << "                                 ";	//Clean Choosed Notice For Debug
+	//	extra.gotoXY(17, 5); cout << "                   ";	//Clean Exit Notice For Debug
+	//	extra.gotoXY(16, 5); cout << "                                 ";	//Clean Choosed Notice For Debug
 		if (key == UP)	//Key UP
 		{
 			x = x - 1;
