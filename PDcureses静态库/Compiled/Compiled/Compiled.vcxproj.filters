@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="addch.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="addchstr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="addstr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="attr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="beep.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="bkgd.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="border.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="clear.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="color.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="delch.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="deleteln.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="deprec.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="getch.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="getstr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="getyx.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="inch.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="inchstr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="initscr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="inopts.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="insch.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="insstr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="instr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="kernel.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="keyname.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mouse.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="move.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="outopts.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="overlay.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pad.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="panel.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pdcclip.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pdcdisp.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pdcgetsc.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pdckbd.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pdcscrn.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pdcsetsc.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pdcutil.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="printw.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="refresh.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="scanw.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="scr_dump.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="scroll.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="slk.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="termattr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="terminfo.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="touch.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="util.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="window.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pdcwin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="curspriv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="curses.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="panel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="term.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
