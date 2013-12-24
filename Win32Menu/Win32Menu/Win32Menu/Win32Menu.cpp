@@ -1,57 +1,67 @@
-// Win32Menu.cpp : ¶¨Òå¿ØÖÆÌ¨Ó¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
+ï»¿// Win32Menu.cpp : å®šä¹‰æ§åˆ¶å°åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
 //
 
 #include "stdafx.h"
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
+#include "ExtraFunction.h"
 
 using namespace std;
-void gotoXY(int x, int y);
 
+#define UP 0x48
+#define DOWN 0x50
+#define LEFT 0x4B
+#define RIGHT 0x4D
+#define RegularColor "BACKGROUND_RED | BACKGROUND_GREEN |BACKGROUND_BLUE "
 int main(int argc, char* argv[])
 {
+	HANDLE thisConsole;
+	thisConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	ExtraFunction extra;
 	int x, y;
 	char key;
-	gotoXY(1, 2); cout << "-> " ;
+	/*	Program Start	*/
+	SetConsoleTextAttribute(thisConsole, BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+	cout << "Use UP and DOWN to choose, RIGHT to confirm, Left to exit." ;
+	extra.gotoXY(1, 2); cout << "-> " ;
 	cout << "This is Menu 1." << endl 
 	<< "     This is Menu 2." << endl 
 	<< "     This is Menu 3." << endl 
 	<< "     This is Menu 4." << endl 
 	<< "     This is Menu 5." << endl;
-	gotoXY(1, 2);	//Back to Top
 	x = 1, y = 2;	//initialize the data
 	while (1)	//Forever Loop
 	{		
 		_getch();	//Throw first four code		
 		key = _getch();
-		if (key == 0x48)	//Key UP
+		if (key == UP)	//Key UP
 		{
 			x = x - 1;
-			if (x <= 1 )
+			if (x <= 1 )	//Zone Control
 			{
 				x = 1;
 			}
 		}
-		else if (key == 0x50)	//Key DOWN
+		else if (key == DOWN)	//Key DOWN
 		{
 			x = x + 1;
-			if (x >= 5)
+			if (x >= 5)		//Zone Control
 			{
 				x = 5;
 			}
 		}
-		gotoXY(x - 1, y); cout << "   ";
-		gotoXY(x, y); cout << "-> ";
-		gotoXY(x + 1, y); cout << "   ";
+		else if (key == RIGHT)	//Key RIGHT
+		{
+			extra.gotoXY(9, 5); cout << "You Choosed" << x;
+		}
+		else if (key == LEFT)	//Key LEFT
+		{
+			extra.gotoXY(8, 5);	cout << "You ask Exit";
+		}
+		extra.gotoXY(x - 1, y); cout << "   ";
+		extra.gotoXY(x, y); cout << "-> ";
+		extra.gotoXY(x + 1, y); cout << "   ";
+		extra.gotoXY(10, 5); cout << "You are now choosing: " << x;
 	}			
-}
-
-
-void gotoXY(int x, int y)
-{
-	COORD coord;
-	coord.X = y;
-	coord.Y = x;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
