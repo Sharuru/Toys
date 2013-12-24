@@ -44,5 +44,6 @@ void ExtraFunction::setColor(int type)
 	}
 	else
 	{
+		;
 	}
 }
