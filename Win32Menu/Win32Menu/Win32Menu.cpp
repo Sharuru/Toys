@@ -14,9 +14,9 @@ using namespace std;
 #define LEFT 0x4B
 #define RIGHT 0x4D
 
-char obj[7][100] = { "  ", "->" };
+char obj[2][100] = { "  ", "->" };
 char menu[7][100] = { "  ", "This is Menu 1.", "This is Menu 2.", "This is Menu 3.", "This is Menu 4.", "This is Menu 5.", "  " };
-//Caution:Messy Code Problem would happen if you do not declare the first and the last area.
+//Caution:Messy Code Problem would happen if you do not declare the first and the last area when you do not use advPrint to print info
 
 int main(int argc, char* argv[])
 {
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 		if (key == UP)	//Key UP
 		{
 			x = x - 1;
-			if (x <= 1)	//Zone Control
+			if (x <= 1)		//Zone Control
 			{
 				x = 1;
 			}
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 			extra.gotoXY(17, 5); cout << "You ask Exit";
 			extra.setColor(0);
 		}
-		extra.advPrint(x, 2, obj[0], 0);
+		extra.advPrint(x, 2, obj[0], 0); 
 		extra.advPrint(x, 5, menu[x - 1], 0);
 		//extra.gotoXY(x, 2); cout << "   " << menu[x - 1];
 		extra.advPrint(x + 1, 2, obj[1], 0);

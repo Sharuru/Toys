@@ -7,6 +7,7 @@ using namespace std;
 
 ExtraFunction::ExtraFunction()
 {
+
 	thisConsole = GetStdHandle(STD_OUTPUT_HANDLE);	//Get Handle
 	/*	Set Cursor Info	*/
 	cursor_info.bVisible = false;	//Hide the Cursor 
