@@ -11,6 +11,6 @@ public:
 
 	void gotoXY(int x, int y);
 	void setColor(int type);
-
+	void advPrint(int x, int y, char menu[],int type);
 };
 

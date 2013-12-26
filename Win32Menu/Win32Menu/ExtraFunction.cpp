@@ -1,6 +1,9 @@
 ﻿#include "stdafx.h"
 #include "ExtraFunction.h"
 #include <windows.h>
+#include <iostream>
+
+using namespace std;
 
 ExtraFunction::ExtraFunction()
 {
@@ -46,4 +49,12 @@ void ExtraFunction::setColor(int type)
 	{
 		;
 	}
+}
+
+void ExtraFunction::advPrint(int x, int y, char menu[], int type)
+{
+	gotoXY(x, y);
+	setColor(type);
+	cout << menu << endl;
+	setColor(0);
 }
