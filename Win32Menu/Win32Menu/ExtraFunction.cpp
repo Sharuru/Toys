@@ -2,12 +2,12 @@
 #include "ExtraFunction.h"
 #include <windows.h>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 ExtraFunction::ExtraFunction()
 {
-
 	thisConsole = GetStdHandle(STD_OUTPUT_HANDLE);	//Get Handle
 	/*	Set Cursor Info	*/
 	cursor_info.bVisible = false;	//Hide the Cursor 
@@ -52,7 +52,7 @@ void ExtraFunction::setColor(int type)
 	}
 }
 
-void ExtraFunction::advPrint(int x, int y, char menu[], int type)
+void ExtraFunction::advPrint(int x, int y, string menu, int type)
 {
 	gotoXY(x, y);
 	setColor(type);

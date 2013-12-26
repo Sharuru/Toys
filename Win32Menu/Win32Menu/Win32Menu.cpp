@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <string>
 #include <windows.h>
 #include <conio.h>
 #include "ExtraFunction.h"
@@ -14,8 +15,8 @@ using namespace std;
 #define LEFT 0x4B
 #define RIGHT 0x4D
 
-char obj[2][100] = { "  ", "->" };
-char menu[7][100] = { "  ", "This is Menu 1.", "This is Menu 2.", "This is Menu 3.", "This is Menu 4.", "This is Menu 5.", "  " };
+string obj[2] = { "  ", "->" };
+string menu[7] = { "  ", "This is Menu 1.", "This is Menu 2.", "This is Menu 3.", "This is Menu 4.", "This is Menu 5.", "  " };
 //Caution:Messy Code Problem would happen if you do not declare the first and the last area when you do not use advPrint to print info
 
 int main(int argc, char* argv[])
@@ -23,6 +24,7 @@ int main(int argc, char* argv[])
 	ExtraFunction extra;
 	int x, y;
 	char key;
+	cout << extra.a[0];
 	/*	Program Start	*/
 	cout << "Use UP and DOWN to choose, RIGHT to confirm, LEFT to exit.";
 	extra.advPrint(2, 2, obj[1], 0);
