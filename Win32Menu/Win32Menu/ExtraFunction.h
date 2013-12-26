@@ -11,5 +11,6 @@ public:
 
 	void gotoXY(int x, int y);
 	void setColor(int type);
+
 };
 

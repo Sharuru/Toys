@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <conio.h>
 #include "ExtraFunction.h"
+#include "Text.h"
 
 using namespace std;
 
@@ -14,21 +15,19 @@ using namespace std;
 #define LEFT 0x4B
 #define RIGHT 0x4D
 
-char menu[7][100] = { "", "This is Menu 1.", "This is Menu 2.", "This is Menu 3. ", "This is Menu 4.", "This is Menu 5.", "" };
-//Caution:Messy Code Problem would happen if you do not declare the first and the last area.
-
 int main(int argc, char* argv[])
 {
 	ExtraFunction extra;
+	Text text;
 	int x, y;
 	char key;
 	/*	Program Start	*/
 	cout << "Use UP and DOWN to choose, RIGHT to confirm, LEFT to exit." ;
 	extra.gotoXY(2, 2); cout << "-> " ;
 	extra.setColor(1);
-	cout << menu[1] << endl;
-	extra.setColor(0); cout << "     "<< menu[2] << endl << "     " << menu[3] << endl
-							<< "     "<< menu[4] << endl << "     " << menu[5] << endl;
+	cout << text.a << endl;
+	/*extra.setColor(0); cout << "     "<< text.menu[2] << endl << "     " << text.menu[3] << endl
+							<< "     "<< text.menu[4] << endl << "     " << text.menu[5] << endl;*/
 	x = 1, y = 2;	//initialize the data
 	while (1)	//Forever Loop
 	{		
@@ -64,10 +63,10 @@ int main(int argc, char* argv[])
 			extra.gotoXY(17, 5); cout << "You ask Exit";
 			extra.setColor(0);
 		}
-		extra.gotoXY(x, 2); cout << "   " << menu[x - 1];
+		extra.gotoXY(x, 2); cout << "   " << text.menu[x - 1];
 		extra.gotoXY(x + 1, 2); cout << "-> ";
-		extra.setColor(1); cout << menu[x]; extra.setColor(0);
-		extra.gotoXY(x + 2, 2); cout << "   " << menu[x + 1];
+		extra.setColor(1); cout << text.menu[x]; extra.setColor(0);
+		extra.gotoXY(x + 2, 2); cout << "   " << text.menu[x + 1];
 		extra.gotoXY(15, 5); cout << "You are now choosing: " << x;
 	}			
 }

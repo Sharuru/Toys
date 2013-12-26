@@ -27,6 +27,9 @@
     <ClInclude Include="ExtraFunction.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +39,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ExtraFunction.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
