@@ -52,10 +52,17 @@ void ExtraFunction::setColor(int type)
 	}
 }
 
-void ExtraFunction::advPrint(int x, int y, string menu, int type)
+void ExtraFunction::advPrint(int x, int y, string menu, int type,int line)
 {
 	gotoXY(x, y);
 	setColor(type);
-	cout << menu << endl;
+	if (line == 1)
+	{
+		cout << menu << endl;
+	}
+	else if (line == 0)
+	{
+		cout << menu;
+	}
 	setColor(0);
 }
