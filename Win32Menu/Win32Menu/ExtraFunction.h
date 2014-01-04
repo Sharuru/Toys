@@ -1,13 +1,12 @@
 ﻿#pragma once
 #include <windows.h>
 #include <string>
+#include "Text.h"
 
 using namespace std; 
 
 class ExtraFunction
 {
-private:
-	string test[20];
 public:
 	ExtraFunction();
 	~ExtraFunction();
@@ -15,9 +14,20 @@ public:
 	HANDLE thisConsole;
 	CONSOLE_CURSOR_INFO cursor_info;
 
-	//string abc[] = { "213", "123" };
+	char key;
+
+	Text text;
+
+	const char UP = 0x48;
+	const char DOWN = 0x50;
+	const char LEFT = 0x4B;
+	const char RIGHT = 0x4D;
+
+	int flag;
+
 	void gotoXY(int x, int y);
 	void setColor(int type);
-	void advPrint(int x, int y, string menu,int type,int line);
+	void advPrint(int x, int y, string text,int type,int line);
+	int itemChooser(int x, int y, int maxItem, int fix, string item[]);
 };
 

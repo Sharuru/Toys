@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <iostream>
 #include <string>
+#include <conio.h>
 
 using namespace std;
 
@@ -14,7 +15,6 @@ ExtraFunction::ExtraFunction()
 	cursor_info.dwSize = 20;	//Cursor Width 
 	SetConsoleCursorInfo(thisConsole, &cursor_info);
 }
-
 
 ExtraFunction::~ExtraFunction()
 {
@@ -30,7 +30,7 @@ void ExtraFunction::gotoXY(int x, int y)
 
 void ExtraFunction::setColor(int type)
 {
-	if (type == 0)	
+	if (type == 0)	//Classic
 	{
 		SetConsoleTextAttribute(thisConsole, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN );
 	}		
@@ -52,17 +52,53 @@ void ExtraFunction::setColor(int type)
 	}
 }
 
-void ExtraFunction::advPrint(int x, int y, string menu, int type,int line)
+void ExtraFunction::advPrint(int x, int y, string text, int type,int line)
 {
 	gotoXY(x, y);
 	setColor(type);
 	if (line == 1)
 	{
-		cout << menu << endl;
+		cout << text << endl;
 	}
 	else if (line == 0)
 	{
-		cout << menu;
+		cout << text;
 	}
 	setColor(0);
+}
+
+int ExtraFunction::itemChooser(int x, int y, int maxItem, int fix, string item[])
+{
+	flag = 2;	//initialize the data
+	_getch();	//Throw first four code		
+	key = _getch();
+	if (key == UP)	//Key UP
+	{
+		x = x - 1;
+		if (x <= 1)		//Zone Control
+		{
+			x = 1;
+		}
+	}
+	else if (key == DOWN)	//Key DOWN
+	{
+		x = x + 1;
+		if (x >= maxItem)		//Zone Control
+		{
+			x = maxItem;
+		}
+	}
+	else if (key == RIGHT)	//Key RIGHT
+	{
+		flag = 1;
+	}
+	else if (key == LEFT)	//Key LEFT
+	{
+		flag = 0;
+	}
+	gotoXY(x + fix, y); cout << text.obj[2] << item[x - 1];
+	//advPrint(x + fix + 1, y, text.obj[1], 0, 1);
+	advPrint(x + fix + 1, y + 3, item[x], 1, 1);
+	gotoXY(x + fix + 2, y); cout << text.obj[2] << item[x + 1];
+	return x;
 }

@@ -8,79 +8,59 @@
 #include <windows.h>
 #include <conio.h>
 #include "ExtraFunction.h"
+#include "Text.h"
 
 using namespace std;
-
-#define UP 0x48
-#define DOWN 0x50
-#define LEFT 0x4B
-#define RIGHT 0x4D
-
-string obj[3] = { "  ", "->","   ",};
-string menu[7] = { "  ", "This is Menu 1.", "This is Menu 2.", "This is Menu 3.", "This is Menu 4.", "This is Menu 5.", "  " };
-//Caution:Messy Code Problem would happen if you do not declare the first and the last area when you do not use advPrint to print info
 
 int main(int argc, char* argv[])
 {
 	ExtraFunction extra;
+	Text text;
 	int x, y;
 	char key;
 	/*	Program Start	*/
-	cout << "Use UP and DOWN to choose, RIGHT to confirm, LEFT to exit.";
-	extra.advPrint(2, 2, obj[1], 0, 1);
-	extra.advPrint(2, 5, menu[1], 1, 1);
-	cout << setw(20) << menu[2] << endl
-		 << setw(20) << menu[3] << endl
-		 << setw(20) << menu[4] << endl
-		 << setw(20) << menu[5] << endl;
-	//extra.advPrint(3, 5, menu[2], 0);
-	//extra.advPrint(4, 5, menu[3], 0);
-	//extra.advPrint(5, 5, menu[4], 0);
-	//extra.advPrint(6, 5, menu[5], 0);
+	cout << "Use UP and DOWN to choose, RIGHT to confirm, LEFT to exit." << endl;
+	cout << "If you have input blocking problem, please hit SPACE.";
+	//extra.advPrint(4, 3, text.obj[1], 0, 1);
+	extra.advPrint(4, 6, text.menu[1], 1, 1);
+	cout << setw(21) << text.menu[2] << endl
+	     << setw(32) << text.menu[3] << endl
+	     << setw(21) << text.menu[4] << endl
+         << setw(21) << text.menu[5] << endl;
 	x = 1, y = 2;	//initialize the data
+	MainScr:
 	while (1)	//Forever Loop
 	{
-		_getch();	//Throw first four code		
-		key = _getch();
-		if (key == UP)	//Key UP
-		{
-			x = x - 1;
-			if (x <= 1)		//Zone Control
-			{
-				x = 1;
-			}
-		}
-		else if (key == DOWN)	//Key DOWN
-		{
-			x = x + 1;
-			if (x >= 5)		//Zone Control
-			{
-				x = 5;
-			}
-		}
-		else if (key == RIGHT)	//Key RIGHT
+		x = extra.itemChooser(x,3,5,2,text.menu);
+		extra.gotoXY(15, 5); cout << "You are now choosing: " << x << "   Flag = " << extra.flag;
+		if (extra.flag == 1)
 		{
 			extra.setColor(2);
 			extra.gotoXY(16, 5); cout << "You Choosed: " << x;
 			extra.setColor(0);
+			if (x == 3)
+			{
+				goto Sub3;
+			}
 		}
-		else if (key == LEFT)	//Key LEFT
+		else if (extra.flag == 0)
 		{
 			extra.advPrint(17, 5, "You ask Exit", 3, 0);
-			//extra.setColor(3);
-			//extra.gotoXY(17, 5); cout << "You ask Exit";
-			//extra.setColor(0);
 		}
-		//extra.advPrint(x, 2, obj[0], 0); 
-		//extra.advPrint(x, 5, menu[x - 1], 0);
-		extra.gotoXY(x, 2); cout << obj[2] << menu[x - 1];
-		extra.advPrint(x + 1, 2, obj[1], 0, 1);
-		//extra.gotoXY(x + 1, 2); cout << "-> ";
-		extra.advPrint(x + 1, 5, menu[x], 1, 1);
-		//extra.setColor(1); cout << menu[x]; extra.setColor(0);
-		//extra.advPrint(x+2, 2, obj[0], 0);
-		//extra.advPrint(x+2, 5, menu[x + 1], 0);
-		extra.gotoXY(x + 2, 2); cout << obj[2] << menu[x + 1];
-		extra.gotoXY(15, 5); cout << "You are now choosing: " << x;
 	}
+	/*	Sub Menu	*/
+	Sub3:
+	extra.advPrint(5, 55, "This is Sub Menu of Menu 3", 2, 0);
+	while (1)
+	{
+		_getch();
+		key = _getch();
+		if (key == 0x4B)
+		{
+			extra.advPrint(5, 55, "                                  ", 2, 0);		//Clean Screen when Back
+			goto MainScr;
+		}
+	}
+	getchar();
+	return 0;
 }
