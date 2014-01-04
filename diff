@@ -1,0 +1,12 @@
+diff --git a/Win32Menu/Win32Menu/Win32Menu.cpp b/Win32Menu/Win32Menu/Win32Menu.cpp
+index d27218b..8b317e9 100644
+--- a/Win32Menu/Win32Menu/Win32Menu.cpp
++++ b/Win32Menu/Win32Menu/Win32Menu.cpp
+@@ -61,6 +61,5 @@ int main(int argc, char* argv[])
+ 			goto MainScr;
+ 		}
+ 	}
+-	getchar();
+ 	return 0;
+ }
+\ No newline at end of file

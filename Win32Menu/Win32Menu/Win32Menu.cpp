@@ -61,6 +61,5 @@ int main(int argc, char* argv[])
 			goto MainScr;
 		}
 	}
-	getchar();
 	return 0;
 }
