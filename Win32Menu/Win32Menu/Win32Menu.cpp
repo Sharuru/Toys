@@ -60,7 +60,7 @@ Sub3:
 		x = extra.itemChooser(x, 55, 3, 5, text.submenu);
 		if (extra.flag == 0)
 		{
-			extra.screenCleaner(55, 27, 5, 5,0);
+			extra.screenCleaner(55, 27, 5, 5, 0);
 			x = 3;
 			goto MainScr;
 		}
