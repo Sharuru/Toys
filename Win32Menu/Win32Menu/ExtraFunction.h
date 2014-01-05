@@ -15,6 +15,7 @@ public:
 	CONSOLE_CURSOR_INFO cursor_info;
 
 	char key;
+	int flag;
 
 	Text text;
 
@@ -22,8 +23,6 @@ public:
 	const char DOWN = 0x50;
 	const char LEFT = 0x4B;
 	const char RIGHT = 0x4D;
-
-	int flag;
 
 	void gotoXY(int x, int y);
 	void setColor(int type);
