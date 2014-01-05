@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 	extra.advPrint(7, 58, text.submenu[1], 1, 1);
 	extra.advPrint(8, 58, text.submenu[2], 0, 1);
 	extra.advPrint(9, 58, text.submenu[3], 0, 1);
-	x = 1;
+	x = 1;	//initialize the data
 	while (1)
 	{
 		x = extra.itemChooser(x, 55, 3, 5, text.submenu);
