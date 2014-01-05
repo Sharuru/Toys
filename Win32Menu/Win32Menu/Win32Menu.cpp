@@ -14,6 +14,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+	system("mode con cols=100 lines=20"); 
 	ExtraFunction extra;
 	Text text;
 	int x;
@@ -21,14 +22,13 @@ int main(int argc, char* argv[])
 	cout << "Use UP and DOWN to choose, RIGHT to confirm, LEFT to exit." << endl;
 	cout << "If you have input blocking problem, please hit SPACE.";
 	//extra.advPrint(4, 3, text.obj[1], 0, 1);
-
 	extra.advPrint(4, 6, text.menu[1], 1, 1);
 	cout << setw(21) << text.menu[2] << endl
 		 << setw(32) << text.menu[3] << endl
 		 << setw(21) << text.menu[4] << endl
 		 << setw(21) << text.menu[5] << endl;
 	x = 1;	//initialize the data
-	MainScr:
+MainScr:
 	while (1)	//Forever Loop
 	{
 		x = extra.itemChooser(x, 3, 5, 2, text.menu);
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 		}
 	}
 	/*	Sub Menu	*/
-	Sub3:
+Sub3:
 	extra.advPrint(5, 55, "This is Sub Menu of Menu 3", 2, 0);
 	extra.advPrint(7, 58, text.submenu[1], 1, 1);
 	extra.advPrint(8, 58, text.submenu[2], 0, 1);
@@ -60,14 +60,10 @@ int main(int argc, char* argv[])
 		x = extra.itemChooser(x, 55, 3, 5, text.submenu);
 		if (extra.flag == 0)
 		{
-			extra.advPrint(5, 55, "                                  ", 2, 0);		//Clean Screen when Back
-			extra.advPrint(6, 55, "                                  ", 2, 0);		//Clean Screen when Back
-			extra.advPrint(7, 55, "                                  ", 2, 0);		//Clean Screen when Back
-			extra.advPrint(8, 55, "                                  ", 2, 0);		//Clean Screen when Back
-			extra.advPrint(9, 55, "                                  ", 2, 0);		//Clean Screen when Back
+			extra.screenCleaner(55, 27, 5, 5,0);
 			x = 3;
 			goto MainScr;
 		}
-	}
+	} 
 	return 0;
 }

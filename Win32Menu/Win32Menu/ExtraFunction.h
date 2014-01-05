@@ -28,5 +28,6 @@ public:
 	void setColor(int type);
 	void advPrint(int x, int y, string text,int type,int line);
 	int itemChooser(int x, int y, int maxItem, int fix, string item[]);
+	void screenCleaner(int x, int xArea, int y, int yArea,int type);
 };
 

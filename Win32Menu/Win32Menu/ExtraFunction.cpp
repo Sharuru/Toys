@@ -102,3 +102,18 @@ int ExtraFunction::itemChooser(int x, int y, int maxItem, int fix, string item[]
 	gotoXY(x + fix + 2, y); cout << text.obj[2] << item[x + 1];
 	return x;
 }
+
+void ExtraFunction::screenCleaner(int x, int xArea, int y, int yArea, int type)
+{
+	setColor(type);
+	gotoXY(x, y);
+	for (int yCount = y-1; yCount < y+yArea; yCount++)
+	{
+		gotoXY(yCount, x);
+		for (int xCount = x; xCount < x+xArea; xCount++)
+		{
+			cout << " ";
+		}
+		cout << endl;
+	}
+}
