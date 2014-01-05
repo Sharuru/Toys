@@ -75,7 +75,7 @@ int ExtraFunction::itemChooser(int x, int y, int maxItem, int fix, string item[]
 	if (key == UP)	//Key UP
 	{
 		x = x - 1;
-		if (x <= 1)		//Zone Control
+		if (x < 1)		//Zone Control
 		{
 			x = 1;
 		}
@@ -83,7 +83,7 @@ int ExtraFunction::itemChooser(int x, int y, int maxItem, int fix, string item[]
 	else if (key == DOWN)	//Key DOWN
 	{
 		x = x + 1;
-		if (x >= maxItem)		//Zone Control
+		if (x > maxItem)		//Zone Control
 		{
 			x = maxItem;
 		}

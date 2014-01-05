@@ -17,21 +17,21 @@ int main(int argc, char* argv[])
 	ExtraFunction extra;
 	Text text;
 	int x, y;
-	char key;
 	/*	Program Start	*/
 	cout << "Use UP and DOWN to choose, RIGHT to confirm, LEFT to exit." << endl;
 	cout << "If you have input blocking problem, please hit SPACE.";
 	//extra.advPrint(4, 3, text.obj[1], 0, 1);
+
 	extra.advPrint(4, 6, text.menu[1], 1, 1);
 	cout << setw(21) << text.menu[2] << endl
-	     << setw(32) << text.menu[3] << endl
-	     << setw(21) << text.menu[4] << endl
-         << setw(21) << text.menu[5] << endl;
+		 << setw(32) << text.menu[3] << endl
+		 << setw(21) << text.menu[4] << endl
+		 << setw(21) << text.menu[5] << endl;
 	x = 1, y = 2;	//initialize the data
 	MainScr:
 	while (1)	//Forever Loop
 	{
-		x = extra.itemChooser(x,3,5,2,text.menu);
+		x = extra.itemChooser(x, 3, 5, 2, text.menu);
 		extra.gotoXY(15, 5); cout << "You are now choosing: " << x << "   Flag = " << extra.flag;
 		if (extra.flag == 1)
 		{
@@ -49,15 +49,23 @@ int main(int argc, char* argv[])
 		}
 	}
 	/*	Sub Menu	*/
-	Sub3:
+Sub3:
 	extra.advPrint(5, 55, "This is Sub Menu of Menu 3", 2, 0);
+	extra.advPrint(7, 58, text.submenu[1], 1, 1);
+	extra.advPrint(8, 58, text.submenu[2], 0, 1);
+	extra.advPrint(9, 58, text.submenu[3], 0, 1);
+	x = 1;
 	while (1)
 	{
-		_getch();
-		key = _getch();
-		if (key == 0x4B)
+		x = extra.itemChooser(x, 55, 3, 5, text.submenu);
+		if (extra.flag == 0)
 		{
 			extra.advPrint(5, 55, "                                  ", 2, 0);		//Clean Screen when Back
+			extra.advPrint(6, 55, "                                  ", 2, 0);		//Clean Screen when Back
+			extra.advPrint(7, 55, "                                  ", 2, 0);		//Clean Screen when Back
+			extra.advPrint(8, 55, "                                  ", 2, 0);		//Clean Screen when Back
+			extra.advPrint(9, 55, "                                  ", 2, 0);		//Clean Screen when Back
+			x = 3;
 			goto MainScr;
 		}
 	}

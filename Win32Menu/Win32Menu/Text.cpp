@@ -26,4 +26,9 @@ void Text::initText()
 	menu[4] = "This is Menu 4.";
 	menu[5] = "This is Menu 5.";
 	menu[6] = "  ";
+	submenu[0] = "  ";
+	submenu[1] = "This is SubMenu 1.";
+	submenu[2] = "This is SubMenu 2.";
+	submenu[3] = "This is SubMenu 3.";
+	submenu[4] = "  ";
 }
