@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 {
 	ExtraFunction extra;
 	Text text;
-	int x, y;
+	int x;
 	/*	Program Start	*/
 	cout << "Use UP and DOWN to choose, RIGHT to confirm, LEFT to exit." << endl;
 	cout << "If you have input blocking problem, please hit SPACE.";
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 		 << setw(32) << text.menu[3] << endl
 		 << setw(21) << text.menu[4] << endl
 		 << setw(21) << text.menu[5] << endl;
-	x = 1, y = 2;	//initialize the data
+	x = 1;	//initialize the data
 	MainScr:
 	while (1)	//Forever Loop
 	{
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 		}
 	}
 	/*	Sub Menu	*/
-Sub3:
+	Sub3:
 	extra.advPrint(5, 55, "This is Sub Menu of Menu 3", 2, 0);
 	extra.advPrint(7, 58, text.submenu[1], 1, 1);
 	extra.advPrint(8, 58, text.submenu[2], 0, 1);
