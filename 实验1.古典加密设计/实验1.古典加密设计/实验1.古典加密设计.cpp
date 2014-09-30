@@ -15,7 +15,6 @@ string unEncrypt(string C, char key);
 int _tmain(int argc, _TCHAR* argv[])
 {
 	string P, C, key;
-	int l;
 	system("title 实验1.古典密码设计");
 	cout << endl << " 实验1.古典密码设计" << endl;
 	cout << endl << " [*] 请输入明文：";
@@ -36,16 +35,16 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 	C = Encrypt(P, key[0]);
-	cout << endl << " [*] 密文为：" << C;
-	cout << "end";
-	cin >> l;
+	cout << endl << " [*] 密文为：" << C << endl;
+	P = unEncrypt(C, key[0]);
+	cout << endl << " [*] 解密后明文为：" << P << endl;
+	getchar();
+	getchar();
 	return 0;
 }
 
 string Encrypt(string P, char key){
 	string C;
-	cout << "key is " << key;
-	cout << "ASCII is" << int(key) - 96;
 	for (int i = 0; i < int(P.length()); i++){
 		if ((P[i] + int(key) - 96) > 122){
 			C += P[i] + (int(key) - 96) - 24;
@@ -57,3 +56,15 @@ string Encrypt(string P, char key){
 	return C;
 }
 
+string unEncrypt(string C, char key){
+	string P;
+	for (int i = 0; i < int(C.length()); i++){
+		if ((C[i] + int(key) - 96) < 97){
+			P += C[i] - (int(key) - 96);
+		}
+		else{
+			P += C[i] - (int(key) - 96);
+		}
+	}
+	return P;
+}
