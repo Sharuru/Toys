@@ -46,7 +46,7 @@ int _tmain(int argc, _TCHAR* argv[])
 string Encrypt(string P, char key){
 	string C;
 	for (int i = 0; i < int(P.length()); i++){
-		if (int(P[i] >= 65 && P[i] <= 90)){
+		if (isalpha(P[i]) == 1){
 			if ((P[i] + int(key) - 96) > 90){
 				C += P[i] + (int(key) - 96) - 26;
 			}
@@ -61,7 +61,6 @@ string Encrypt(string P, char key){
 			else{
 				C += P[i] + (int(key) - 96);
 			}
-
 		}
 	}
 	return C;
@@ -70,7 +69,7 @@ string Encrypt(string P, char key){
 string unEncrypt(string C, char key){
 	string P;
 	for (int i = 0; i < int(C.length()); i++){
-		if (int(C[i] >= 65 && C[i] <= 90)){
+		if (isalpha(C[i]) == 1){
 			if (C[i] - (int(key) - 96) < 65){
 				P += C[i] - (int(key) - 96) + 26;
 			}
@@ -86,12 +85,6 @@ string unEncrypt(string C, char key){
 				P += C[i] - (int(key) - 96);
 			}
 		}
-// 		if (int(C[i] > 96) && (C[i] - (int(key) - 96)) < 97){
-// 			P += C[i] - (int(key) - 96) + 26;
-// 		}
-// 		else{
-// 			P += C[i] - (int(key) - 96);
-// 		}
 	}
 	return P;
 }
