@@ -47,7 +47,7 @@ string Encrypt(string P, char key){
 	string C;
 	for (int i = 0; i < int(P.length()); i++){
 		if ((P[i] + int(key) - 96) > 122){
-			C += P[i] + (int(key) - 96) - 24;
+			C += P[i] + (int(key) - 96) - 26;
 		}
 		else{
 			C += P[i] + (int(key) - 96);
@@ -59,8 +59,8 @@ string Encrypt(string P, char key){
 string unEncrypt(string C, char key){
 	string P;
 	for (int i = 0; i < int(C.length()); i++){
-		if ((C[i] + int(key) - 96) < 97){
-			P += C[i] - (int(key) - 96);
+		if ((C[i] - (int(key) - 96)) < 97){
+			P += C[i] - (int(key) - 96) + 26;
 		}
 		else{
 			P += C[i] - (int(key) - 96);
