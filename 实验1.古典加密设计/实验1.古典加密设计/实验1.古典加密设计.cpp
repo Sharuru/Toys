@@ -47,7 +47,6 @@ string Encrypt(string P, char key){
 	string C;
 	for (int i = 0; i < int(P.length()); i++){
 		if (int(P[i] >= 65 && P[i] <= 90)){
-			cout << "Big";
 			if ((P[i] + int(key) - 96) > 90){
 				C += P[i] + (int(key) - 96) - 26;
 			}
@@ -56,7 +55,6 @@ string Encrypt(string P, char key){
 			}
 		}
 		else{
-			cout << "small";
 			if ((P[i] + int(key) - 96) > 122){
 				C += P[i] + (int(key) - 96) - 26;
 			}
@@ -65,15 +63,6 @@ string Encrypt(string P, char key){
 			}
 
 		}
-// 		if (int(P[i]) > 96 && (P[i] + int(key) - 96) > 122){
-// 			C += P[i] + (int(key) - 96) - 26;
-// 		}
-// 		else if (int(P[i] < 97) && (P[i] + int(key) - 96) > 90){
-// 			C += P[i] + (int(key)-96) - 26;
-// 		}
-// 		else{
-// 			C += P[i] + (int(key) - 96);
-// 		}
 	}
 	return C;
 }
@@ -81,12 +70,28 @@ string Encrypt(string P, char key){
 string unEncrypt(string C, char key){
 	string P;
 	for (int i = 0; i < int(C.length()); i++){
-		if (int(C[i] > 96) && (C[i] - (int(key) - 96)) < 97){
-			P += C[i] - (int(key) - 96) + 26;
+		if (int(C[i] >= 65 && C[i] <= 90)){
+			if (C[i] - (int(key) - 96) < 65){
+				P += C[i] - (int(key) - 96) + 26;
+			}
+			else{
+				P += C[i] - (int(key) - 96);
+			}
 		}
 		else{
-			P += C[i] - (int(key) - 96);
+			if (C[i] - (int(key) - 96) < 97){
+				P += C[i] - (int(key) - 96) + 26;
+			}
+			else{
+				P += C[i] - (int(key) - 96);
+			}
 		}
+// 		if (int(C[i] > 96) && (C[i] - (int(key) - 96)) < 97){
+// 			P += C[i] - (int(key) - 96) + 26;
+// 		}
+// 		else{
+// 			P += C[i] - (int(key) - 96);
+// 		}
 	}
 	return P;
 }
