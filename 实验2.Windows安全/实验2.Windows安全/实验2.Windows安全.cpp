@@ -8,6 +8,7 @@
 using namespace std;
 
 int modexp(int a, int b, int n);
+bool primejud(int n);
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -33,6 +34,19 @@ int _tmain(int argc, _TCHAR* argv[])
 			cin >> n;
 			cout << endl << " [*] 计算得：" << a << " ^ " << b << " mod " << n << " = " <<
 				modexp(a, b, n) << endl;
+		}break;
+		case 2:		//快速求素数
+		{
+			int n;
+			cout << endl << " [*] 请输入需要判断的素数值：" << endl;
+			cout << " n = ";
+			cin >> n;
+			primejud(n) == true ? cout << endl << " [*] " << n << "是素数" << endl : cout << endl << " [*] " << n << "不是素数";
+			cout << endl;
+		}break;
+		default:
+		{
+			cout << endl << " [*] 选择错误" << endl;
 		}
 		}
 	}
@@ -52,4 +66,13 @@ int modexp(int a, int b, int n){
 		b >>= 1;
 	}
 	return ret;
+}
+
+bool primejud(int n){
+	for (int loop = 2; loop <= sqrt(n); loop++){
+		if (n % loop == 0){
+			return false;
+		}
+	}
+	return true;
 }
