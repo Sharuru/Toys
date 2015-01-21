@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace RSA算法示例
 {
     public partial class Form1 : Form
     {
+        //所有参数都在这里
+        private long _numN, _numP, _numQ, _numE, _numD, _numPhi, _msgP, _msgC;
+
         public Form1()
         {
             InitializeComponent();
@@ -24,27 +21,29 @@ namespace RSA算法示例
             //程序Load时，自动生成一个明文P，默认P=19
             numericUpDownP.Value = 19;
             //程序Load时，将密文C以及解密明文P置问号
-            textBoxC1.Text = "?";
-            textBoxC2.Text = "?";
-            textBoxP.Text = "?";
+            textBoxC1.Text = @"?";
+            textBoxC2.Text = @"?";
+            textBoxP.Text = @"?";
         }
 
         private void buttonCreateKey_Click(object sender, EventArgs e)
         {
-            //按下“产生密钥”后开始计算
-            long n, p, q, ee, dd, phi;
-            p = Convert.ToInt64(listBoxP.SelectedItem);
-            q = Convert.ToInt64(listBoxQ.SelectedItem);
-            n = p*q;
-            phi = (p - 1)*(q - 1);
-            textBoxPQ.Text = "n = pq = " + n;
-            ee = CalcE(phi);
-            textBoxEN.Text = "公钥为{e,n} = { " + ee + ", " + n + "}";
-            dd = CalcD(phi, ee);
-            textBoxDN.Text = "私钥为{d,n} = { " + dd + ", " + n + "}";
+            //按下产生密钥时先清空密文C1和明文P位
+            textBoxC1.Text = @"?";
+            textBoxP.Text = @"?";
+            //然后开始计算
+            _numP = Convert.ToInt64(listBoxP.SelectedItem);
+            _numQ = Convert.ToInt64(listBoxQ.SelectedItem);
+            _numN = _numP*_numQ;
+            _numPhi = (_numP - 1)*(_numQ - 1);
+            textBoxPQ.Text = @"n = pq = " + _numN;
+            _numE = CalcE(_numPhi);
+            textBoxEN.Text = @"公钥为{e,n} = { " + _numE + @", " + _numN + @"}";
+            _numD = CalcD(_numPhi, _numE);
+            textBoxDN.Text = @"私钥为{d,n} = { " + _numD + @", " + _numN + @"}";
         }
 
-        private long CalcE(long phi)
+        private static long CalcE(long phi)
         {
             //由于两个不相同的质数必定互素，为提高计算效率预先硬编码1~37*37的质数表
             long[] prime =
@@ -63,8 +62,8 @@ namespace RSA算法示例
                 1277, 1279, 1283, 1289, 1291, 1297, 1301, 1303, 1307, 1319, 1321, 1327, 1361, 1367
             };
             //随机选择e
-            Random Re = new Random();
-            return 5;
+//             Random Re = new Random();
+//             //从质数表中随机抽取，但是有时会发生响应问题，故不采用
 //             while(true)
 //             {
 //                 int i = Re.Next(218);
@@ -73,32 +72,36 @@ namespace RSA算法示例
 //                     return prime[i];
 //                 }
 //             }
+            //取而代之的是返回固定值5
+            return 5;
         }
 
-        private long CalcD(long phi, long ee)
+        private static long CalcD(long phi, long e)
         {
+            //模取余运算
             for (long d = 1;; d++)
             {
-                if ((ee*d)%phi == 1)
+                if ((e*d)%phi == 1)
                 {
                     return d;
                 }
             }
         }
 
-        private long Encrypt(long ee, long n)
+        private long Encrypt(long e, long n)
         {
-            return (long) (Math.Pow(Convert.ToInt64(numericUpDownP.Value),ee))%n;
+            //返回C = P^e mod n
+            return (long) (Math.Pow(Convert.ToInt64(numericUpDownP.Value),e))%n;
         }
 
         private long Decrypt(long dd, long n)
         {
-            //return (long) (Math.Pow(Convert.ToInt64(textBoxC2.Text),dd));
+            //返回P = C^d mod n
             long ans = 1;
             long a = Convert.ToInt64(textBoxC2.Text);
+            long b = dd;
             long c = n;
             a = a%c;
-            long b = dd;
             while (b > 0)
             {
                 if (b%2 == 1)
@@ -113,29 +116,15 @@ namespace RSA算法示例
 
         private void buttonEncrypt_Click(object sender, EventArgs e)
         {
-            long n, p, q, ee, dd, phi, cc;
-            p = Convert.ToInt64(listBoxP.SelectedItem);
-            q = Convert.ToInt64(listBoxQ.SelectedItem);
-            n = p*q;
-            phi = (p - 1)*(q - 1);
-            ee = CalcE(phi);
-            dd = CalcD(phi, ee);
-            cc = Encrypt(5, n);
-            textBoxC1.Text = cc.ToString();
-            textBoxC2.Text = cc.ToString();
+            _msgC = Encrypt(_numE, _numN);
+            textBoxC1.Text = _msgC.ToString();
+            textBoxC2.Text = _msgC.ToString();
         }
 
         private void buttonDecrypt_Click(object sender, EventArgs e)
         {
-            long n, p, q, ee, dd, phi, cc;
-            p = Convert.ToInt64(listBoxP.SelectedItem);
-            q = Convert.ToInt64(listBoxQ.SelectedItem);
-            n = p * q;
-            phi = (p - 1) * (q - 1);
-            ee = CalcE(phi);
-            dd = CalcD(phi, ee);
-            p = Decrypt(dd, n);
-            textBoxP.Text = p.ToString();
+            _msgP = Decrypt(_numD, _numN);
+            textBoxP.Text = _msgP.ToString();
         }
     }
 }
