@@ -117,17 +117,12 @@ namespace EasyCertManager
         private void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             CheckForIllegalCrossThreadCalls = false;
-            if (!String.IsNullOrEmpty(outLine.Data))
-            {
-                SetLog(outLine.Data);
-            }
-            else
-            {
-                SetLog("-234234234234----");
-            }
+            SetLog(!String.IsNullOrEmpty(outLine.Data)
+                ? outLine.Data
+                : "-------Please Check the information above-------");
         }
 
-#endregion
+        #endregion
 
 
 
