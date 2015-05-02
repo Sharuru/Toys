@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Windows.Forms;
 
 namespace EasyCertManager
@@ -85,7 +78,7 @@ namespace EasyCertManager
         private void RegCert()
         {
             SetLog("Start registering your certificate...");
-            SetLog("-------Please Check the information below-------");
+            SetLog("----------Please Check the information below----------");
             RunCmd("CertUtil -user -f -p " + _certPassword + " -importpfx " + _certPath);
         }
 
@@ -93,9 +86,9 @@ namespace EasyCertManager
         {
             SetLog("Start deleting your certificate...");
             SetLog("Calculating serial number...");
-            X509Certificate2 cert = new X509Certificate2(_certPath, _certPassword);
+            var cert = new X509Certificate2(_certPath, _certPassword);
             SetLog("Serial number is: " + cert.SerialNumber);
-            SetLog("-------Please Check the information below-------");
+            SetLog("----------Please Check the information below----------");
             RunCmd("CertUtil -user -delstore my " + cert.SerialNumber);
         }
 
@@ -130,7 +123,7 @@ namespace EasyCertManager
             CheckForIllegalCrossThreadCalls = false;
             SetLog(!String.IsNullOrEmpty(outLine.Data)
                 ? outLine.Data
-                : "-------Please Check the information above-------");
+                : "----------Please Check the information above----------");
         }
 
         private void buttonDel_Click(object sender, EventArgs e)
