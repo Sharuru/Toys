@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows.Forms;
 
@@ -88,6 +89,16 @@ namespace EasyCertManager
             RunCmd("CertUtil -user -f -p " + _certPassword + " -importpfx " + _certPath);
         }
 
+        private void DelCert()
+        {
+            SetLog("Start deleting your certificate...");
+            SetLog("Calculating serial number...");
+            X509Certificate2 cert = new X509Certificate2(_certPath, _certPassword);
+            SetLog("Serial number is: " + cert.SerialNumber);
+            SetLog("-------Please Check the information below-------");
+            RunCmd("CertUtil -user -delstore my " + cert.SerialNumber);
+        }
+
 #endregion
 
 #region Events
@@ -122,7 +133,23 @@ namespace EasyCertManager
                 : "-------Please Check the information above-------");
         }
 
+        private void buttonDel_Click(object sender, EventArgs e)
+        {
+            _certPassword = textBoxPassword.Text;
+            if (_certPath != "" && _certPassword != "")
+            {
+                DelCert();
+            }
+            else
+            {
+                MessageBox.Show(@"Please check your information.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SetLog("Error occurred.");
+            }
+        }
+
         #endregion
+
+
 
 
 
