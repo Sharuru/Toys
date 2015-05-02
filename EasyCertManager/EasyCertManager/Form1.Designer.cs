@@ -30,17 +30,21 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.labelLocation = new System.Windows.Forms.Label();
             this.textBoxLocation = new System.Windows.Forms.TextBox();
             this.buttonBrowse = new System.Windows.Forms.Button();
             this.buttonReg = new System.Windows.Forms.Button();
             this.buttonDel = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBoxLog = new System.Windows.Forms.TextBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -52,23 +56,23 @@
             this.groupBox1.Controls.Add(this.labelLocation);
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(448, 51);
+            this.groupBox1.Size = new System.Drawing.Size(448, 52);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "1.Select .pfx file:";
             // 
-            // groupBox2
+            // groupBox3
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.buttonDel);
-            this.groupBox2.Controls.Add(this.buttonReg);
-            this.groupBox2.Location = new System.Drawing.Point(12, 70);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(448, 64);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "2.Select operation:";
+            this.groupBox3.Controls.Add(this.buttonDel);
+            this.groupBox3.Controls.Add(this.buttonReg);
+            this.groupBox3.Location = new System.Drawing.Point(13, 130);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(448, 64);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "3.Select operation:";
             // 
             // labelLocation
             // 
@@ -86,16 +90,16 @@
             this.textBoxLocation.Location = new System.Drawing.Point(72, 18);
             this.textBoxLocation.Name = "textBoxLocation";
             this.textBoxLocation.Size = new System.Drawing.Size(289, 21);
-            this.textBoxLocation.TabIndex = 1;
+            this.textBoxLocation.TabIndex = 0;
             // 
             // buttonBrowse
             // 
             this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBrowse.Location = new System.Drawing.Point(367, 16);
+            this.buttonBrowse.Location = new System.Drawing.Point(373, 16);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowse.TabIndex = 2;
+            this.buttonBrowse.TabIndex = 1;
             this.buttonBrowse.Text = "Browse";
             this.buttonBrowse.UseVisualStyleBackColor = true;
             // 
@@ -105,7 +109,7 @@
             this.buttonReg.Location = new System.Drawing.Point(6, 20);
             this.buttonReg.Name = "buttonReg";
             this.buttonReg.Size = new System.Drawing.Size(211, 39);
-            this.buttonReg.TabIndex = 0;
+            this.buttonReg.TabIndex = 3;
             this.buttonReg.Text = "Register";
             this.buttonReg.UseVisualStyleBackColor = true;
             // 
@@ -115,22 +119,22 @@
             this.buttonDel.Location = new System.Drawing.Point(231, 20);
             this.buttonDel.Name = "buttonDel";
             this.buttonDel.Size = new System.Drawing.Size(211, 39);
-            this.buttonDel.TabIndex = 1;
+            this.buttonDel.TabIndex = 4;
             this.buttonDel.Text = "Delete";
             this.buttonDel.UseVisualStyleBackColor = true;
             // 
-            // groupBox3
+            // groupBox4
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.textBoxLog);
-            this.groupBox3.Location = new System.Drawing.Point(12, 140);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(449, 80);
-            this.groupBox3.TabIndex = 2;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "3.Log:";
+            this.groupBox4.Controls.Add(this.textBoxLog);
+            this.groupBox4.Location = new System.Drawing.Point(12, 195);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(449, 84);
+            this.groupBox4.TabIndex = 3;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "4.Log:";
             // 
             // textBoxLog
             // 
@@ -141,17 +145,43 @@
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
             this.textBoxLog.ShortcutsEnabled = false;
-            this.textBoxLog.Size = new System.Drawing.Size(436, 53);
+            this.textBoxLog.Size = new System.Drawing.Size(436, 57);
             this.textBoxLog.TabIndex = 0;
             this.textBoxLog.TabStop = false;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.textBoxPassword);
+            this.groupBox2.Location = new System.Drawing.Point(12, 71);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(449, 53);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "2.Enter password:";
+            // 
+            // textBoxPassword
+            // 
+            this.textBoxPassword.Location = new System.Drawing.Point(10, 21);
+            this.textBoxPassword.Name = "textBoxPassword";
+            this.textBoxPassword.PasswordChar = '*';
+            this.textBoxPassword.Size = new System.Drawing.Size(432, 21);
+            this.textBoxPassword.TabIndex = 2;
+            this.textBoxPassword.UseSystemPasswordChar = true;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 232);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(473, 291);
             this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -160,10 +190,12 @@
             this.Text = "EasyCertManager";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -174,11 +206,14 @@
         private System.Windows.Forms.Button buttonBrowse;
         private System.Windows.Forms.TextBox textBoxLocation;
         private System.Windows.Forms.Label labelLocation;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button buttonDel;
         private System.Windows.Forms.Button buttonReg;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.TextBox textBoxLog;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TextBox textBoxPassword;
     }
 }
 
