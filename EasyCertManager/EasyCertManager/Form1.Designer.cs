@@ -30,12 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.labelLocation = new System.Windows.Forms.Label();
-            this.textBoxLocation = new System.Windows.Forms.TextBox();
             this.buttonBrowse = new System.Windows.Forms.Button();
-            this.buttonReg = new System.Windows.Forms.Button();
+            this.textBoxLocation = new System.Windows.Forms.TextBox();
+            this.labelLocation = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.buttonDel = new System.Windows.Forms.Button();
+            this.buttonReg = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBoxLog = new System.Windows.Forms.TextBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -61,6 +61,36 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "1.Select .pfx file:";
             // 
+            // buttonBrowse
+            // 
+            this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBrowse.Location = new System.Drawing.Point(367, 16);
+            this.buttonBrowse.Name = "buttonBrowse";
+            this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowse.TabIndex = 1;
+            this.buttonBrowse.Text = "Browse";
+            this.buttonBrowse.UseVisualStyleBackColor = true;
+            this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
+            // 
+            // textBoxLocation
+            // 
+            this.textBoxLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxLocation.Location = new System.Drawing.Point(72, 18);
+            this.textBoxLocation.Name = "textBoxLocation";
+            this.textBoxLocation.Size = new System.Drawing.Size(289, 21);
+            this.textBoxLocation.TabIndex = 0;
+            // 
+            // labelLocation
+            // 
+            this.labelLocation.AutoSize = true;
+            this.labelLocation.Location = new System.Drawing.Point(7, 21);
+            this.labelLocation.Name = "labelLocation";
+            this.labelLocation.Size = new System.Drawing.Size(59, 12);
+            this.labelLocation.TabIndex = 0;
+            this.labelLocation.Text = "Location:";
+            // 
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -74,34 +104,15 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "3.Select operation:";
             // 
-            // labelLocation
+            // buttonDel
             // 
-            this.labelLocation.AutoSize = true;
-            this.labelLocation.Location = new System.Drawing.Point(7, 21);
-            this.labelLocation.Name = "labelLocation";
-            this.labelLocation.Size = new System.Drawing.Size(59, 12);
-            this.labelLocation.TabIndex = 0;
-            this.labelLocation.Text = "Location:";
-            // 
-            // textBoxLocation
-            // 
-            this.textBoxLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxLocation.Location = new System.Drawing.Point(72, 18);
-            this.textBoxLocation.Name = "textBoxLocation";
-            this.textBoxLocation.Size = new System.Drawing.Size(289, 21);
-            this.textBoxLocation.TabIndex = 0;
-            // 
-            // buttonBrowse
-            // 
-            this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBrowse.Location = new System.Drawing.Point(367, 16);
-            this.buttonBrowse.Name = "buttonBrowse";
-            this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowse.TabIndex = 1;
-            this.buttonBrowse.Text = "Browse";
-            this.buttonBrowse.UseVisualStyleBackColor = true;
+            this.buttonDel.AutoSize = true;
+            this.buttonDel.Location = new System.Drawing.Point(231, 20);
+            this.buttonDel.Name = "buttonDel";
+            this.buttonDel.Size = new System.Drawing.Size(211, 39);
+            this.buttonDel.TabIndex = 4;
+            this.buttonDel.Text = "Delete";
+            this.buttonDel.UseVisualStyleBackColor = true;
             // 
             // buttonReg
             // 
@@ -112,16 +123,6 @@
             this.buttonReg.TabIndex = 3;
             this.buttonReg.Text = "Register";
             this.buttonReg.UseVisualStyleBackColor = true;
-            // 
-            // buttonDel
-            // 
-            this.buttonDel.AutoSize = true;
-            this.buttonDel.Location = new System.Drawing.Point(231, 20);
-            this.buttonDel.Name = "buttonDel";
-            this.buttonDel.Size = new System.Drawing.Size(211, 39);
-            this.buttonDel.TabIndex = 4;
-            this.buttonDel.Text = "Delete";
-            this.buttonDel.UseVisualStyleBackColor = true;
             // 
             // groupBox4
             // 
@@ -151,7 +152,8 @@
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "openFileDialog";
+            this.openFileDialog.Filter = "PKCS #12 file|*.pfx";
+            this.openFileDialog.InitialDirectory = "Enviorment.Appst";
             // 
             // groupBox2
             // 

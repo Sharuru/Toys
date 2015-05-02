@@ -53,6 +53,17 @@ namespace EasyCertManager
         }
 #endregion
 
+#region Events
+
+        private void buttonBrowse_Click(object sender, EventArgs e)
+        {
+            openFileDialog.InitialDirectory = Environment.CurrentDirectory;
+            openFileDialog.ShowDialog();
+            textBoxLocation.Text = openFileDialog.FileName;
+        }
+
+#endregion
+
     }
 
 }
