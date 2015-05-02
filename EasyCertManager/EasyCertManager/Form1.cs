@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -55,23 +56,38 @@ namespace EasyCertManager
                 }
                 binaryWriter.Close();
                 fileStream.Close();
-                SetLog("CertUtil.exe is deployed.");
+                SetLog("CertUtil.exe is deployed");
             }
             SetLog("Initialization finished.");
         }
 
+        private void RunCmd(string command)
+        {
+            var process = new Process
+            {
+                StartInfo =
+                {
+                    FileName = "cmd.exe",
+                    UseShellExecute = false,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                }
+            };
+            process.StartInfo.Arguments = "/c " + command; 
+            process.Start();
+            process.BeginOutputReadLine();
+            process.OutputDataReceived += OutputHandler;
+            process.Close();
+        }
+
         private void RegCert()
         {
-            if (_certPath != "" && _certPassword != "")
-            {
-                ;
-            }
-            else
-            {
-                MessageBox.Show(@"Please check your information.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                SetLog("Error occurred.");
-            }
+            SetLog("Start registering your certificate...");
+            SetLog("-------Please Check the information below-------");
+            RunCmd("CertUtil -user -f -p " + _certPassword + " -importpfx " + _certPath);
         }
+
 #endregion
 
 #region Events
@@ -87,7 +103,28 @@ namespace EasyCertManager
         private void buttonReg_Click(object sender, EventArgs e)
         {
             _certPassword = textBoxPassword.Text;
-            RegCert();
+            if (_certPath != "" && _certPassword != "")
+            {
+                RegCert();
+            }
+            else
+            {
+                MessageBox.Show(@"Please check your information.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SetLog("Error occurred.");
+            }
+        }
+
+        private void OutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            CheckForIllegalCrossThreadCalls = false;
+            if (!String.IsNullOrEmpty(outLine.Data))
+            {
+                SetLog(outLine.Data);
+            }
+            else
+            {
+                SetLog("-234234234234----");
+            }
         }
 
 #endregion

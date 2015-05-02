@@ -79,8 +79,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxLocation.Location = new System.Drawing.Point(72, 18);
             this.textBoxLocation.Name = "textBoxLocation";
+            this.textBoxLocation.ReadOnly = true;
             this.textBoxLocation.Size = new System.Drawing.Size(289, 21);
             this.textBoxLocation.TabIndex = 0;
+            this.textBoxLocation.TabStop = false;
             // 
             // labelLocation
             // 
