@@ -38,7 +38,7 @@
             this.buttonDel = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBoxLog = new System.Windows.Forms.TextBox();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
@@ -96,7 +96,7 @@
             // 
             this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonBrowse.Location = new System.Drawing.Point(373, 16);
+            this.buttonBrowse.Location = new System.Drawing.Point(367, 16);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonBrowse.TabIndex = 1;
@@ -149,9 +149,9 @@
             this.textBoxLog.TabIndex = 0;
             this.textBoxLog.TabStop = false;
             // 
-            // openFileDialog1
+            // openFileDialog
             // 
-            this.openFileDialog1.FileName = "openFileDialog";
+            this.openFileDialog.FileName = "openFileDialog";
             // 
             // groupBox2
             // 
@@ -211,7 +211,7 @@
         private System.Windows.Forms.Button buttonReg;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.TextBox textBoxLog;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBoxPassword;
     }
