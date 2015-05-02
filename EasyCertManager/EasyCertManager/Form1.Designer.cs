@@ -123,6 +123,7 @@
             this.buttonReg.TabIndex = 3;
             this.buttonReg.Text = "Register";
             this.buttonReg.UseVisualStyleBackColor = true;
+            this.buttonReg.Click += new System.EventHandler(this.buttonReg_Click);
             // 
             // groupBox4
             // 
@@ -145,6 +146,7 @@
             this.textBoxLog.Location = new System.Drawing.Point(6, 21);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
+            this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxLog.ShortcutsEnabled = false;
             this.textBoxLog.Size = new System.Drawing.Size(436, 57);
             this.textBoxLog.TabIndex = 0;

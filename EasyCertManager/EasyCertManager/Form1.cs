@@ -13,6 +13,9 @@ namespace EasyCertManager
 {
     public partial class FormMain : Form
     {
+        private string _certPath = "";
+        private string _certPassword = "";
+
         public FormMain()
         {
             InitializeComponent();
@@ -21,18 +24,23 @@ namespace EasyCertManager
 
 #region Function
 
+        private void SetLog(string message)
+        {
+            textBoxLog.AppendText(DateTime.Now.ToLongTimeString() + " " + message + "\n");    
+        }
+
         //If CertUtil.exe existed
         private void FileDeploy()
         {
-            textBoxLog.AppendText(DateTime.Now.ToLongTimeString() + " Initializing...\n");
+            SetLog("Initializing...");
             //Try deploy certUtil
             if (File.Exists("C:\\WINDOWS\\system32\\certutil.exe"))
             {
-                textBoxLog.AppendText(DateTime.Now.ToLongTimeString() + " CertUtil.exe is already existed.\n");
+                SetLog("CertUtil.exe is already existed.");
             }
             else
             {
-                textBoxLog.AppendText(DateTime.Now.ToLongTimeString() + " CertUtil.exe is not exist, deploying...\n");
+                SetLog("CertUtil.exe is not exist, deploying...");
                 var certUtil = Properties.Resources.certutil;
                 var fileStream = new FileStream("C:\\WINDOWS\\system32\\certutil.exe", FileMode.Create);
                 var binaryWriter = new BinaryWriter(fileStream);
@@ -47,9 +55,22 @@ namespace EasyCertManager
                 }
                 binaryWriter.Close();
                 fileStream.Close();
-                textBoxLog.AppendText("CertUtil.exe is deployed.\n");
+                SetLog("CertUtil.exe is deployed.");
             }
-            textBoxLog.AppendText(DateTime.Now.ToLongTimeString() + " Initialization finished.\n");
+            SetLog("Initialization finished.");
+        }
+
+        private void RegCert()
+        {
+            if (_certPath != "" && _certPassword != "")
+            {
+                ;
+            }
+            else
+            {
+                MessageBox.Show(@"Please check your information.", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SetLog("Error occurred.");
+            }
         }
 #endregion
 
@@ -59,10 +80,19 @@ namespace EasyCertManager
         {
             openFileDialog.InitialDirectory = Environment.CurrentDirectory;
             openFileDialog.ShowDialog();
-            textBoxLocation.Text = openFileDialog.FileName;
+            _certPath = openFileDialog.FileName;
+            textBoxLocation.Text = _certPath;
+        }
+
+        private void buttonReg_Click(object sender, EventArgs e)
+        {
+            _certPassword = textBoxPassword.Text;
+            RegCert();
         }
 
 #endregion
+
+
 
     }
 
