@@ -65,7 +65,8 @@ namespace EasyCertManager
                     UseShellExecute = false,
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
-                    CreateNoWindow = true
+                    CreateNoWindow = true,
+                    Verb = "RunAs"
                 }
             };
             process.StartInfo.Arguments = "/c " + command; 
