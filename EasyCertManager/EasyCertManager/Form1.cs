@@ -14,7 +14,6 @@ namespace EasyCertManager
         public FormMain()
         {
             InitializeComponent();
-            FileDeploy();
         }
 
 #region Function
@@ -24,36 +23,6 @@ namespace EasyCertManager
             textBoxLog.AppendText(DateTime.Now.ToLongTimeString() + " " + message + "\n");    
         }
 
-        //If CertUtil.exe existed
-        private void FileDeploy()
-        {
-            SetLog("Initializing...");
-            //Try deploy certUtil
-            if (File.Exists("C:\\WINDOWS\\system32\\certutil.exe"))
-            {
-                SetLog("CertUtil.exe is already existed.");
-            }
-            else
-            {
-                SetLog("CertUtil.exe is not exist, deploying...");
-                var certUtil = Properties.Resources.certutil;
-                var fileStream = new FileStream("C:\\WINDOWS\\system32\\certutil.exe", FileMode.Create);
-                var binaryWriter = new BinaryWriter(fileStream);
-                try
-                {
-                    binaryWriter.Write(certUtil);
-                }
-                catch(Exception e)
-                {
-                    MessageBox.Show(@"Error message: " + e.Message, @"Deploy error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-                binaryWriter.Close();
-                fileStream.Close();
-                SetLog("CertUtil.exe is deployed");
-            }
-            SetLog("Initialization finished.");
-        }
 
         private void RunCmd(string command)
         {
