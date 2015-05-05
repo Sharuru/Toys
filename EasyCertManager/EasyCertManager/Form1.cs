@@ -12,7 +12,7 @@ namespace EasyCertManager
         public FormMain()
         {
             InitializeComponent();
-            SetLog("Current OS version:" + Environment.OSVersion);
+            SetLog("Current OS version: " + Environment.OSVersion);
             SetLog("Waiting for operation...");
         }
 
