@@ -54,16 +54,16 @@
             this.groupBox1.Controls.Add(this.labelLocation);
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(443, 52);
+            this.groupBox1.Size = new System.Drawing.Size(545, 52);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "1.Select .pfx file:";
             // 
             // buttonBrowse
             // 
-            this.buttonBrowse.Location = new System.Drawing.Point(355, 16);
+            this.buttonBrowse.Location = new System.Drawing.Point(457, 14);
             this.buttonBrowse.Name = "buttonBrowse";
-            this.buttonBrowse.Size = new System.Drawing.Size(82, 23);
+            this.buttonBrowse.Size = new System.Drawing.Size(82, 27);
             this.buttonBrowse.TabIndex = 1;
             this.buttonBrowse.Text = "Browse";
             this.buttonBrowse.UseVisualStyleBackColor = true;
@@ -74,7 +74,7 @@
             this.textBoxLocation.Location = new System.Drawing.Point(72, 18);
             this.textBoxLocation.Name = "textBoxLocation";
             this.textBoxLocation.ReadOnly = true;
-            this.textBoxLocation.Size = new System.Drawing.Size(277, 21);
+            this.textBoxLocation.Size = new System.Drawing.Size(379, 21);
             this.textBoxLocation.TabIndex = 0;
             this.textBoxLocation.TabStop = false;
             // 
@@ -91,9 +91,9 @@
             // 
             this.groupBox3.Controls.Add(this.buttonRemove);
             this.groupBox3.Controls.Add(this.buttonReg);
-            this.groupBox3.Location = new System.Drawing.Point(226, 71);
+            this.groupBox3.Location = new System.Drawing.Point(294, 71);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(230, 53);
+            this.groupBox3.Size = new System.Drawing.Size(264, 52);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "3.Select operation:";
@@ -101,9 +101,9 @@
             // buttonRemove
             // 
             this.buttonRemove.AutoSize = true;
-            this.buttonRemove.Location = new System.Drawing.Point(119, 15);
+            this.buttonRemove.Location = new System.Drawing.Point(135, 17);
             this.buttonRemove.Name = "buttonRemove";
-            this.buttonRemove.Size = new System.Drawing.Size(105, 30);
+            this.buttonRemove.Size = new System.Drawing.Size(123, 27);
             this.buttonRemove.TabIndex = 4;
             this.buttonRemove.Text = "Remove";
             this.buttonRemove.UseVisualStyleBackColor = true;
@@ -112,9 +112,9 @@
             // buttonReg
             // 
             this.buttonReg.AutoSize = true;
-            this.buttonReg.Location = new System.Drawing.Point(6, 15);
+            this.buttonReg.Location = new System.Drawing.Point(6, 17);
             this.buttonReg.Name = "buttonReg";
-            this.buttonReg.Size = new System.Drawing.Size(105, 30);
+            this.buttonReg.Size = new System.Drawing.Size(123, 27);
             this.buttonReg.TabIndex = 3;
             this.buttonReg.Text = "Register";
             this.buttonReg.UseVisualStyleBackColor = true;
@@ -127,7 +127,7 @@
             this.groupBox4.Controls.Add(this.textBoxLog);
             this.groupBox4.Location = new System.Drawing.Point(13, 130);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(444, 134);
+            this.groupBox4.Size = new System.Drawing.Size(545, 134);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "4.Log:";
@@ -142,7 +142,7 @@
             this.textBoxLog.Name = "textBoxLog";
             this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxLog.ShortcutsEnabled = false;
-            this.textBoxLog.Size = new System.Drawing.Size(431, 107);
+            this.textBoxLog.Size = new System.Drawing.Size(532, 107);
             this.textBoxLog.TabIndex = 0;
             this.textBoxLog.TabStop = false;
             // 
@@ -156,7 +156,7 @@
             this.groupBox2.Controls.Add(this.textBoxPassword);
             this.groupBox2.Location = new System.Drawing.Point(12, 71);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(208, 53);
+            this.groupBox2.Size = new System.Drawing.Size(276, 53);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "2.Enter password:";
@@ -166,7 +166,7 @@
             this.textBoxPassword.Location = new System.Drawing.Point(10, 21);
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.PasswordChar = '*';
-            this.textBoxPassword.Size = new System.Drawing.Size(192, 21);
+            this.textBoxPassword.Size = new System.Drawing.Size(260, 21);
             this.textBoxPassword.TabIndex = 2;
             this.textBoxPassword.UseSystemPasswordChar = true;
             // 
@@ -174,7 +174,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(471, 276);
+            this.ClientSize = new System.Drawing.Size(570, 276);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
