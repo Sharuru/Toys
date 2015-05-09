@@ -28,6 +28,9 @@ namespace EasyCertManager
             var cert = new X509Certificate2(_certPath, _certPassword);
             var store = new X509Store(StoreName.My);
             store.Open(OpenFlags.ReadWrite);
+            SetLog("Certificate info:");
+            SetLog(cert.Issuer);
+            SetLog(cert.Subject);
             switch (operation)
             {
                 case "Add":
