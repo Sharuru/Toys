@@ -63,7 +63,7 @@ namespace EasyCertManager
                 try
                 {
                     CertHandler("Add");
-                    SetLog("Registration complete.");
+                    SetLog("Registration completed.");
                 }
                 catch (Exception ex)
                 {
@@ -87,7 +87,7 @@ namespace EasyCertManager
                 try
                 {
                     CertHandler("Remove");
-                    SetLog("Remove complete.");
+                    SetLog("Remove completed.");
                 }
                 catch (Exception ex)
                 {
