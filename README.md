@@ -7,5 +7,5 @@ Usually are small things and used only **ONCE**.
 
 Or they are just a **BACKUP** of my idea.
 
-But still happy if they can help you ::smile::
+But still happy if they can help you :smile:
 
