@@ -1,11 +1,11 @@
 Toys
 ====
 
-Toys For My Works
+Toys for my works.
 
-Just a BACKUP for some idea.
+Usually are small things and used only **ONCE**.
 
-**! No further developing !**
+Or they are just a **BACKUP** of my idea.
 
-But still happy if they can help you ;)
+But still happy if they can help you ::smile::
 
