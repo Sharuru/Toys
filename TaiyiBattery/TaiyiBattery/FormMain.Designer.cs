@@ -61,7 +61,7 @@
             this.dateTimePickerStart.Size = new System.Drawing.Size(82, 21);
             this.dateTimePickerStart.TabIndex = 1;
             this.dateTimePickerStart.Value = new System.DateTime(2015, 7, 2, 11, 30, 0, 0);
-            this.dateTimePickerStart.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged);
+            this.dateTimePickerStart.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged_1);
             // 
             // dateTimePickerEnd
             // 
@@ -73,7 +73,7 @@
             this.dateTimePickerEnd.Size = new System.Drawing.Size(82, 21);
             this.dateTimePickerEnd.TabIndex = 3;
             this.dateTimePickerEnd.Value = new System.DateTime(2015, 7, 2, 22, 0, 0, 0);
-            this.dateTimePickerEnd.ValueChanged += new System.EventHandler(this.dateTimePickerEnd_ValueChanged);
+            this.dateTimePickerEnd.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged_1);
             // 
             // labelGuide2
             // 
