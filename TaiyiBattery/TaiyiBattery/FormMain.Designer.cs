@@ -104,10 +104,12 @@
             // 
             // progressBarBattery
             // 
+            this.progressBarBattery.ForeColor = System.Drawing.Color.Green;
             this.progressBarBattery.Location = new System.Drawing.Point(14, 148);
             this.progressBarBattery.Name = "progressBarBattery";
             this.progressBarBattery.Size = new System.Drawing.Size(241, 19);
             this.progressBarBattery.Step = 1;
+            this.progressBarBattery.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBarBattery.TabIndex = 7;
             // 
             // labelTime
