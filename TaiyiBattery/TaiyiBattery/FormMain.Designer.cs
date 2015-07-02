@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.labelGuide1 = new System.Windows.Forms.Label();
             this.dateTimePickerStart = new System.Windows.Forms.DateTimePicker();
             this.dateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
@@ -48,7 +49,7 @@
             this.labelGuide1.Name = "labelGuide1";
             this.labelGuide1.Size = new System.Drawing.Size(155, 12);
             this.labelGuide1.TabIndex = 0;
-            this.labelGuide1.Text = "今天太医的充电完成时间是:";
+            this.labelGuide1.Text = "今天太医充电完成的时间是:";
             // 
             // dateTimePickerStart
             // 
@@ -57,7 +58,7 @@
             this.dateTimePickerStart.Location = new System.Drawing.Point(173, 48);
             this.dateTimePickerStart.Name = "dateTimePickerStart";
             this.dateTimePickerStart.ShowUpDown = true;
-            this.dateTimePickerStart.Size = new System.Drawing.Size(138, 21);
+            this.dateTimePickerStart.Size = new System.Drawing.Size(82, 21);
             this.dateTimePickerStart.TabIndex = 1;
             this.dateTimePickerStart.Value = new System.DateTime(2015, 7, 2, 11, 30, 0, 0);
             this.dateTimePickerStart.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged);
@@ -66,10 +67,10 @@
             // 
             this.dateTimePickerEnd.CustomFormat = "HH:mm";
             this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerEnd.Location = new System.Drawing.Point(185, 79);
+            this.dateTimePickerEnd.Location = new System.Drawing.Point(173, 79);
             this.dateTimePickerEnd.Name = "dateTimePickerEnd";
             this.dateTimePickerEnd.ShowUpDown = true;
-            this.dateTimePickerEnd.Size = new System.Drawing.Size(126, 21);
+            this.dateTimePickerEnd.Size = new System.Drawing.Size(82, 21);
             this.dateTimePickerEnd.TabIndex = 3;
             this.dateTimePickerEnd.Value = new System.DateTime(2015, 7, 2, 22, 0, 0, 0);
             this.dateTimePickerEnd.ValueChanged += new System.EventHandler(this.dateTimePickerEnd_ValueChanged);
@@ -79,18 +80,18 @@
             this.labelGuide2.AutoSize = true;
             this.labelGuide2.Location = new System.Drawing.Point(12, 85);
             this.labelGuide2.Name = "labelGuide2";
-            this.labelGuide2.Size = new System.Drawing.Size(167, 12);
+            this.labelGuide2.Size = new System.Drawing.Size(155, 12);
             this.labelGuide2.TabIndex = 2;
-            this.labelGuide2.Text = "预计今天太医的没电的时间是:";
+            this.labelGuide2.Text = "预计今天太医没电的时间是:";
             // 
             // labelGuide3
             // 
             this.labelGuide3.AutoSize = true;
             this.labelGuide3.Location = new System.Drawing.Point(12, 23);
             this.labelGuide3.Name = "labelGuide3";
-            this.labelGuide3.Size = new System.Drawing.Size(71, 12);
+            this.labelGuide3.Size = new System.Drawing.Size(83, 12);
             this.labelGuide3.TabIndex = 4;
-            this.labelGuide3.Text = "现在时间是:";
+            this.labelGuide3.Text = "现在的时间是:";
             // 
             // label4
             // 
@@ -105,14 +106,14 @@
             // 
             this.progressBarBattery.Location = new System.Drawing.Point(14, 148);
             this.progressBarBattery.Name = "progressBarBattery";
-            this.progressBarBattery.Size = new System.Drawing.Size(297, 19);
+            this.progressBarBattery.Size = new System.Drawing.Size(241, 19);
             this.progressBarBattery.Step = 1;
             this.progressBarBattery.TabIndex = 7;
             // 
             // labelTime
             // 
             this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(89, 23);
+            this.labelTime.Location = new System.Drawing.Point(101, 23);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(53, 12);
             this.labelTime.TabIndex = 8;
@@ -131,7 +132,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(321, 185);
+            this.ClientSize = new System.Drawing.Size(267, 185);
             this.Controls.Add(this.labelBattery);
             this.Controls.Add(this.labelTime);
             this.Controls.Add(this.progressBarBattery);
@@ -141,6 +142,7 @@
             this.Controls.Add(this.labelGuide2);
             this.Controls.Add(this.dateTimePickerStart);
             this.Controls.Add(this.labelGuide1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
             this.Text = "太医电量";
             this.Load += new System.EventHandler(this.FormMain_Load);
