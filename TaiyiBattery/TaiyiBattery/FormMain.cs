@@ -13,6 +13,8 @@ namespace TaiyiBattery
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            dateTimePickerStart.Value = DateTime.Today;
+            dateTimePickerEnd.Value = DateTime.Today.AddSeconds(78300);
             timerSetTime.Interval = 1000;
             timerSetTime.Tick += timerSetTime_Tick;
             timerSetTime.Start();

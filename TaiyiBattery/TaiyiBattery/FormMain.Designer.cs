@@ -53,26 +53,26 @@
             // 
             // dateTimePickerStart
             // 
-            this.dateTimePickerStart.CustomFormat = "HH:mm";
-            this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerStart.CustomFormat = "HH:mm:ss";
+            this.dateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePickerStart.Location = new System.Drawing.Point(173, 48);
             this.dateTimePickerStart.Name = "dateTimePickerStart";
             this.dateTimePickerStart.ShowUpDown = true;
             this.dateTimePickerStart.Size = new System.Drawing.Size(82, 21);
             this.dateTimePickerStart.TabIndex = 1;
-            this.dateTimePickerStart.Value = new System.DateTime(2015, 7, 2, 11, 30, 0, 0);
+            this.dateTimePickerStart.Value = new System.DateTime(2015, 7, 3, 1, 0, 0, 0);
             this.dateTimePickerStart.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged_1);
             // 
             // dateTimePickerEnd
             // 
-            this.dateTimePickerEnd.CustomFormat = "HH:mm";
-            this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerEnd.CustomFormat = "HH:mm:ss";
+            this.dateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePickerEnd.Location = new System.Drawing.Point(173, 79);
             this.dateTimePickerEnd.Name = "dateTimePickerEnd";
             this.dateTimePickerEnd.ShowUpDown = true;
             this.dateTimePickerEnd.Size = new System.Drawing.Size(82, 21);
             this.dateTimePickerEnd.TabIndex = 3;
-            this.dateTimePickerEnd.Value = new System.DateTime(2015, 7, 2, 22, 0, 0, 0);
+            this.dateTimePickerEnd.Value = new System.DateTime(2015, 7, 3, 21, 45, 0, 0);
             this.dateTimePickerEnd.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged_1);
             // 
             // labelGuide2
