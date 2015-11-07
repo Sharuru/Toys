@@ -28,20 +28,87 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.groupBoxControl = new System.Windows.Forms.GroupBox();
+            this.buttonStart = new System.Windows.Forms.Button();
+            this.buttonStop = new System.Windows.Forms.Button();
+            this.groupBoxLog = new System.Windows.Forms.GroupBox();
+            this.textBoxLog = new System.Windows.Forms.TextBox();
+            this.groupBoxControl.SuspendLayout();
+            this.groupBoxLog.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // groupBoxControl
+            // 
+            this.groupBoxControl.Controls.Add(this.buttonStop);
+            this.groupBoxControl.Controls.Add(this.buttonStart);
+            this.groupBoxControl.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxControl.Name = "groupBoxControl";
+            this.groupBoxControl.Size = new System.Drawing.Size(332, 81);
+            this.groupBoxControl.TabIndex = 1;
+            this.groupBoxControl.TabStop = false;
+            this.groupBoxControl.Text = "单击按钮以控制 Honoka";
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Location = new System.Drawing.Point(6, 20);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(152, 47);
+            this.buttonStart.TabIndex = 0;
+            this.buttonStart.Text = "启动";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            // 
+            // buttonStop
+            // 
+            this.buttonStop.Location = new System.Drawing.Point(174, 20);
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.Size = new System.Drawing.Size(152, 47);
+            this.buttonStop.TabIndex = 1;
+            this.buttonStop.Text = "停止";
+            this.buttonStop.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxLog
+            // 
+            this.groupBoxLog.Controls.Add(this.textBoxLog);
+            this.groupBoxLog.Location = new System.Drawing.Point(12, 100);
+            this.groupBoxLog.Name = "groupBoxLog";
+            this.groupBoxLog.Size = new System.Drawing.Size(332, 195);
+            this.groupBoxLog.TabIndex = 2;
+            this.groupBoxLog.TabStop = false;
+            this.groupBoxLog.Text = "日志";
+            // 
+            // textBoxLog
+            // 
+            this.textBoxLog.Location = new System.Drawing.Point(7, 21);
+            this.textBoxLog.Multiline = true;
+            this.textBoxLog.Name = "textBoxLog";
+            this.textBoxLog.Size = new System.Drawing.Size(319, 168);
+            this.textBoxLog.TabIndex = 0;
             // 
             // MainForm
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(689, 366);
+            this.ClientSize = new System.Drawing.Size(356, 307);
+            this.Controls.Add(this.groupBoxLog);
+            this.Controls.Add(this.groupBoxControl);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
-            this.Text = "Honoka 1.0";
+            this.Text = "Honoka 1.0 控制面板";
+            this.groupBoxControl.ResumeLayout(false);
+            this.groupBoxLog.ResumeLayout(false);
+            this.groupBoxLog.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.GroupBox groupBoxControl;
+        private System.Windows.Forms.Button buttonStop;
+        private System.Windows.Forms.Button buttonStart;
+        private System.Windows.Forms.GroupBox groupBoxLog;
+        private System.Windows.Forms.TextBox textBoxLog;
     }
 }
 
