@@ -28,12 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBoxControl = new System.Windows.Forms.GroupBox();
-            this.buttonStart = new System.Windows.Forms.Button();
+            this.buttonOpenHonoka = new System.Windows.Forms.Button();
             this.buttonStop = new System.Windows.Forms.Button();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.groupBoxLog = new System.Windows.Forms.GroupBox();
             this.textBoxLog = new System.Windows.Forms.TextBox();
-            this.buttonOpenHonoka = new System.Windows.Forms.Button();
             this.groupBoxControl.SuspendLayout();
             this.groupBoxLog.SuspendLayout();
             this.SuspendLayout();
@@ -50,15 +51,16 @@
             this.groupBoxControl.TabStop = false;
             this.groupBoxControl.Text = "单击按钮以控制 Honoka";
             // 
-            // buttonStart
+            // buttonOpenHonoka
             // 
-            this.buttonStart.Location = new System.Drawing.Point(6, 20);
-            this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(260, 47);
-            this.buttonStart.TabIndex = 0;
-            this.buttonStart.Text = "启动";
-            this.buttonStart.UseVisualStyleBackColor = true;
-            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
+            this.buttonOpenHonoka.Enabled = false;
+            this.buttonOpenHonoka.Location = new System.Drawing.Point(538, 21);
+            this.buttonOpenHonoka.Name = "buttonOpenHonoka";
+            this.buttonOpenHonoka.Size = new System.Drawing.Size(147, 46);
+            this.buttonOpenHonoka.TabIndex = 2;
+            this.buttonOpenHonoka.Text = "打开 Honoka";
+            this.buttonOpenHonoka.UseVisualStyleBackColor = true;
+            this.buttonOpenHonoka.Click += new System.EventHandler(this.buttonOpenHonoka_Click);
             // 
             // buttonStop
             // 
@@ -70,6 +72,16 @@
             this.buttonStop.Text = "停止";
             this.buttonStop.UseVisualStyleBackColor = true;
             this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Location = new System.Drawing.Point(6, 20);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(260, 47);
+            this.buttonStart.TabIndex = 0;
+            this.buttonStart.Text = "启动";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // groupBoxLog
             // 
@@ -91,17 +103,6 @@
             this.textBoxLog.Size = new System.Drawing.Size(678, 168);
             this.textBoxLog.TabIndex = 0;
             // 
-            // buttonOpenHonoka
-            // 
-            this.buttonOpenHonoka.Enabled = false;
-            this.buttonOpenHonoka.Location = new System.Drawing.Point(538, 21);
-            this.buttonOpenHonoka.Name = "buttonOpenHonoka";
-            this.buttonOpenHonoka.Size = new System.Drawing.Size(147, 46);
-            this.buttonOpenHonoka.TabIndex = 2;
-            this.buttonOpenHonoka.Text = "打开 Honoka";
-            this.buttonOpenHonoka.UseVisualStyleBackColor = true;
-            this.buttonOpenHonoka.Click += new System.EventHandler(this.buttonOpenHonoka_Click);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -111,9 +112,12 @@
             this.Controls.Add(this.groupBoxLog);
             this.Controls.Add(this.groupBoxControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Honoka 1.0 控制面板";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.buttonStop_Click);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.buttonStop_Click);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBoxControl.ResumeLayout(false);
             this.groupBoxLog.ResumeLayout(false);
