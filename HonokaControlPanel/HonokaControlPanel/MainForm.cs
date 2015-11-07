@@ -39,28 +39,28 @@ namespace HonokaControlPanel
             Process startDbProcess = new Process();
             ProcessStartInfo dbStartInfo = new ProcessStartInfo();
             dbStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            dbStartInfo.FileName = "cmd.exe";
-            dbStartInfo.Arguments = "/C  " + Environment.CurrentDirectory + "\\pgsql\\bin\\pg_ctl.exe " + "-D " + Environment.CurrentDirectory + "\\pgsql\\data" + " -l logfile start";
+            dbStartInfo.FileName = Environment.CurrentDirectory + "\\pgsql\\bin\\pg_ctl.exe";
+            dbStartInfo.Arguments = "-D " + "\"" + Environment.CurrentDirectory + "\\pgsql\\data" + "\"" + " -l logfile start";
             startDbProcess.StartInfo = dbStartInfo;
             startDbProcess.Start();
             textBoxLog.AppendText(DateTime.Now.ToString("hh:mm:ss") + " - 数据库启动命令已发送... \r\n");
             while (!checkProcessExist("postgres"))
             {
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
             textBoxLog.AppendText(DateTime.Now.ToString("hh:mm:ss") + " - 数据库已成功启动... \r\n");
             //启动服务器
             Process startSvProcess = new Process();
-            ProcessStartInfo svStartInfo = new System.Diagnostics.ProcessStartInfo();
+            ProcessStartInfo svStartInfo = new ProcessStartInfo();
             svStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            svStartInfo.FileName = "cmd.exe";
-            svStartInfo.Arguments = "/C  " + Environment.CurrentDirectory + "\\tomcat\\bin\\catalina.bat run";
+            svStartInfo.FileName = Environment.CurrentDirectory + "\\tomcat\\bin\\catalina.bat";
+            svStartInfo.Arguments = "run";
             startSvProcess.StartInfo = svStartInfo;
             startSvProcess.Start();
             textBoxLog.AppendText(DateTime.Now.ToString("hh:mm:ss") + " - 服务器启动命令已发送... \r\n");
             while (!checkProcessExist("java"))
             {
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
             textBoxLog.AppendText(DateTime.Now.ToString("hh:mm:ss") + " - 服务器已成功启动... \r\n");
             buttonStart.Text = "已启动";
@@ -82,8 +82,8 @@ namespace HonokaControlPanel
             Process stopSvProcess = new Process();
             ProcessStartInfo svStartInfo = new ProcessStartInfo();
             svStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            svStartInfo.FileName = "cmd.exe";
-            svStartInfo.Arguments = "/C  " + Environment.CurrentDirectory + "\\tomcat\\bin\\catalina.bat stop";
+            svStartInfo.FileName = Environment.CurrentDirectory + "\\tomcat\\bin\\catalina.bat";
+            svStartInfo.Arguments = "stop";
             stopSvProcess.StartInfo = svStartInfo;
             stopSvProcess.Start();
             //释放资源
@@ -102,16 +102,15 @@ namespace HonokaControlPanel
             Process stopDbProcess = new Process();
             ProcessStartInfo dbStartInfo = new ProcessStartInfo();
             dbStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            dbStartInfo.FileName = "cmd.exe";
-            dbStartInfo.Arguments = "/C  " + Environment.CurrentDirectory + "\\pgsql\\bin\\pg_ctl.exe " + "-D " + System.Environment.CurrentDirectory + "\\pgsql\\data" + " -m fast stop";
+            dbStartInfo.FileName = Environment.CurrentDirectory + "\\pgsql\\bin\\pg_ctl.exe";
+            dbStartInfo.Arguments = "-D " + "\""+ Environment.CurrentDirectory + "\\pgsql\\data" +"\""+ " -m fast stop";
             stopDbProcess.StartInfo = dbStartInfo;
             stopDbProcess.Start();
             while (checkProcessExist("postgres"))
             {
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
             textBoxLog.AppendText(DateTime.Now.ToString("hh:mm:ss") + " - 数据库已成功停止... \r\n");
-            
             buttonStop.Text = "停止";
             buttonStop.Enabled = false;
             buttonStart.Text = "启动";
@@ -120,7 +119,7 @@ namespace HonokaControlPanel
             
         }
 
-        private Boolean checkProcessExist(String procName)
+        private bool checkProcessExist(string procName)
         {
             Process[] processlist = Process.GetProcesses();
             foreach (Process theprocess in processlist)
