@@ -116,9 +116,10 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Honoka 1.0 控制面板";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.buttonStop_Click);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.buttonStop_Click);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormClose_Click);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormClose_Click);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             this.groupBoxControl.ResumeLayout(false);
             this.groupBoxLog.ResumeLayout(false);
             this.groupBoxLog.PerformLayout();
