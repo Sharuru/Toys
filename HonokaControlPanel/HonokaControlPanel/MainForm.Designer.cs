@@ -33,12 +33,14 @@
             this.buttonStop = new System.Windows.Forms.Button();
             this.groupBoxLog = new System.Windows.Forms.GroupBox();
             this.textBoxLog = new System.Windows.Forms.TextBox();
+            this.buttonOpenHonoka = new System.Windows.Forms.Button();
             this.groupBoxControl.SuspendLayout();
             this.groupBoxLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxControl
             // 
+            this.groupBoxControl.Controls.Add(this.buttonOpenHonoka);
             this.groupBoxControl.Controls.Add(this.buttonStop);
             this.groupBoxControl.Controls.Add(this.buttonStart);
             this.groupBoxControl.Location = new System.Drawing.Point(12, 12);
@@ -52,7 +54,7 @@
             // 
             this.buttonStart.Location = new System.Drawing.Point(6, 20);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(330, 47);
+            this.buttonStart.Size = new System.Drawing.Size(260, 47);
             this.buttonStart.TabIndex = 0;
             this.buttonStart.Text = "启动";
             this.buttonStart.UseVisualStyleBackColor = true;
@@ -61,9 +63,9 @@
             // buttonStop
             // 
             this.buttonStop.Enabled = false;
-            this.buttonStop.Location = new System.Drawing.Point(355, 20);
+            this.buttonStop.Location = new System.Drawing.Point(272, 20);
             this.buttonStop.Name = "buttonStop";
-            this.buttonStop.Size = new System.Drawing.Size(330, 47);
+            this.buttonStop.Size = new System.Drawing.Size(259, 47);
             this.buttonStop.TabIndex = 1;
             this.buttonStop.Text = "停止";
             this.buttonStop.UseVisualStyleBackColor = true;
@@ -84,9 +86,21 @@
             this.textBoxLog.Location = new System.Drawing.Point(7, 21);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
+            this.textBoxLog.ReadOnly = true;
             this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxLog.Size = new System.Drawing.Size(678, 168);
             this.textBoxLog.TabIndex = 0;
+            // 
+            // buttonOpenHonoka
+            // 
+            this.buttonOpenHonoka.Enabled = false;
+            this.buttonOpenHonoka.Location = new System.Drawing.Point(538, 21);
+            this.buttonOpenHonoka.Name = "buttonOpenHonoka";
+            this.buttonOpenHonoka.Size = new System.Drawing.Size(147, 46);
+            this.buttonOpenHonoka.TabIndex = 2;
+            this.buttonOpenHonoka.Text = "打开 Honoka";
+            this.buttonOpenHonoka.UseVisualStyleBackColor = true;
+            this.buttonOpenHonoka.Click += new System.EventHandler(this.buttonOpenHonoka_Click);
             // 
             // MainForm
             // 
@@ -115,6 +129,7 @@
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.GroupBox groupBoxLog;
         private System.Windows.Forms.TextBox textBoxLog;
+        private System.Windows.Forms.Button buttonOpenHonoka;
     }
 }
 
