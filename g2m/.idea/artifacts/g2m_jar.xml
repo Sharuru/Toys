@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="g2m:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/g2m_jar</output-path>
+    <root id="archive" name="g2m.jar">
+      <element id="module-output" name="g2m" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/commons-io-2.5.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
