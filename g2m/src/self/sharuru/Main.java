@@ -1,123 +1,107 @@
 package self.sharuru;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
+/**
+ * Convert gradle-typed cache to maven local-typed cache
+ * <p>
+ * Example:
+ * From X:\a.b.c.d\1.0.0-RELEASE\SHA_1_VALUE\something.jar/pom
+ * To   X:\a\b\c\d\1.0.0-RELEASE\something.jar/pom
+ * <p>
+ * Usually used for offline gradle build with secret dependencies.
+ */
 public class Main {
 
+    private static final String FROM_DIR = "D:\\G";
+    private static final String TO_DIR = "D:\\O";
+
     public static void main(String[] args) {
-        // write your code here
-        //List
-        //Split
-        //mkdir
-        //cp
-        //if 40 and pom /jar
-        //throw
-        System.out.println("Listing file in dir...");
-/*        File targetFolder = new File("D:\\G");
-        File[] subFolders = targetFolder.listFiles();
-        for(File folder : subFolders){
-            System.out.println("Current: " + folder.getName());
-            String path = "D:\\O\\";
-            for(String part : folder.getName().split("\\.")){
-                path = path + part + "\\";
-            }
-            System.out.println("Parent path: " + path);
-            // SUB
-            if(folder.isDirectory()){
+        System.out.println("Listing file under " + FROM_DIR + "...");
 
-            }
-        }*/
-        List<fileDict> files = new ArrayList<>();
+        // list all flies.
+        List<cpOpt> allFiles = new ArrayList<>();
         try {
-            Files.walk(Paths.get("D:\\G"))
+            Files.walk(Paths.get(FROM_DIR))
                     .filter(Files::isRegularFile)
-                    .forEach(p -> files.add(new fileDict(p.toAbsolutePath())));
-
+                    .forEach(p -> allFiles.add(new cpOpt(p.toAbsolutePath())));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (fileDict f : files) {
-            //System.out.println(f.getoP().toString());
-            String op = f.getoP().toString();
-            //System.out.println("O: " + op);
-            String[] a = op.split("\\\\");
-            String trueP = "";
-            //System.out.println(a.size());
-            String[] ss = a[2].split("\\.");
 
-            for (int i = 0; i < a.length; i++) {
+        System.out.println("Get " + allFiles.size() + " files.");
 
-                if (a[i].length() != 40 && a[i].length() != 39) {
-                    //System.out.println(l);
+        // trim the path
+        for (cpOpt aFile : allFiles) {
+            //System.out.println(aFile.getFrom().toString());
+
+            // split path by '/'
+            String[] origPath = aFile.getFrom().toString().split("\\\\");
+            String toPath = "";
+
+            // split package by '.'
+            String[] pkgName = origPath[2].split("\\.");
+
+            for (int i = 0; i < origPath.length; i++) {
+                // ignore SHA1
+                if (i != origPath.length - 2) {
                     if (i != 2) {
-                        trueP = trueP + "\\" + a[i];
+                        toPath = toPath + "\\" + origPath[i];
                     } else {
-                        for (String k : ss) {
-                            trueP = trueP + "\\" + k;
+                        // package name append
+                        for (String p : pkgName) {
+                            toPath = toPath + "\\" + p;
                         }
                     }
-
                 }
             }
-            trueP = trueP.substring(1);
-            trueP = trueP.replace("D:\\G\\", "D:\\O\\");
-            System.out.println(trueP);
-            f.settP(Paths.get(trueP));
 
-            File sourceFile = f.getoP().toFile();
-            Path sourcePath = sourceFile.toPath();
+            // cut final '\'
+            toPath = toPath.substring(1);
+            toPath = toPath.replace(FROM_DIR, TO_DIR);
 
-            File destFile = f.gettP().toFile();
-            Path destPath = destFile.toPath();
+            aFile.setTo(Paths.get(toPath));
 
             try {
-                if(destPath.toString().endsWith(".jar") || destPath.toString().endsWith(".pom")){
-                    //FileUtils.copyFile(f.getoP().toFile(), f.gettP().toFile());
-                    Files.createDirectories(destPath.getParent());
-                    Files.copy( sourcePath, destPath,REPLACE_EXISTING );
-                }
-
+                Files.createDirectories(aFile.getTo().getParent());
+                Files.copy(aFile.getFrom(), aFile.getTo(), REPLACE_EXISTING);
+                System.out.println("Copied: " + aFile.getFrom() + " --> " + aFile.getTo());
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
-
+        System.out.println("Finished.");
     }
 
-    public static class fileDict {
-        Path oP;
-        Path tP;
+    private static class cpOpt {
+        Path from;
+        Path to;
 
-        public Path getoP() {
-            return oP;
+        private Path getFrom() {
+            return from;
         }
 
-        public void setoP(Path oP) {
-            this.oP = oP;
+        private void setFrom(Path from) {
+            this.from = from;
         }
 
-        public Path gettP() {
-            return tP;
+        private Path getTo() {
+            return to;
         }
 
-        public void settP(Path tP) {
-            this.tP = tP;
+        private void setTo(Path to) {
+            this.to = to;
         }
 
-        public fileDict(Path oP) {
-            this.oP = oP;
+        private cpOpt(Path oP) {
+            this.from = oP;
         }
     }
 }
