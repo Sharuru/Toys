@@ -1,8 +1,8 @@
 package self.srr.fish;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import self.srr.common.ResponseModel;
+import org.springframework.web.bind.annotation.*;
+import self.srr.common.BotRequestModel;
+import self.srr.common.BotResponseModel;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -17,9 +17,9 @@ import java.util.TimeZone;
 @RequestMapping("/bot/fish")
 public class FishController {
 
-    @RequestMapping("")
-    public ResponseModel etaTime() {
-        ResponseModel model = new ResponseModel();
+    @RequestMapping(value = "")
+    public BotResponseModel etaTime(BotRequestModel botReq) {
+        BotResponseModel model = new BotResponseModel();
         model.setResponse_type("in_channel");
 
         String context = "";

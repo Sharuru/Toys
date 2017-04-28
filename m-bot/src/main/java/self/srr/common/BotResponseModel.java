@@ -3,7 +3,7 @@ package self.srr.common;
 /**
  * Created by Sharuru on 2017/04/28.
  */
-public class ResponseModel {
+public class BotResponseModel {
 
     String response_type;
     String text;
