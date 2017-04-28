@@ -1,18 +1,23 @@
-package self.srr;
+package self.srr.fish;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import self.srr.common.ResponseModel;
 
-import java.time.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
 /**
  * Created by Sharuru on 2017/04/28.
  */
 @RestController
-public class Controller {
+@RequestMapping("/bot/fish")
+public class FishController {
 
-    @RequestMapping("/bot/time")
+    @RequestMapping("")
     public ResponseModel etaTime() {
         ResponseModel model = new ResponseModel();
         model.setResponse_type("in_channel");
@@ -21,7 +26,7 @@ public class Controller {
 
         // calc time
         LocalDateTime now = LocalDateTime.now();
-        ZonedDateTime endTime = ZonedDateTime.of(now.getYear(),now.getMonthValue(),now.getDayOfMonth(),18,00,00,00,ZoneId.of("Asia/Shanghai"));
+        ZonedDateTime endTime = ZonedDateTime.of(now.getYear(),now.getMonthValue(),now.getDayOfMonth(),18,00,00,00, ZoneId.of("Asia/Shanghai"));
         LocalDateTime end = endTime.withZoneSameInstant(ZoneId.of(TimeZone.getDefault().getID())).toLocalDateTime();
         Duration duration = Duration.between(now, end);
 

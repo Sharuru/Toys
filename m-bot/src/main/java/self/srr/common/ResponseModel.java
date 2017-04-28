@@ -1,9 +1,10 @@
-package self.srr;
+package self.srr.common;
 
 /**
  * Created by Sharuru on 2017/04/28.
  */
 public class ResponseModel {
+
     String response_type;
     String text;
     String username;
