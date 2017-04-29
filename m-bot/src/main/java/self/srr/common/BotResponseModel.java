@@ -5,10 +5,10 @@ package self.srr.common;
  */
 public class BotResponseModel {
 
-    String response_type;
-    String text;
-    String username;
-    String icon_url;
+    String response_type = "in_channel";
+    String text = "";
+    String username = "Bot";
+    String icon_url = "http://www.www.com/";
 
     public String getResponse_type() {
         return response_type;

@@ -1,5 +1,6 @@
 package self.srr.fish;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import self.srr.common.BotRequestModel;
 import self.srr.common.BotResponseModel;
@@ -17,9 +18,15 @@ import java.util.TimeZone;
 @RequestMapping("/bot/fish")
 public class FishController {
 
+    @Autowired
+    FishProcessor fProc;
+
     @RequestMapping(value = "")
     public BotResponseModel etaTime(BotRequestModel botReq) {
-        BotResponseModel model = new BotResponseModel();
+
+        return fProc.main(botReq);
+
+        /*BotResponseModel model = new BotResponseModel();
         model.setResponse_type("in_channel");
 
         String context = "";
@@ -40,6 +47,6 @@ public class FishController {
         model.setText(context);
         model.setUsername("Bot");
         model.setIcon_url("http://127.0.0.1/");
-        return model;
+        return model;*/
     }
 }
