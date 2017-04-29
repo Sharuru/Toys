@@ -1,16 +1,22 @@
 package self.srr.fish;
 
 /**
+ * fish_record 表结果映射
+ * <p>
  * Created by Sharuru on 2017/4/29 0029.
  */
 public class FishRecord {
 
-    Integer id;
-    String user;
-    Integer check_time;
-    Integer input_time;
+    // 主键
+    private Integer id;
+    // 用户名
+    private String user;
+    // 检查用时间戳
+    private Integer check_time;
+    // 用户输入时间戳
+    private Integer input_time;
 
-    public Integer getId() {
+    Integer getId() {
         return id;
     }
 
