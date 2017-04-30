@@ -20,17 +20,17 @@ public interface FishMapper {
      * @param endTs   今日结束时间戳
      * @return 记录
      */
-    @Select("SELECT " +
-            "    * " +
-            "FROM " +
-            "    fish_record " +
-            "WHERE " +
-            "    user = #{user} " +
-            "AND " +
-            "    check_time >= #{beginTs} " +
-            "AND " +
-            "    check_time <= #{endTs} " +
-            "LIMIT " +
+    @Select("  SELECT" +
+            "    *" +
+            "  FROM" +
+            "    fish_record" +
+            "  WHERE" +
+            "    user = #{user}" +
+            "  AND" +
+            "    check_time >= #{beginTs}" +
+            "  AND" +
+            "    check_time <= #{endTs}" +
+            "  LIMIT" +
             "    1")
     FishRecord findOneByTime(@Param("user") String user, @Param("beginTs") Long beginTs, @Param("endTs") Long endTs);
 
@@ -41,12 +41,12 @@ public interface FishMapper {
      * @param checkTime 比对用时间戳
      * @param inputTime 用户输入时间戳
      */
-    @Update("UPDATE " +
+    @Update("  UPDATE" +
             "    fish_record" +
-            "SET " +
+            "  SET" +
             "    check_time = #{checkTime}," +
             "    input_time = #{inputTime}" +
-            "WHERE" +
+            "  WHERE" +
             "    id = #{id}")
     void updateTimeById(@Param("id") Integer id, @Param("checkTime") Long checkTime, @Param("inputTime") Long inputTime);
 
@@ -57,17 +57,17 @@ public interface FishMapper {
      * @param checkTime 比对用时间戳
      * @param inputTime 用户输入时间戳
      */
-    @Insert("INSERT INTO" +
+    @Insert("  INSERT INTO" +
             "    fish_record (" +
-            "        user," +
-            "        check_time," +
-            "        input_time" +
+            "      user," +
+            "      check_time," +
+            "      input_time" +
             "    )" +
-            "VALUES (" +
+            "  VALUES (" +
             "    #{user}," +
             "    #{checkTime}," +
             "    #{inputTime}" +
-            ")")
+            "  )")
     void insertTime(@Param("user") String user, @Param("checkTime") Long checkTime, @Param("inputTime") Long inputTime);
 
 }

@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * 摸鱼计时的业务实现
+ * 摸鱼计时的功能实现
  * <p>
  * Created by Sharuru on 2017/04/28.
  */
@@ -52,7 +52,7 @@ class FishProcessor {
                 "使用方法：输入 `/fish 指令。`\n" +
                 "`/fish` 显示今天还得摸多久才能跑路；" +
                 "`/fish help` 显示本帮助信息；\n" +
-                "`/fish ci 0900 记录今天的签到时间为上午九点，再次使用则进行修改；" +
+                "`/fish ci 0900 记录今天的出勤时间为上午九点，再次使用则进行修改；" +
                 "* 所有时间均已 +8 区为基准进行计算。 *";
         botResp.setText(text);
     }
@@ -75,37 +75,37 @@ class FishProcessor {
 
                 // 转换成时间戳
                 Long beginTs = Date.from(todayBegin.toInstant()).getTime() / 1000;      // 今日开始
-                Long endTs = beginTs + 86400;   // 今日结束
-                Long workTs = beginTs + 32400;  // 上班时间（上午九点）
+                Long endTs = beginTs + FishContrast.ONE_DAY;   // 今日结束
+                Long workTs = beginTs + FishContrast.NINE_HOUR;  // 上班时间（上午九点）
                 Long inputTs = Date.from(inputTzTime.toInstant()).getTime() / 1000;     // 用户输入
 
                 // 查询数据库已有记录
                 FishRecord dbRecord = mapper.findOneByTime(botReq.getUser_name(), beginTs, endTs);
 
-
                 // 已存在记录，更新
                 if (dbRecord != null) {
                     // 今日已登记过，修改记录
-                    if (inputTs > workTs + 1800) {
+                    if (inputTs > workTs + FishContrast.HALF_HOUR) {
                         // 超过弹性时间（上午九点半）
                         mapper.updateTimeById(dbRecord.getId(), workTs, inputTs);
-                        botResp.setText("真鸡儿丢人！都超过弹性时间了！");
+                        botResp.setText("人心散了，队伍带不动了啊……（出勤时间已修改为：09:00）");
                     } else {
                         mapper.updateTimeById(dbRecord.getId(), inputTs, inputTs);
-                        botResp.setText("今天的考勤时间已经修改成：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哦！");
+                        botResp.setText("今天的出勤时间已经修改成：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哦！");
                     }
                 } else {
                     // 插入数据库
-                    if (inputTs > workTs + 1800) {
+                    if (inputTs > workTs + FishContrast.HALF_HOUR) {
                         // 超过弹性时间（上午九点半）
                         mapper.insertTime(botReq.getUser_name(), workTs, inputTs);
-                        botResp.setText("真鸡儿丢人！都超过弹性时间了！");
+                        botResp.setText("真鸡儿丢人！都超过弹性时间了，这大清药丸啊！（出勤时间已修改为：09:00）");
                     } else {
                         mapper.insertTime(botReq.getUser_name(), inputTs, inputTs);
-                        botResp.setText("今天的考勤时间已经修改成：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哦！");
+                        botResp.setText("今天的出勤时间已经记录为：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哟！今日も一日頑張るぞい！");
                     }
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 botResp.setText("似乎发生了奇怪的问题，麻烦稍后再试。");
             }
         } catch (Exception e) {
