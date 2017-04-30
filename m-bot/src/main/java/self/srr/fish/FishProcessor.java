@@ -6,6 +6,8 @@ import self.srr.common.BotRequestModel;
 import self.srr.common.BotResponseModel;
 
 import java.sql.Date;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -39,6 +41,7 @@ class FishProcessor {
             }
         } else {
             // 根据时刻计算剩余时间
+            chkTime();
         }
         return botResp;
     }
@@ -113,4 +116,43 @@ class FishProcessor {
         }
     }
 
+    /**
+     * 计算剩余时间
+     */
+    private void chkTime() {
+        // 获取时间戳
+        ZonedDateTime now = ZonedDateTime.now(FishContrast.ZONE_SHANGHAI);
+        ZonedDateTime todayBegin = ZonedDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 0, 0, 0, 0, FishContrast.ZONE_SHANGHAI);
+        Long beginTs = Date.from(todayBegin.toInstant()).getTime() / 1000;      // 今日开始
+        Long endTs = beginTs + FishContrast.ONE_DAY;   // 今日结束
+
+        // 查询数据库已有记录
+        FishRecord dbRecord = mapper.findOneByTime(botReq.getUser_name(), beginTs, endTs);
+
+        // 不存在记录
+        if (dbRecord == null) {
+            botResp.setText("貌似今天还没有记录出勤时间哦！（使用 `/fish ci HHmm` 来记录）");
+        } else {
+            // 计算
+            ZonedDateTime end = Instant.ofEpochSecond(dbRecord.getCheck_time()).atZone(FishContrast.ZONE_SHANGHAI);
+            Duration duration = Duration.between(now, end);
+            Long etaSeconds = duration.getSeconds();
+            Long etaSecondsAbs = Math.abs(etaSeconds);
+            String context = "";
+            if (etaSeconds > 0) {
+                // 剩余时间
+                context += "哎呀，还得摸：" + etaSeconds + " 秒";
+            } else {
+                // 续命时间
+                context += "嚯哟！你给自己续了：" + etaSecondsAbs + " 秒";
+            }
+            if (etaSecondsAbs > 60 && etaSecondsAbs < 3600) {
+                context += "，约 " + (etaSecondsAbs / 60) + " 分钟";
+            }
+            if (etaSecondsAbs > 3600) {
+                context += "，约 " + (etaSecondsAbs / 3600) + " 小时";
+            }
+            botResp.setText(context);
+        }
+    }
 }
