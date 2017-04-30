@@ -1,14 +1,20 @@
 package self.srr.common;
 
 /**
+ * Bot 响应实体
+ * <p>
  * Created by Sharuru on 2017/04/28.
  */
 public class BotResponseModel {
 
-    String response_type = "in_channel";
-    String text = "";
-    String username = "Bot";
-    String icon_url = "http://www.www.com/";
+    // 响应类型
+    private String response_type = BotContrast.BOT_RES_TYPE;
+    // 响应内容
+    private String text = BotContrast.BOT_RESPONSE;
+    // Bot 名
+    private String username = BotContrast.BOT_NAME;
+    // Bot 头像地址
+    private String icon_url = BotContrast.BOT_ICON_URL;
 
     public String getResponse_type() {
         return response_type;
