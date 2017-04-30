@@ -31,13 +31,16 @@ class FishProcessor {
         // 解析参数以执行不同的行为
         String[] userCommand = botReq.getText().split("\\s+");
         // 选择行为
-        if ("help".equals(userCommand[0].toLowerCase())) {
+        if ("help".equalsIgnoreCase(userCommand[0])) {
             // 显示帮助信息
             showHelpMsg();
-        } else if ("ci".equals(userCommand[0].toLowerCase())) {
+        } else if ("ci".equalsIgnoreCase(userCommand[0])) {
             // 摸鱼计时登记
-            if (userCommand[1] != null) {
+            if (userCommand.length >= 2) {
                 regTime(userCommand[1]);
+            }else{
+                // 缺失参数
+                botResp.setText("参数忘记输入了的样子……使用 `/fish help` 来获取帮助。");
             }
         } else {
             // 根据时刻计算剩余时间
@@ -91,7 +94,7 @@ class FishProcessor {
                     if (inputTs > workTs + FishContrast.HALF_HOUR) {
                         // 超过弹性时间（上午九点半）
                         mapper.updateTimeById(dbRecord.getId(), workTs, inputTs);
-                        botResp.setText("人心散了，队伍带不动了啊……（出勤时间已修改为：09:00）");
+                        botResp.setText("人心散了，队伍带不动了啊……出勤时间已修改为：09:00。（超出弹性时间）");
                     } else {
                         mapper.updateTimeById(dbRecord.getId(), inputTs, inputTs);
                         botResp.setText("今天的出勤时间已经修改成：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哦！");
@@ -101,7 +104,7 @@ class FishProcessor {
                     if (inputTs > workTs + FishContrast.HALF_HOUR) {
                         // 超过弹性时间（上午九点半）
                         mapper.insertTime(botReq.getUser_name(), workTs, inputTs);
-                        botResp.setText("真鸡儿丢人！都超过弹性时间了，这大清药丸啊！（出勤时间已修改为：09:00）");
+                        botResp.setText("真鸡儿丢人！都超过弹性时间了，这大清药丸啊！出勤时间已修改为：09:00。（超出弹性时间）");
                     } else {
                         mapper.insertTime(botReq.getUser_name(), inputTs, inputTs);
                         botResp.setText("今天的出勤时间已经记录为：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哟！今日も一日頑張るぞい！");
