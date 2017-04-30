@@ -1,6 +1,8 @@
 package self.srr.fish;
 
 import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 摸鱼计时的一些常量
@@ -8,6 +10,9 @@ import java.time.ZoneId;
  * Created by Sharuru on 2017/4/29 0029.
  */
 class FishContrast {
+
+    // 调用频率
+    static final Map<String, Long> RATE_MAP = new HashMap<>();
 
     // +8 时区
     static final ZoneId ZONE_SHANGHAI = ZoneId.of("Asia/Shanghai");
