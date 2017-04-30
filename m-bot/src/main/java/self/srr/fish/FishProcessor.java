@@ -37,6 +37,8 @@ class FishProcessor {
             if (userCommand[1] != null) {
                 regTime(userCommand[1]);
             }
+        } else {
+            // 根据时刻计算剩余时间
         }
         return botResp;
     }
@@ -77,8 +79,9 @@ class FishProcessor {
                 Long workTs = beginTs + 32400;  // 上班时间（上午九点）
                 Long inputTs = Date.from(inputTzTime.toInstant()).getTime() / 1000;     // 用户输入
 
-                // 查询数据库是否已有记录
+                // 查询数据库已有记录
                 FishRecord dbRecord = mapper.findOneByTime(botReq.getUser_name(), beginTs, endTs);
+
 
                 // 已存在记录，更新
                 if (dbRecord != null) {
@@ -93,7 +96,14 @@ class FishProcessor {
                     }
                 } else {
                     // 插入数据库
-
+                    if (inputTs > workTs + 1800) {
+                        // 超过弹性时间（上午九点半）
+                        mapper.insertTime(botReq.getUser_name(), workTs, inputTs);
+                        botResp.setText("真鸡儿丢人！都超过弹性时间了！");
+                    } else {
+                        mapper.insertTime(botReq.getUser_name(), inputTs, inputTs);
+                        botResp.setText("今天的考勤时间已经修改成：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哦！");
+                    }
                 }
             } catch (Exception e) {
                 botResp.setText("似乎发生了奇怪的问题，麻烦稍后再试。");

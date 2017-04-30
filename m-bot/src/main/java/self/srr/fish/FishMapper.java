@@ -1,9 +1,6 @@
 package self.srr.fish;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -52,5 +49,25 @@ public interface FishMapper {
             "WHERE" +
             "    id = #{id}")
     void updateTimeById(@Param("id") Integer id, @Param("checkTime") Long checkTime, @Param("inputTime") Long inputTime);
+
+    /**
+     * 插入新纪录
+     *
+     * @param user      用户名
+     * @param checkTime 比对用时间戳
+     * @param inputTime 用户输入时间戳
+     */
+    @Insert("INSERT INTO" +
+            "    fish_record (" +
+            "        user," +
+            "        check_time," +
+            "        input_time" +
+            "    )" +
+            "VALUES (" +
+            "    #{user}," +
+            "    #{checkTime}," +
+            "    #{inputTime}" +
+            ")")
+    void insertTime(@Param("user") String user, @Param("checkTime") Long checkTime, @Param("inputTime") Long inputTime);
 
 }

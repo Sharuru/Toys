@@ -10,5 +10,5 @@ import java.time.ZoneId;
 class FishContrast {
 
     // +8 时区
-    static final ZoneId ZONE_SHANGHAI = ZoneId.of("Shanghai");
+    static final ZoneId ZONE_SHANGHAI = ZoneId.of("Asia/Shanghai");
 }
