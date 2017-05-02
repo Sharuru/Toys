@@ -93,7 +93,7 @@ class FishProcessor {
                     // 今日已登记过，修改记录
                     if (inputTs > workTs + FishContrast.HALF_HOUR) {
                         // 超过弹性时间（上午九点半）
-                        mapper.updateTimeById(dbRecord.getId(), workTs, inputTs);
+                        mapper.updateTimeById(dbRecord.getId(), workTs + FishContrast.NINE_HOUR, inputTs);
                         botResp.setText("人心散了，队伍带不动了啊……出勤时间已修改为：09:00。（超出弹性时间）");
                     } else {
                         mapper.updateTimeById(dbRecord.getId(), inputTs + FishContrast.NINE_HOUR, inputTs);
@@ -103,7 +103,7 @@ class FishProcessor {
                     // 插入数据库
                     if (inputTs > workTs + FishContrast.HALF_HOUR) {
                         // 超过弹性时间（上午九点半）
-                        mapper.insertTime(botReq.getUser_name(), workTs, inputTs);
+                        mapper.insertTime(botReq.getUser_name(), workTs + FishContrast.NINE_HOUR, inputTs);
                         botResp.setText("真鸡儿丢人！都超过弹性时间了，这大清药丸啊！出勤时间已修改为：09:00。（超出弹性时间）");
                     } else {
                         mapper.insertTime(botReq.getUser_name(), inputTs + FishContrast.NINE_HOUR, inputTs);
