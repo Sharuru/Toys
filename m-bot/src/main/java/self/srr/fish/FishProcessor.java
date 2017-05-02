@@ -96,6 +96,10 @@ class FishProcessor {
                         // 超过弹性时间（上午九点半）
                         mapper.updateTimeById(dbRecord.getId(), workTs + FishContrast.NINE_HOUR, inputTs);
                         botResp.setText("人心散了，队伍带不动了啊……出勤时间已修改为：09:00。（超出弹性时间）");
+                    } else if (inputTs < workTs) {
+                        // 早于标准时间（上午九点）
+                        mapper.updateTimeById(dbRecord.getId(), workTs + FishContrast.NINE_HOUR, inputTs);
+                        botResp.setText("早于标准时间，所以……今天的出勤时间已修改为：09:00。（早于标准时间）");
                     } else {
                         mapper.updateTimeById(dbRecord.getId(), inputTs + FishContrast.NINE_HOUR, inputTs);
                         botResp.setText("今天的出勤时间已经修改成：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哦！");
@@ -106,6 +110,10 @@ class FishProcessor {
                         // 超过弹性时间（上午九点半）
                         mapper.insertTime(botReq.getUser_name(), workTs + FishContrast.NINE_HOUR, inputTs);
                         botResp.setText("真鸡儿丢人！都超过弹性时间了，这大清药丸啊！出勤时间已修改为：09:00。（超出弹性时间）");
+                    } else if (inputTs < workTs) {
+                        // 早于标准时间（上午九点）
+                        mapper.updateTimeById(dbRecord.getId(), workTs + FishContrast.NINE_HOUR, inputTs);
+                        botResp.setText("早上好！你很努力，可是并不能提早下班……加油！出勤时间已修改为：09:00。（早于标准时间）");
                     } else {
                         mapper.insertTime(botReq.getUser_name(), inputTs + FishContrast.NINE_HOUR, inputTs);
                         botResp.setText("今天的出勤时间已经记录为：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哟！今日も一日頑張るぞい！");
@@ -154,7 +162,7 @@ class FishProcessor {
                 context += "，约 " + (etaSecondsAbs / 60) + " 分钟";
             }
             if (etaSecondsAbs > 3600) {
-                context += "，约 " + new BigDecimal(etaSecondsAbs).divide(new BigDecimal(3600), 2,BigDecimal.ROUND_HALF_UP) + " 小时";
+                context += "，约 " + new BigDecimal(etaSecondsAbs).divide(new BigDecimal(3600), 2, BigDecimal.ROUND_HALF_UP) + " 小时";
             }
             botResp.setText(context);
         }
