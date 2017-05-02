@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import self.srr.common.BotRequestModel;
 import self.srr.common.BotResponseModel;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.Duration;
 import java.time.Instant;
@@ -153,7 +154,7 @@ class FishProcessor {
                 context += "，约 " + (etaSecondsAbs / 60) + " 分钟";
             }
             if (etaSecondsAbs > 3600) {
-                context += "，约 " + (etaSecondsAbs / 3600) + " 小时";
+                context += "，约 " + new BigDecimal(etaSecondsAbs).divide(new BigDecimal(3600), 2,BigDecimal.ROUND_HALF_UP) + " 小时";
             }
             botResp.setText(context);
         }
