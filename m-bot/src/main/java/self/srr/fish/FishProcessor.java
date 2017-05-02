@@ -38,7 +38,7 @@ class FishProcessor {
             // 摸鱼计时登记
             if (userCommand.length >= 2) {
                 regTime(userCommand[1]);
-            }else{
+            } else {
                 // 缺失参数
                 botResp.setText("参数忘记输入了的样子……使用 `/fish help` 来获取帮助。");
             }
@@ -56,10 +56,10 @@ class FishProcessor {
         String text = "" +
                 "摸鱼计时的帮助信息：\n" +
                 "使用方法：输入 `/fish 指令。`\n" +
-                "`/fish` 显示今天还得摸多久才能跑路；" +
+                "`/fish` 显示今天还得摸多久才能跑路；\n" +
                 "`/fish help` 显示本帮助信息；\n" +
-                "`/fish ci 0900 记录今天的出勤时间为上午九点，再次使用则进行修改；" +
-                "* 所有时间均已 +8 区为基准进行计算。 *";
+                "`/fish ci 0900` 记录今天的出勤时间为上午九点，再次使用则进行修改；\n" +
+                "**所有时间均已 +8 区为基准进行计算。**";
         botResp.setText(text);
     }
 
@@ -96,7 +96,7 @@ class FishProcessor {
                         mapper.updateTimeById(dbRecord.getId(), workTs, inputTs);
                         botResp.setText("人心散了，队伍带不动了啊……出勤时间已修改为：09:00。（超出弹性时间）");
                     } else {
-                        mapper.updateTimeById(dbRecord.getId(), inputTs, inputTs);
+                        mapper.updateTimeById(dbRecord.getId(), inputTs + FishContrast.NINE_HOUR, inputTs);
                         botResp.setText("今天的出勤时间已经修改成：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哦！");
                     }
                 } else {
@@ -106,7 +106,7 @@ class FishProcessor {
                         mapper.insertTime(botReq.getUser_name(), workTs, inputTs);
                         botResp.setText("真鸡儿丢人！都超过弹性时间了，这大清药丸啊！出勤时间已修改为：09:00。（超出弹性时间）");
                     } else {
-                        mapper.insertTime(botReq.getUser_name(), inputTs, inputTs);
+                        mapper.insertTime(botReq.getUser_name(), inputTs + FishContrast.NINE_HOUR, inputTs);
                         botResp.setText("今天的出勤时间已经记录为：" + inputTzTime.format(DateTimeFormatter.ofPattern("HH:mm")) + " 了哟！今日も一日頑張るぞい！");
                     }
                 }
