@@ -112,7 +112,7 @@ class FishProcessor {
                         botResp.setText("真鸡儿丢人！都超过弹性时间了，这大清药丸啊！出勤时间已修改为：09:00。（超出弹性时间）");
                     } else if (inputTs < workTs) {
                         // 早于标准时间（上午九点）
-                        mapper.updateTimeById(dbRecord.getId(), workTs + FishContrast.NINE_HOUR, inputTs);
+                        mapper.insertTime(botReq.getUser_name(), workTs + FishContrast.NINE_HOUR, inputTs);
                         botResp.setText("早上好！你很努力，可是并不能提早下班……加油！出勤时间已修改为：09:00。（早于标准时间）");
                     } else {
                         mapper.insertTime(botReq.getUser_name(), inputTs + FishContrast.NINE_HOUR, inputTs);
