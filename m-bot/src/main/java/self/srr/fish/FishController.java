@@ -1,8 +1,9 @@
 package self.srr.fish;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import self.srr.common.BotContrast;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import self.srr.common.BotRequestModel;
 import self.srr.common.BotResponseModel;
 
@@ -13,6 +14,7 @@ import self.srr.common.BotResponseModel;
  */
 @RestController
 @RequestMapping("/bot/fish")
+@Slf4j
 public class FishController {
 
     @Autowired
@@ -30,22 +32,19 @@ public class FishController {
             if (nowTs - lastTs <= 10) {
                 // 超过频率，禁止
                 passFlg = false;
+                log.info("User '" + botReq.getUser_name() + "' process skipped(Over limit)");
                 respModel.setText("频率太快了，请等待一会儿！  @" + botReq.getUser_name());
             }
         }
 
         // 如果合规
         if (passFlg) {
+            log.info("User '" + botReq.getUser_name() + "' in process");
             respModel = processor.main(botReq);
-            // 增加 @
-            respModel.setText(respModel.getText() + "  @" + botReq.getUser_name());
             FishContrast.RATE_MAP.put(botReq.getUser_name(), nowTs);
         }
 
-        // 如果 master
-        if (botReq.getUser_name().equalsIgnoreCase(BotContrast.BOT_MASTER)) {
-            respModel.setText("主人，" + respModel.getText());
-        }
+        log.info("User '" + botReq.getUser_name() + "' process finished");
 
         return respModel;
     }

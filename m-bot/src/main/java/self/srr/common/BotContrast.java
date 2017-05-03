@@ -8,14 +8,12 @@ package self.srr.common;
 public class BotContrast {
 
     // 响应类型
-    static final String BOT_RES_TYPE = "ephemeral";
+    public static final String BOT_RES_TYPE_ICH = "in_channel";
+    public static final String BOT_RES_TYPE_EPH = "ephemeral";
     // 响应内容
-    static final String BOT_RESPONSE = "";
+    public static final String BOT_RESPONSE = "";
     // Bot 名
-    static final String BOT_NAME = "Bot";
+    public static final String BOT_NAME = "Bot";
     // Bot 头像地址
-    static final String BOT_ICON_URL = "URL";
-    // Bot 管理者 ID
-    public static final String BOT_MASTER = "sharuru";
-
+    public static final String BOT_ICON_URL = "URL";
 }

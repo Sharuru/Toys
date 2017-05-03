@@ -8,7 +8,7 @@ package self.srr.common;
 public class BotResponseModel {
 
     // 响应类型
-    private String response_type = BotContrast.BOT_RES_TYPE;
+    private String response_type = BotContrast.BOT_RES_TYPE_EPH;
     // 响应内容
     private String text = BotContrast.BOT_RESPONSE;
     // Bot 名
