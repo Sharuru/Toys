@@ -8,7 +8,7 @@ package self.srr.common;
 public class BotContrast {
 
     // 响应类型
-    static final String BOT_RES_TYPE = "in_channel";
+    static final String BOT_RES_TYPE = "ephemeral";
     // 响应内容
     static final String BOT_RESPONSE = "";
     // Bot 名

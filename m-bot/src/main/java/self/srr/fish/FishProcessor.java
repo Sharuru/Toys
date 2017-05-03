@@ -43,9 +43,12 @@ class FishProcessor {
                 // 缺失参数
                 botResp.setText("参数忘记输入了的样子……使用 `/fish help` 来获取帮助。");
             }
+        } else if ("s".equalsIgnoreCase(userCommand[0])) {
+            // 在公频分享剩余计时
+            chkTime(true);
         } else {
             // 根据时刻计算剩余时间
-            chkTime();
+            chkTime(false);
         }
         return botResp;
     }
@@ -60,6 +63,7 @@ class FishProcessor {
                 "`/fish` 显示今天还得摸多久才能跑路；\n" +
                 "`/fish help` 显示本帮助信息；\n" +
                 "`/fish ci 0900` 记录今天的出勤时间为上午九点，再次使用则进行修改；\n" +
+                "`/fish s` 将自己的摸鱼时间共享到群；\n" +
                 "**所有时间均已 +8 区为基准进行计算。**";
         botResp.setText(text);
     }
@@ -130,8 +134,10 @@ class FishProcessor {
 
     /**
      * 计算剩余时间
+     *
+     * @param share 是否要将处理结果公开（仅正常时）
      */
-    private void chkTime() {
+    private void chkTime(Boolean share) {
         // 获取时间戳
         ZonedDateTime now = ZonedDateTime.now(FishContrast.ZONE_SHANGHAI);
         ZonedDateTime todayBegin = ZonedDateTime.of(now.getYear(), now.getMonthValue(), now.getDayOfMonth(), 0, 0, 0, 0, FishContrast.ZONE_SHANGHAI);
@@ -165,6 +171,11 @@ class FishProcessor {
                 context += "，约 " + new BigDecimal(etaSecondsAbs).divide(new BigDecimal(3600), 2, BigDecimal.ROUND_HALF_UP) + " 小时";
             }
             botResp.setText(context);
+            if (share) {
+                botResp.setResponse_type("in_channel");
+            } else {
+                botResp.setResponse_type("ephemeral");
+            }
         }
     }
 }
