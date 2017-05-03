@@ -2,6 +2,7 @@ package self.srr.fish;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import self.srr.common.BotContrast;
 import self.srr.common.BotRequestModel;
 import self.srr.common.BotResponseModel;
 
@@ -39,6 +40,11 @@ public class FishController {
             // 增加 @
             respModel.setText(respModel.getText() + "  @" + botReq.getUser_name());
             FishContrast.RATE_MAP.put(botReq.getUser_name(), nowTs);
+        }
+
+        // 如果 master
+        if (botReq.getUser_name().equalsIgnoreCase(BotContrast.BOT_MASTER)) {
+            respModel.setText("主人，" + respModel.getText());
         }
 
         return respModel;

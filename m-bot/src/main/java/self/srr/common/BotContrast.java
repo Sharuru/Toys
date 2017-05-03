@@ -5,7 +5,7 @@ package self.srr.common;
  * <p>
  * Created by Sharuru on 2017/4/30 0030.
  */
-class BotContrast {
+public class BotContrast {
 
     // 响应类型
     static final String BOT_RES_TYPE = "in_channel";
@@ -15,5 +15,7 @@ class BotContrast {
     static final String BOT_NAME = "Bot";
     // Bot 头像地址
     static final String BOT_ICON_URL = "URL";
+    // Bot 管理者 ID
+    public static final String BOT_MASTER = "sharuru";
 
 }
