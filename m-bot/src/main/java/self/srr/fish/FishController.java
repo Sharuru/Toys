@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import self.srr.common.BotRequestModel;
+import self.srr.common.BotRespDecorator;
 import self.srr.common.BotResponseModel;
 
 /**
@@ -20,6 +21,9 @@ public class FishController {
     @Autowired
     private FishProcessor processor;
 
+    @Autowired
+    private BotRespDecorator botRespDecorator;
+
     @RequestMapping(value = "")
     public BotResponseModel etaTime(BotRequestModel botReq) {
         BotResponseModel respModel = new BotResponseModel();
@@ -33,7 +37,8 @@ public class FishController {
                 // 超过频率，禁止
                 passFlg = false;
                 log.info("User '" + botReq.getUser_name() + "' process skipped(Over limit)");
-                respModel.setText("频率太快了，请等待一会儿！  @" + botReq.getUser_name());
+                respModel.setText("频率太快了，请等待一会儿！");
+                respModel = botRespDecorator.atDecorator(respModel, botReq.getUser_name());
             }
         }
 
