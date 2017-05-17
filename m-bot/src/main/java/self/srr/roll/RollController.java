@@ -27,9 +27,28 @@ public class RollController {
     @RequestMapping(value = "")
     public BotResponseModel roll(BotRequestModel botReq) {
         BotResponseModel respModel = new BotResponseModel();
-        log.info("User '" + botReq.getUser_name() + "' in process");
-        respModel = rollProcessor.main(botReq);
-        log.info("User '" + botReq.getUser_name() + "' process finished");
+        Boolean passFlg = true;
+
+        // 计算 API 频率
+        Long nowTs = System.currentTimeMillis() / 1000;
+        if (RollContrast.RATE_MAP.get(botReq.getUser_name()) != null) {
+            Long lastTs = RollContrast.RATE_MAP.get(botReq.getUser_name());
+            if (nowTs - lastTs <= 5) {
+                // 超过频率，禁止
+                passFlg = false;
+                log.info("User '" + botReq.getUser_name() + "' process skipped(Over limit)");
+                respModel.setText("频率太快了，请等待一会儿（5 秒冷却）！");
+                respModel = botRespDecorator.atDecorator(respModel, botReq.getUser_name());
+            }
+        }
+
+        //如果合规
+        if (passFlg) {
+            log.info("User '" + botReq.getUser_name() + "' in process");
+            respModel = rollProcessor.main(botReq);
+            RollContrast.RATE_MAP.put(botReq.getUser_name(), nowTs);
+        }
+
         return respModel;
     }
 }

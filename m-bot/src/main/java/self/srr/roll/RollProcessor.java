@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import self.srr.common.BotContrast;
 import self.srr.common.BotRequestModel;
 import self.srr.common.BotRespDecorator;
 import self.srr.common.BotResponseModel;
@@ -42,10 +43,10 @@ public class RollProcessor {
             botResp = helpMsgDecorator();
         } else if ("t1".equalsIgnoreCase(mainCommand)) {
             // 类型 1 抽卡
-            botResp = cardDecorator(mainCommand);
+            botResp = cardDecorator(userCommand);
         } else {
             // 普通 roll 点
-            botResp = rollDecorator();
+            botResp = rollDecorator(userCommand);
         }
 
         // 公开设置
@@ -79,20 +80,21 @@ public class RollProcessor {
     /**
      * 种类抽卡
      *
-     * @param type 种类名称
+     * @param userCommand 用户命令
      * @return 响应实体
      */
-    private BotResponseModel cardDecorator(String type) {
+    private BotResponseModel cardDecorator(String[] userCommand) {
         BotResponseModel resp = new BotResponseModel();
         String result = "";
+        String type = userCommand[0];
         // 根据类型抽卡
         if ("t1".equalsIgnoreCase(type)) {
             // 卡池设定
             List<Card> cards = new ArrayList<>();
             cards.add(new Card(1, "N", 0.28d));
             cards.add(new Card(2, "R", 0.27d));
-            cards.add(new Card(3, "SR", 0.26d));
-            cards.add(new Card(4, "SSR", 0.17d));
+            cards.add(new Card(3, "SR", 0.28d));
+            cards.add(new Card(4, "SSR", 0.14d));
             cards.add(new Card(5, "UR", 0.01d));
             // 11 连
             for (int i = 0; i < 11; i++) {
@@ -111,25 +113,40 @@ public class RollProcessor {
             }
         }
         log.info("User '" + botReq.getUser_name() + "' t1_gotcha: '" + result + "'");
-        resp.setText("「" + botReq.getUser_name() + "」这大佬进行了十一连，获得了：" + result + "。");
+        // PY 交易
+        if (userCommand.length > 2 && "black".equalsIgnoreCase(userCommand[1]) && BotContrast.BOT_MASTER_ID.equalsIgnoreCase(botReq.getUser_id())) {
+            String[] pyResult = userCommand[2].split(",");
+            result = "";
+            for (String aPyResult : pyResult) {
+                result += aPyResult + ", ";
+            }
+            result = result.substring(0, result.length() - 2);
+        }
+        resp.setText("「" + botReq.getUser_name() + "」这位大佬进行了十一连，获得了：" + result + "。");
+        if (result.contains("UR")) {
+            resp.setText(resp.getText() + "嚯哟！还是个欧皇！");
+        }
         return resp;
     }
 
     /**
      * 1 - 100 点投掷
      *
+     * @param userCommand 用户命令
      * @return 响应实体
      */
-    private BotResponseModel rollDecorator() {
+    private BotResponseModel rollDecorator(String[] userCommand) {
         BotResponseModel resp = new BotResponseModel();
 
         int roll = new Random().nextInt(100) + 1;
         log.info("User '" + botReq.getUser_name() + "' rolled: '" + roll + "'");
+        if (userCommand.length > 1 && "black".equalsIgnoreCase(userCommand[0]) && BotContrast.BOT_MASTER_ID.equalsIgnoreCase(botReq.getUser_id())) {
+            roll = Integer.valueOf(userCommand[1]);
+        }
         resp.setText("「" + botReq.getUser_name() + "」掷出了：" + roll + " 点。");
 
         return resp;
     }
-
 
     /**
      * 卡牌实体

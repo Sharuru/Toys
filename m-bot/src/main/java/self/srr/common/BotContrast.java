@@ -16,4 +16,6 @@ public class BotContrast {
     public static final String BOT_NAME = "Bot";
     // Bot 头像地址
     public static final String BOT_ICON_URL = "URL";
+    // Master Id
+    public static final String BOT_MASTER_ID = "6m9yaea4cfrrfgcdo7c3su9w6r";
 }
