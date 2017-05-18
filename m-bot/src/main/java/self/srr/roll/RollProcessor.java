@@ -91,11 +91,11 @@ public class RollProcessor {
         if ("t1".equalsIgnoreCase(type)) {
             // 卡池设定
             List<Card> cards = new ArrayList<>();
-            cards.add(new Card(1, "N", 0.28d));
-            cards.add(new Card(2, "R", 0.27d));
-            cards.add(new Card(3, "SR", 0.28d));
-            cards.add(new Card(4, "SSR", 0.14d));
-            cards.add(new Card(5, "UR", 0.01d));
+            cards.add(new Card(1, "N", 0.305d));
+            cards.add(new Card(2, "R", 0.275d));
+            cards.add(new Card(3, "SR", 0.285d));
+            cards.add(new Card(4, "SSR", 0.126d));
+            cards.add(new Card(5, "UR", 0.009d));
             // 11 连
             for (int i = 0; i < 11; i++) {
                 Double total = 0d;
@@ -103,7 +103,11 @@ public class RollProcessor {
                 for (Card aCard : cards) {
                     total += aCard.getProbability();
                     if (a < total) {
-                        result += aCard.getName();
+                        if ("SSR".equalsIgnoreCase(aCard.getName()) || "UR".equalsIgnoreCase(aCard.getName())) {
+                            result += "**" + aCard.getName() + "**";
+                        } else {
+                            result += aCard.getName();
+                        }
                         if (i < 10) {
                             result += ", ";
                         }
