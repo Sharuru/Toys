@@ -1,5 +1,7 @@
 package self.srr.roll;
 
+import lombok.Data;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,5 +12,13 @@ import java.util.Map;
  */
 public class RollContrast {
     // 调用频率
-    static final Map<String, Long> RATE_MAP = new HashMap<>();
+    static final Map<String, ApiRate> RATE_MAP = new HashMap<>();
+
+    // API 频率记录
+    @Data
+    static class ApiRate {
+        String name;
+        int count;
+        Long lastCall;
+    }
 }
