@@ -17,6 +17,13 @@ public class RollContrast {
     // API 频率记录
     @Data
     static class ApiRate {
+
+        ApiRate(String name, int count, Long lastCall) {
+            this.name = name;
+            this.count = count;
+            this.lastCall = lastCall;
+        }
+
         String name;
         int count;
         Long lastCall;
