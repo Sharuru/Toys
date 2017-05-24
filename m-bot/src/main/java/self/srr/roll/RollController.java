@@ -70,7 +70,7 @@ public class RollController {
                 RollContrast.RATE_MAP.put(RATE_MAP_KEY, new RollContrast.ApiRate("CARD", 1, nowTs));
             }
         }
-        
+
         //如果合规
         if (passFlg) {
             log.info("User '" + botReq.getUser_name() + "' in process");

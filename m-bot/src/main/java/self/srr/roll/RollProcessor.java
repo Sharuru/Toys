@@ -44,6 +44,9 @@ public class RollProcessor {
         } else if ("t1".equalsIgnoreCase(mainCommand)) {
             // 类型 1 抽卡
             botResp = cardDecorator(userCommand);
+        } else if ("reset".equalsIgnoreCase(mainCommand)) {
+            // 管理员重置
+            botResp = resetDecorator(userCommand);
         } else {
             // 普通 roll 点
             botResp = rollDecorator(userCommand);
@@ -130,6 +133,20 @@ public class RollProcessor {
         if (result.contains("UR")) {
             resp.setText(resp.getText() + "嚯哟！还是个欧皇！");
         }
+        return resp;
+    }
+
+    private BotResponseModel resetDecorator(String[] userCommand) {
+        BotResponseModel resp = new BotResponseModel();
+        if (userCommand.length > 1 && BotContrast.BOT_MASTER_ID.equalsIgnoreCase(botReq.getUser_id())) {
+            RollContrast.ApiRate lastRate = RollContrast.RATE_MAP.get(userCommand[1] + "CARD");
+            int count = 1;
+            if (userCommand.length > 2) {
+                count = Integer.valueOf(userCommand[2]);
+            }
+            RollContrast.RATE_MAP.put(userCommand[1] + "CARD", new RollContrast.ApiRate("CARD", lastRate.getCount() - count, lastRate.getLastCall()));
+        }
+        resp.setText("FINISH - " + userCommand[1] + "- " + RollContrast.RATE_MAP.get(userCommand[1] + "CARD").toString());
         return resp;
     }
 
