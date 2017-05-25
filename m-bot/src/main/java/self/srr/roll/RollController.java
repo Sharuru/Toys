@@ -29,7 +29,7 @@ public class RollController {
         BotResponseModel respModel = new BotResponseModel();
         Boolean passFlg = true;
         Long nowTs = System.currentTimeMillis() / 1000;
-        String command = botReq.getText().contains("t1") ? "CARD" : "DICE";     //TODO 命令解析, 整理
+        String command = botReq.getText().toLowerCase().contains("t1") ? "CARD" : "DICE";     //TODO 命令解析, 整理
         String RATE_MAP_KEY = botReq.getUser_name() + command;
         RollContrast.ApiRate lastRate = RollContrast.RATE_MAP.get(RATE_MAP_KEY);
 
