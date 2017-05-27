@@ -12,7 +12,6 @@ import java.util.Map;
  */
 class RollContrast {
     // 调用频率
-    static final Map<String, ApiRate> RATE_MAP = new HashMap<>();
     static final Map<String, Long> DICE_RATE_MAP = new HashMap<>();
 
     // 抽卡类型
@@ -21,22 +20,23 @@ class RollContrast {
 
     // 抽卡价格
     static final Integer CARD_SINGLE_COST = 3;
+    static final Integer CARD_STONE_COST = 6;
 
     // 充值地址
     static final String CHARGE_URL = "http://127.0.0.1/roll/switch";
 
-    // API 频率记录
-    @Data
-    static class ApiRate {
+    // 充值余额
+    static final FreeBalance FREE_BALANCE = new FreeBalance(0D, 0L);
 
-        ApiRate(String name, int count, Long lastCall) {
-            this.name = name;
-            this.count = count;
+    // 充值记录
+    @Data
+    static class FreeBalance {
+        FreeBalance(Double amount, Long lastCall) {
+            this.amount = amount;
             this.lastCall = lastCall;
         }
 
-        String name;
-        int count;
+        Double amount;
         Long lastCall;
     }
 }

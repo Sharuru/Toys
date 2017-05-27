@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>用户余额充值</title>
+
+    <link th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script th:src="@{/webjars/jquery/3.2.0/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container" style="padding-top: 65px;">
+
+    <div class="page-header">
+        <h1>用户余额充值
+            <small>氪不改命，玄不救非</small>
+        </h1>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            欢迎，用户 <b><span th:text="${user.nickname}"></span></b> <br/>
+            您当前的用户余额为：<b><span id="user-amount" th:text="${#numbers.formatDecimal(user.amount,1,2)}"></span></b> 元 <br/>
+            您当前的水晶余额为：<b><span id="user-stone" th:text="${user.stone}"></span></b> 枚 <br/>
+            <span id="user-uid" hidden="hidden" th:text="${user.uid}"></span>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary" onClick="window.location.reload()">刷新用户信息</button>
+
+    <hr/>
+
+    <div class="panel panel-default" style="margin-top: 20px;">
+
+        <div class="panel-heading">充值 Area <span class="badge">由系统每小时自动生成，免费！</span></div>
+        <div class="panel-body">
+            当前时段可用余额：<b><span id="free-amount" th:text="${#numbers.formatDecimal(freeBalance,1,2)}"></span></b> 元
+        </div>
+
+    </div>
+
+    <button id="charge-button" type="button" class="btn btn-success">随机充值</button>
+
+    <hr/>
+
+    <div class="panel panel-default" style="margin-top: 20px;">
+
+        <div class="panel-heading">充值记录</div>
+        <div id="charge-result" class="panel-body">
+
+        </div>
+
+    </div>
+
+
+</div>
+<script>
+    $(function () {
+        $('#charge-button').click(function () {
+            $('#charge-button').attr('disabled', 'disabled');
+            $.ajax({
+                method: "POST",
+                url: "/roll/switch",
+                data: {
+                    uid: $('#user-uid').text()
+                }
+            })
+                .done(function(data) {
+                    $('#user-amount').text(data.amount);
+                    $('#user-stone').text(data.stone);
+                    $('#free-amount').text(data.freeAmount);
+                    $('#charge-result').append("本次充值：" + data.chargeAmount + "元" + "<br/>");
+                    setTimeout(function(){
+                        $('#charge-button').removeAttr('disabled');
+                        },500)
+                    ;
+                });
+        })
+    });
+</script>
+</body>
+</html>
