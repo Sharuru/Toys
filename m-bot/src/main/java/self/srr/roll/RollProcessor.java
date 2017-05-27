@@ -44,7 +44,7 @@ public class RollProcessor {
         if ("help".equalsIgnoreCase(mainCommand)) {
             // 显示帮助信息
             botResp = helpMsgDecorator();
-        } else if ("t1".equalsIgnoreCase(mainCommand)) {
+        } else if ("card".equalsIgnoreCase(mainCommand)) {
             // 抽卡
             botResp = cardDecorator(userCommand);
         } else if ("reset".equalsIgnoreCase(mainCommand)) {
@@ -88,9 +88,14 @@ public class RollProcessor {
         } else {
             if (RollContrast.CARD_SINGLE.equalsIgnoreCase(cardPolicy)) {
                 // 单抽策略
-
+                if (rollRecord.getStone() < RollContrast.CARD_SINGLE_COST) {
+                    return false;
+                }
             } else if (RollContrast.CARD_ELEVEN.equalsIgnoreCase(cardPolicy)) {
                 // 十一连策略
+                if (rollRecord.getStone() < RollContrast.CARD_SINGLE_COST * 11) {
+                    return false;
+                }
             }
         }
         return true;
@@ -125,8 +130,8 @@ public class RollProcessor {
      */
     private BotResponseModel cardDecorator(String[] userCommand) {
         BotResponseModel resp = new BotResponseModel();
-        String result = "";
-        String type = userCommand[0];
+        List<String> result = new ArrayList<>();
+        String type = userCommand[1];
         // 卡池设定
         List<Card> cards = new ArrayList<>();
         cards.add(new Card(1, "N", 0.305d));
@@ -135,31 +140,43 @@ public class RollProcessor {
         cards.add(new Card(4, "SSR", 0.126d));
         cards.add(new Card(5, "UR", 0.009d));
         // 根据类型抽卡
-        if ("t1".equalsIgnoreCase(type)) {
-
-            // 11 连
-            for (int i = 0; i < 11; i++) {
+        if (("o".equalsIgnoreCase(type) && cardPolicyChecker(RollContrast.CARD_SINGLE)) || ("e".equalsIgnoreCase(type) && cardPolicyChecker(RollContrast.CARD_ELEVEN))) {
+            int times = "o".equalsIgnoreCase(type) ? 1 : 11;
+            // 抽卡连
+            for (int i = 0; i < times; i++) {
                 Double total = 0d;
                 Double a = Math.random();
                 for (Card aCard : cards) {
                     total += aCard.getProbability();
                     if (a < total) {
                         if ("SSR".equalsIgnoreCase(aCard.getName()) || "UR".equalsIgnoreCase(aCard.getName())) {
-                            result += "**" + aCard.getName() + "**";
+                            result.add("**" + aCard.getName() + "**");
                         } else {
-                            result += aCard.getName();
-                        }
-                        if (i < 10) {
-                            result += ", ";
+                            result.add(aCard.getName());
                         }
                         break;
                     }
                 }
             }
-        } else if (1 == 1) {
 
-        }
-        log.info("User '" + botReq.getUser_name() + "' t1_gotcha: '" + result + "'");
+            // 十一连抽保底
+            Boolean africaFlag = false;
+            if ("e".equalsIgnoreCase(type) && !result.contains("**UR**")) {
+                result.set(new Random().nextInt(10), "**UR**");
+                africaFlag = true;
+            }
+
+            // 结果输出
+            String resultStr = "";
+            for (String card : result) {
+                resultStr += card + ", ";
+            }
+            resultStr = resultStr.substring(0, resultStr.length() - 2);
+
+
+            log.info("User '" + botReq.getUser_name() + "' card_gotcha: '" + resultStr + "'");
+
+/*
         // PY 交易
         if (userCommand.length > 2 && "black".equalsIgnoreCase(userCommand[1]) && BotContrast.BOT_MASTER_ID.equalsIgnoreCase(botReq.getUser_id())) {
             String[] pyResult = userCommand[2].split(",");
@@ -169,9 +186,13 @@ public class RollProcessor {
             }
             result = result.substring(0, result.length() - 2);
         }
-        resp.setText("「" + botReq.getUser_name() + "」这位大佬进行了十一连，获得了：" + result + "。");
-        if (result.contains("UR")) {
-            resp.setText(resp.getText() + "嚯哟！还是个欧皇！");
+*/
+            String gotchaType = "o".equalsIgnoreCase(type) ? "单抽" : "十一连";
+            resp.setText("「" + botReq.getUser_name() + "」这位大佬进行了一次" + gotchaType + "，获得了：" + resultStr + "。");
+            if (result.contains("**UR**")) {
+                String tailStr = africaFlag ? "（来自系统的怜悯）" : "";
+                resp.setText(resp.getText() + "嚯哟！还是个欧皇！" + tailStr);
+            }
         }
         return resp;
     }

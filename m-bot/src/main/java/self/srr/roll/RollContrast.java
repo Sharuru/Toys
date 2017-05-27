@@ -19,6 +19,9 @@ class RollContrast {
     static final String CARD_SINGLE = "CARD_SINGLE";
     static final String CARD_ELEVEN = "CARD_ELEVEN";
 
+    // 抽卡价格
+    static final Integer CARD_SINGLE_COST = 3;
+
     // API 频率记录
     @Data
     static class ApiRate {
