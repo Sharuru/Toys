@@ -21,6 +21,7 @@ class RollContrast {
 
     // 抽卡价格
     static final Integer CARD_SINGLE_COST = 3;
+    static final Integer CARD_STONE_COST = 6;
 
     // 充值地址
     static final String CHARGE_URL = "http://127.0.0.1/roll/switch";

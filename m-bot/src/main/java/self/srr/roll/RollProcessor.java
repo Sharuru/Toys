@@ -47,9 +47,9 @@ public class RollProcessor {
         } else if ("card".equalsIgnoreCase(mainCommand)) {
             // 抽卡
             botResp = cardDecorator(userCommand);
-        } else if ("reset".equalsIgnoreCase(mainCommand)) {
-            // 管理员重置
-            botResp = resetDecorator(userCommand);
+        } else if ("switch".equalsIgnoreCase(mainCommand)) {
+            // 水晶充值
+            botResp = switchDecorator(userCommand);
         } else {
             // 普通 Roll 点
             botResp = rollDecorator(userCommand);
@@ -131,7 +131,7 @@ public class RollProcessor {
                 "`/roll help` 显示本帮助信息；\n" +
                 "`/roll card o` 进行一次单抽（3 水晶）；\n" +
                 "`/roll card e` 进行十一连（30 水晶，十一连必出 UR）；\n" +
-                "`/roll switch 30` 充值 30 水晶（180 元）；\n" +
+                "`/roll switch 30` 获取 30 水晶（180 元）；\n" +
                 "在指令后追加 s 表示将本次响应公开；";
         resp.setText(text);
 
@@ -147,7 +147,7 @@ public class RollProcessor {
     private BotResponseModel cardDecorator(String[] userCommand) {
         BotResponseModel resp = new BotResponseModel();
         List<String> result = new ArrayList<>();
-        String type = userCommand.length > 1 ? userCommand[1] : "o";
+        String type = userCommand.length > 1 && "e".equalsIgnoreCase(userCommand[1]) ? "e" : "o";
         // 卡池设定
         List<Card> cards = new ArrayList<>();
         cards.add(new Card(1, "N", 0.305d));
@@ -158,7 +158,7 @@ public class RollProcessor {
         // 根据类型抽卡
         if (("o".equalsIgnoreCase(type) && cardPolicyChecker(RollContrast.CARD_SINGLE)) || ("e".equalsIgnoreCase(type) && cardPolicyChecker(RollContrast.CARD_ELEVEN))) {
             int times = "o".equalsIgnoreCase(type) ? 1 : 11;
-            // 抽卡连
+            // 连抽
             for (int i = 0; i < times; i++) {
                 Double total = 0d;
                 Double a = Math.random();
@@ -203,23 +203,32 @@ public class RollProcessor {
             }
         } else {
             log.info("User '" + botReq.getUser_name() + "' process skipped(Over limit)");
-            resp.setText("当前水晶余额不足，无法抽卡！[点击充值](" + RollContrast.CHARGE_URL + "?ticket_id=" + botReq.getUser_id() +")");
+            resp.setText("当前剩余水晶不足，无法抽卡。（使用 `/roll switch` 命令获取水晶）");
             resp = botRespDecorator.atDecorator(resp, botReq.getUser_name());
         }
         return resp;
     }
 
-    private BotResponseModel resetDecorator(String[] userCommand) {
+    private BotResponseModel switchDecorator(String[] userCommand) {
         BotResponseModel resp = new BotResponseModel();
-        if (userCommand.length > 1 && BotContrast.BOT_MASTER_ID.equalsIgnoreCase(botReq.getUser_id())) {
-            RollContrast.ApiRate lastRate = RollContrast.RATE_MAP.get(userCommand[1] + "CARD");
-            int count = 1;
-            if (userCommand.length > 2) {
-                count = Integer.valueOf(userCommand[2]);
+        int switchCount = 1;
+        if (userCommand.length > 1) {
+            try {
+                switchCount = Integer.valueOf(userCommand[1]);
+            } catch (Exception e) {
+                switchCount = 1;
             }
-            RollContrast.RATE_MAP.put(userCommand[1] + "CARD", new RollContrast.ApiRate("CARD", lastRate.getCount() - count, lastRate.getLastCall()));
         }
-        resp.setText("FINISH - " + userCommand[1] + "- " + RollContrast.RATE_MAP.get(userCommand[1] + "CARD").toString());
+
+        // 转换
+        RollRecord rollRecord = rollMapper.findOneByUid(botReq.getUser_id());
+        if(rollRecord.getAmount() >= switchCount * RollContrast.CARD_STONE_COST){
+            rollMapper.updateAmount(botReq.getUser_id(), rollRecord.getAmount() - switchCount * RollContrast.CARD_STONE_COST, rollRecord.getStone() + switchCount);
+            resp.setText("已通过消耗用户余额：" + switchCount * RollContrast.CARD_STONE_COST + " 元，获取：" + switchCount + " 枚水晶。");
+        }else{
+            resp.setText("当前用户余额不足，无法获取水晶！ [点击充值](" + RollContrast.CHARGE_URL + "?pass=" + botReq.getUser_id() + ")");
+            resp = botRespDecorator.atDecorator(resp, botReq.getUser_name());
+        }
         return resp;
     }
 
