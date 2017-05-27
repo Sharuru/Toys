@@ -100,15 +100,18 @@ public class RollProcessor {
             Double freeAmount = 648.0 + new Random().nextInt(10000) / 100.0;
             Integer freeStone = 35 + new Random().nextInt(10);
             rollMapper.insertUser(botReq.getUser_id(), botReq.getUser_name(), freeAmount, freeStone);
+            log.info("User '" + botReq.getUser_name() + "' free stone added");
         } else {
             if (RollContrast.CARD_SINGLE.equalsIgnoreCase(cardPolicy)) {
                 // 单抽策略
                 if (rollRecord.getStone() < RollContrast.CARD_SINGLE_COST) {
+                    log.info("User '" + botReq.getUser_name() + "' process skipped(Insufficient stone)");
                     return false;
                 }
             } else if (RollContrast.CARD_ELEVEN.equalsIgnoreCase(cardPolicy)) {
                 // 十一连策略
                 if (rollRecord.getStone() < RollContrast.CARD_SINGLE_COST * 11) {
+                    log.info("User '" + botReq.getUser_name() + "' process skipped(Insufficient stone)");
                     return false;
                 }
             }
@@ -178,6 +181,7 @@ public class RollProcessor {
             // 抽卡后扣款
             RollRecord rollRecord = rollMapper.findOneByUid(botReq.getUser_id());
             rollMapper.updateAmount(botReq.getUser_id(), rollRecord.getAmount(), rollRecord.getStone() - RollContrast.CARD_SINGLE_COST * times);
+            log.info("User '" + botReq.getUser_name() + "' stone cost '" + RollContrast.CARD_SINGLE_COST * times + "'");
 
             // 十一连抽保底
             Boolean africaFlag = false;
@@ -202,7 +206,7 @@ public class RollProcessor {
                 resp.setText(resp.getText() + "嚯哟！还是个欧皇！" + tailStr);
             }
         } else {
-            log.info("User '" + botReq.getUser_name() + "' process skipped(Over limit)");
+            log.info("User '" + botReq.getUser_name() + "' process skipped(Insufficient stone)");
             resp.setText("当前剩余水晶不足，无法抽卡。（使用 `/roll switch` 命令获取水晶）");
             resp = botRespDecorator.atDecorator(resp, botReq.getUser_name());
         }
@@ -222,11 +226,13 @@ public class RollProcessor {
 
         // 转换
         RollRecord rollRecord = rollMapper.findOneByUid(botReq.getUser_id());
-        if(rollRecord.getAmount() >= switchCount * RollContrast.CARD_STONE_COST){
+        if (rollRecord.getAmount() >= switchCount * RollContrast.CARD_STONE_COST) {
             rollMapper.updateAmount(botReq.getUser_id(), rollRecord.getAmount() - switchCount * RollContrast.CARD_STONE_COST, rollRecord.getStone() + switchCount);
+            log.info("User '" + botReq.getUser_name() + "' balance changed ' +" + switchCount + " stone, -" + switchCount * RollContrast.CARD_STONE_COST + " balance'");
             resp.setText("已通过消耗用户余额：" + switchCount * RollContrast.CARD_STONE_COST + " 元，获取：" + switchCount + " 枚水晶。");
-        }else{
+        } else {
             resp.setText("当前用户余额不足，无法获取水晶！ [点击充值](" + RollContrast.CHARGE_URL + "?pass=" + botReq.getUser_id() + ")");
+            log.info("User '" + botReq.getUser_name() + "' process skipped(Insufficient balance)");
             resp = botRespDecorator.atDecorator(resp, botReq.getUser_name());
         }
         return resp;
