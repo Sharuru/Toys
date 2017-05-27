@@ -131,7 +131,7 @@ public class RollProcessor {
     private BotResponseModel cardDecorator(String[] userCommand) {
         BotResponseModel resp = new BotResponseModel();
         List<String> result = new ArrayList<>();
-        String type = userCommand[1];
+        String type = userCommand.length > 1 ? userCommand[1] : "o";
         // 卡池设定
         List<Card> cards = new ArrayList<>();
         cards.add(new Card(1, "N", 0.305d));
@@ -159,6 +159,10 @@ public class RollProcessor {
                 }
             }
 
+            // 抽卡后扣款
+            RollRecord rollRecord = rollMapper.findOneByUid(botReq.getUser_id());
+            rollMapper.updateAmount(botReq.getUser_id(), rollRecord.getAmount(), rollRecord.getStone() - RollContrast.CARD_SINGLE_COST * times);
+
             // 十一连抽保底
             Boolean africaFlag = false;
             if ("e".equalsIgnoreCase(type) && !result.contains("**UR**")) {
@@ -173,26 +177,16 @@ public class RollProcessor {
             }
             resultStr = resultStr.substring(0, resultStr.length() - 2);
 
-
             log.info("User '" + botReq.getUser_name() + "' card_gotcha: '" + resultStr + "'");
 
-/*
-        // PY 交易
-        if (userCommand.length > 2 && "black".equalsIgnoreCase(userCommand[1]) && BotContrast.BOT_MASTER_ID.equalsIgnoreCase(botReq.getUser_id())) {
-            String[] pyResult = userCommand[2].split(",");
-            result = "";
-            for (String aPyResult : pyResult) {
-                result += aPyResult + ", ";
-            }
-            result = result.substring(0, result.length() - 2);
-        }
-*/
             String gotchaType = "o".equalsIgnoreCase(type) ? "单抽" : "十一连";
             resp.setText("「" + botReq.getUser_name() + "」这位大佬进行了一次" + gotchaType + "，获得了：" + resultStr + "。");
             if (result.contains("**UR**")) {
                 String tailStr = africaFlag ? "（来自系统的怜悯）" : "";
                 resp.setText(resp.getText() + "嚯哟！还是个欧皇！" + tailStr);
             }
+        } else {
+            resp.setText("当前余额不足，无法抽卡！[点击充值](" + RollContrast.CHARGE_URL + "?trade=" + botReq.getUser_id());
         }
         return resp;
     }
@@ -222,6 +216,7 @@ public class RollProcessor {
         if (dicePolicyChecker()) {
             int roll = new Random().nextInt(100) + 1;
             log.info("User '" + botReq.getUser_name() + "' rolled: '" + roll + "'");
+            // PY 交易
             if (userCommand.length > 1 && "black".equalsIgnoreCase(userCommand[0]) && BotContrast.BOT_MASTER_ID.equalsIgnoreCase(botReq.getUser_id())) {
                 roll = Integer.valueOf(userCommand[1]);
             }

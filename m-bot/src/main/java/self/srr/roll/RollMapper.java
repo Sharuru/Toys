@@ -1,9 +1,6 @@
 package self.srr.roll;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,6 +22,16 @@ public interface RollMapper {
             "  LIMIT" +
             "   1")
     RollRecord findOneByUid(@Param("uid") String uid);
+
+    @Update("  UPDATE" +
+            "    roll_record" +
+            "  SET" +
+            "    amount = #{amount}," +
+            "    stone = #{stone}" +
+            "  WHERE" +
+            "    uid = #{uid}")
+    void updateAmount(@Param("uid") String uid, @Param("amount") Double amount, @Param("stone") Integer stone);
+
 
     @Insert("  INSERT INTO" +
             "    roll_record (" +
