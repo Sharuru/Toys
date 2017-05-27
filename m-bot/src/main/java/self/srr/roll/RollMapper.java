@@ -1,5 +1,6 @@
 package self.srr.roll;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -24,4 +25,17 @@ public interface RollMapper {
             "  LIMIT" +
             "   1")
     RollRecord findOneByUid(@Param("uid") String uid);
+
+    @Insert("  INSERT INTO" +
+            "    roll_record (" +
+            "      uid," +
+            "      nickname," +
+            "      amount" +
+            "    )" +
+            "  VALUES (" +
+            "    #{uid}," +
+            "    #{nickname}," +
+            "    #{amount}" +
+            "  )")
+    void insertUser(@Param("uid") String uid, @Param("nickname") String nickname, @Param("amount") Double amount);
 }

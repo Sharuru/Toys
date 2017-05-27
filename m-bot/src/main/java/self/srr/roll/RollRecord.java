@@ -8,14 +8,14 @@ import lombok.Data;
  * Created by Sharuru on 2017/5/27 0027.
  */
 @Data
-class RollRecord {
+public class RollRecord {
     // 主键
     private Integer id;
     // 用户名
     private String uid;
     // 用户昵称
-    private String nicename;
+    private String nickname;
     // 用户余额
-    private Float amount;
+    private Double amount;
 
 }

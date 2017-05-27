@@ -25,6 +25,9 @@ public class RollProcessor {
     @Autowired
     private BotRespDecorator botRespDecorator;
 
+    @Autowired
+    private RollMapper rollMapper;
+
     private BotRequestModel botReq = new BotRequestModel();
 
     //主处理
@@ -42,14 +45,16 @@ public class RollProcessor {
             // 显示帮助信息
             botResp = helpMsgDecorator();
         } else if ("t1".equalsIgnoreCase(mainCommand)) {
-            // 类型 1 抽卡
+            // 抽卡
             botResp = cardDecorator(userCommand);
         } else if ("reset".equalsIgnoreCase(mainCommand)) {
             // 管理员重置
             botResp = resetDecorator(userCommand);
         } else {
-            // 普通 roll 点
+            // 普通 Roll 点
             botResp = rollDecorator(userCommand);
+
+
         }
 
         // 公开设置
@@ -59,6 +64,32 @@ public class RollProcessor {
 
         return botResp;
     }
+
+    private Boolean dicePolicyChecker() {
+        Long nowTs = System.currentTimeMillis() / 1000;
+        if (RollContrast.DICE_RATE_MAP.get(botReq.getUser_name()) != null) {
+            Long lastTs = RollContrast.DICE_RATE_MAP.get(botReq.getUser_name());
+            if (nowTs - lastTs <= 10) {
+                // 超过频率，禁止
+                log.info("User '" + botReq.getUser_name() + "' process skipped(Over limit)");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Boolean cardPolicyChecker(String cardPolicy) {
+        RollRecord rollRecord = rollMapper.findOneByUid(botReq.getUser_id());
+        if (rollRecord == null) {
+            // 新纪录，插入
+            Double freeAmount = 648.0 + new Random().nextInt(10000) / 100.0;
+            rollMapper.insertUser(botReq.getUser_id(), botReq.getUser_name(), freeAmount);
+        } else {
+            // 根据策略检测
+        }
+        return true;
+    }
+
 
     /**
      * 显示帮助信息
@@ -90,15 +121,17 @@ public class RollProcessor {
         BotResponseModel resp = new BotResponseModel();
         String result = "";
         String type = userCommand[0];
+        // 卡池设定
+        List<Card> cards = new ArrayList<>();
+        cards.add(new Card(1, "N", 0.305d));
+        cards.add(new Card(2, "R", 0.275d));
+        cards.add(new Card(3, "SR", 0.285d));
+        cards.add(new Card(4, "SSR", 0.126d));
+        cards.add(new Card(5, "UR", 0.009d));
         // 根据类型抽卡
+        cardPolicyChecker(RollContrast.CARD_SINGLE);
         if ("t1".equalsIgnoreCase(type)) {
-            // 卡池设定
-            List<Card> cards = new ArrayList<>();
-            cards.add(new Card(1, "N", 0.305d));
-            cards.add(new Card(2, "R", 0.275d));
-            cards.add(new Card(3, "SR", 0.285d));
-            cards.add(new Card(4, "SSR", 0.126d));
-            cards.add(new Card(5, "UR", 0.009d));
+
             // 11 连
             for (int i = 0; i < 11; i++) {
                 Double total = 0d;
@@ -118,6 +151,8 @@ public class RollProcessor {
                     }
                 }
             }
+        } else if (1 == 1) {
+
         }
         log.info("User '" + botReq.getUser_name() + "' t1_gotcha: '" + result + "'");
         // PY 交易
@@ -158,13 +193,18 @@ public class RollProcessor {
      */
     private BotResponseModel rollDecorator(String[] userCommand) {
         BotResponseModel resp = new BotResponseModel();
-
-        int roll = new Random().nextInt(100) + 1;
-        log.info("User '" + botReq.getUser_name() + "' rolled: '" + roll + "'");
-        if (userCommand.length > 1 && "black".equalsIgnoreCase(userCommand[0]) && BotContrast.BOT_MASTER_ID.equalsIgnoreCase(botReq.getUser_id())) {
-            roll = Integer.valueOf(userCommand[1]);
+        if (dicePolicyChecker()) {
+            int roll = new Random().nextInt(100) + 1;
+            log.info("User '" + botReq.getUser_name() + "' rolled: '" + roll + "'");
+            if (userCommand.length > 1 && "black".equalsIgnoreCase(userCommand[0]) && BotContrast.BOT_MASTER_ID.equalsIgnoreCase(botReq.getUser_id())) {
+                roll = Integer.valueOf(userCommand[1]);
+            }
+            resp.setText("「" + botReq.getUser_name() + "」掷出了：" + roll + " 点。");
+        } else {
+            log.info("User '" + botReq.getUser_name() + "' process skipped(Over limit)");
+            resp.setText("频率太快了，请等待一会儿（10 秒冷却）！");
+            resp = botRespDecorator.atDecorator(resp, botReq.getUser_name());
         }
-        resp.setText("「" + botReq.getUser_name() + "」掷出了：" + roll + " 点。");
 
         return resp;
     }

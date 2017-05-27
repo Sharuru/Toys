@@ -8,7 +8,7 @@ import lombok.Data;
  * Created by Sharuru on 2017/4/29 0029.
  */
 @Data
-class FishRecord {
+public class FishRecord {
 
     // 主键
     private Integer id;
