@@ -65,6 +65,13 @@ public class RollProcessor {
         return botResp;
     }
 
+    /**
+     * Roll 点检测策略
+     * <p>
+     * 检测用户两次请求间冷却时间是否有十秒
+     *
+     * @return 是否继续
+     */
     private Boolean dicePolicyChecker() {
         Long nowTs = System.currentTimeMillis() / 1000;
         if (RollContrast.DICE_RATE_MAP.get(botReq.getUser_name()) != null) {
@@ -78,12 +85,20 @@ public class RollProcessor {
         return true;
     }
 
+    /**
+     * 抽卡检测策略
+     * <p>
+     * 根据抽卡策略检测用户余额
+     *
+     * @param cardPolicy 具体抽卡策略
+     * @return 是否继续
+     */
     private Boolean cardPolicyChecker(String cardPolicy) {
         RollRecord rollRecord = rollMapper.findOneByUid(botReq.getUser_id());
         if (rollRecord == null) {
             // 新纪录，插入
             Double freeAmount = 648.0 + new Random().nextInt(10000) / 100.0;
-            Integer freeStone = 3 + new Random().nextInt(10);
+            Integer freeStone = 35 + new Random().nextInt(10);
             rollMapper.insertUser(botReq.getUser_id(), botReq.getUser_name(), freeAmount, freeStone);
         } else {
             if (RollContrast.CARD_SINGLE.equalsIgnoreCase(cardPolicy)) {
@@ -101,7 +116,6 @@ public class RollProcessor {
         return true;
     }
 
-
     /**
      * 显示帮助信息
      *
@@ -115,7 +129,9 @@ public class RollProcessor {
                 "使用方法：输入 `/roll 指令。`\n" +
                 "`/roll` 从 1-100 中随意 roll 出一种点数；\n" +
                 "`/roll help` 显示本帮助信息；\n" +
-                "`/roll t1` 进行种类 1 的十一连（N，R，SR，SSR，UR）；\n" +
+                "`/roll card o` 进行一次单抽（3 水晶）；\n" +
+                "`/roll card e` 进行十一连（30 水晶，十一连必出 UR）；\n" +
+                "`/roll switch 30` 充值 30 水晶（180 元）；\n" +
                 "在指令后追加 s 表示将本次响应公开；";
         resp.setText(text);
 
@@ -186,7 +202,9 @@ public class RollProcessor {
                 resp.setText(resp.getText() + "嚯哟！还是个欧皇！" + tailStr);
             }
         } else {
-            resp.setText("当前余额不足，无法抽卡！[点击充值](" + RollContrast.CHARGE_URL + "?trade=" + botReq.getUser_id());
+            log.info("User '" + botReq.getUser_name() + "' process skipped(Over limit)");
+            resp.setText("当前水晶余额不足，无法抽卡！[点击充值](" + RollContrast.CHARGE_URL + "?ticket_id=" + botReq.getUser_id() +")");
+            resp = botRespDecorator.atDecorator(resp, botReq.getUser_name());
         }
         return resp;
     }

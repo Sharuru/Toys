@@ -13,6 +13,12 @@ import org.springframework.stereotype.Repository;
 public interface RollMapper {
 
 
+    /**
+     * 根据 uid 获取用户信息
+     *
+     * @param uid 用户 uid
+     * @return 用户信息
+     */
     @Select("  SELECT" +
             "   *" +
             "  FROM" +
@@ -23,6 +29,13 @@ public interface RollMapper {
             "   1")
     RollRecord findOneByUid(@Param("uid") String uid);
 
+    /**
+     * 更新用户金额信息
+     *
+     * @param uid    用户 uid
+     * @param amount 金额
+     * @param stone  水晶余额
+     */
     @Update("  UPDATE" +
             "    roll_record" +
             "  SET" +
@@ -33,6 +46,14 @@ public interface RollMapper {
     void updateAmount(@Param("uid") String uid, @Param("amount") Double amount, @Param("stone") Integer stone);
 
 
+    /**
+     * 新用户插入
+     *
+     * @param uid      用户 uid
+     * @param nickname 用户昵称
+     * @param amount   用户余额
+     * @param stone    用户水晶
+     */
     @Insert("  INSERT INTO" +
             "    roll_record (" +
             "      uid," +

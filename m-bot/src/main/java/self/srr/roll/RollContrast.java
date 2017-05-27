@@ -23,7 +23,7 @@ class RollContrast {
     static final Integer CARD_SINGLE_COST = 3;
 
     // 充值地址
-    static final String CHARGE_URL = "http://127.0.0.1/charge";
+    static final String CHARGE_URL = "http://127.0.0.1/roll/switch";
 
     // API 频率记录
     @Data
