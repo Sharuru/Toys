@@ -20,13 +20,13 @@
     <div class="panel panel-default">
         <div class="panel-body">
             欢迎，用户 <b><span th:text="${user.nickname}"></span></b> <br/>
-            您当前的用户余额为：<b><span id="user-amount" th:text="${#numbers.formatDecimal(user.amount,3,2)}"></span></b> 元 <br/>
+            您当前的用户余额为：<b><span id="user-amount" th:text="${#numbers.formatDecimal(user.amount,1,2)}"></span></b> 元 <br/>
             您当前的水晶余额为：<b><span id="user-stone" th:text="${user.stone}"></span></b> 枚 <br/>
             <span id="user-uid" hidden="hidden" th:text="${user.uid}"></span>
         </div>
     </div>
 
-    <button type="button" class="btn btn-primary">刷新用户信息</button>
+    <button type="button" class="btn btn-primary" onClick="window.location.reload()">刷新用户信息</button>
 
     <hr/>
 
@@ -34,7 +34,7 @@
 
         <div class="panel-heading">充值 Area <span class="badge">由系统每小时自动生成，免费！</span></div>
         <div class="panel-body">
-            当前时段可用余额：<b><span id="free-amount" th:text="${#numbers.formatDecimal(freeBalance,3,2)}"></span></b> 元
+            当前时段可用余额：<b><span id="free-amount" th:text="${#numbers.formatDecimal(freeBalance,1,2)}"></span></b> 元
         </div>
 
     </div>
