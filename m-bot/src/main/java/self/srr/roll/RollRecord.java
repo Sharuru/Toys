@@ -17,5 +17,7 @@ public class RollRecord {
     private String nickname;
     // 用户余额
     private Double amount;
+    // 石头余额
+    private Integer stone;
 
 }

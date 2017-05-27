@@ -30,12 +30,14 @@ public interface RollMapper {
             "    roll_record (" +
             "      uid," +
             "      nickname," +
-            "      amount" +
+            "      amount," +
+            "      stone" +
             "    )" +
             "  VALUES (" +
             "    #{uid}," +
             "    #{nickname}," +
-            "    #{amount}" +
+            "    #{amount}," +
+            "    #{stone}" +
             "  )")
-    void insertUser(@Param("uid") String uid, @Param("nickname") String nickname, @Param("amount") Double amount);
+    void insertUser(@Param("uid") String uid, @Param("nickname") String nickname, @Param("amount") Double amount, @Param("stone") Integer stone);
 }

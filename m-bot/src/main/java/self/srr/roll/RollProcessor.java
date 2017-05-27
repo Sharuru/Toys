@@ -83,9 +83,15 @@ public class RollProcessor {
         if (rollRecord == null) {
             // 新纪录，插入
             Double freeAmount = 648.0 + new Random().nextInt(10000) / 100.0;
-            rollMapper.insertUser(botReq.getUser_id(), botReq.getUser_name(), freeAmount);
+            Integer freeStone = 3 + new Random().nextInt(10);
+            rollMapper.insertUser(botReq.getUser_id(), botReq.getUser_name(), freeAmount, freeStone);
         } else {
-            // 根据策略检测
+            if (RollContrast.CARD_SINGLE.equalsIgnoreCase(cardPolicy)) {
+                // 单抽策略
+
+            } else if (RollContrast.CARD_ELEVEN.equalsIgnoreCase(cardPolicy)) {
+                // 十一连策略
+            }
         }
         return true;
     }
@@ -129,7 +135,6 @@ public class RollProcessor {
         cards.add(new Card(4, "SSR", 0.126d));
         cards.add(new Card(5, "UR", 0.009d));
         // 根据类型抽卡
-        cardPolicyChecker(RollContrast.CARD_SINGLE);
         if ("t1".equalsIgnoreCase(type)) {
 
             // 11 连
