@@ -10,9 +10,14 @@ import lombok.Data;
 @Data
 public class RollResponse {
 
+    // 用户 uid
     String uid;
+    // 用户余额
     String amount;
+    // 水晶余额
     String stone;
+    // 充值金额
     String chargeAmount;
+    // 系统剩余余额
     String freeAmount;
 }

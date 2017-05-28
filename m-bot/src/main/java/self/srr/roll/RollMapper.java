@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RollMapper {
 
-
     /**
      * 根据 uid 获取用户信息
      *
@@ -44,7 +43,6 @@ public interface RollMapper {
             "  WHERE" +
             "    uid = #{uid}")
     void updateAmount(@Param("uid") String uid, @Param("amount") Double amount, @Param("stone") Integer stone);
-
 
     /**
      * 新用户插入

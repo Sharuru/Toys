@@ -31,12 +31,10 @@
     <hr/>
 
     <div class="panel panel-default" style="margin-top: 20px;">
-
         <div class="panel-heading">充值 Area <span class="badge">由系统每小时自动生成，免费！</span></div>
         <div class="panel-body">
             当前时段可用余额：<b><span id="free-amount" th:text="${#numbers.formatDecimal(freeBalance,1,2)}"></span></b> 元
         </div>
-
     </div>
 
     <button id="charge-button" type="button" class="btn btn-success">随机充值</button>
@@ -44,12 +42,9 @@
     <hr/>
 
     <div class="panel panel-default" style="margin-top: 20px;">
-
         <div class="panel-heading">充值记录</div>
         <div id="charge-result" class="panel-body">
-
         </div>
-
     </div>
 
 

@@ -1,7 +1,6 @@
 package self.srr.roll;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.NumberFormat;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -27,6 +25,13 @@ public class RollPageController {
     @Autowired
     RollMapper rollMapper;
 
+    /**
+     * 充值页面
+     *
+     * @param model 页面 model
+     * @param uid   用户 uid
+     * @return 模板地址
+     */
     @RequestMapping(value = "/switch", method = RequestMethod.GET)
     public String index(Model model, @RequestParam(name = "pass") String uid) {
         RollRecord rollRecord = rollMapper.findOneByUid(uid);
@@ -46,18 +51,28 @@ public class RollPageController {
         return "roll/switch";
     }
 
+    /**
+     * 充值接口
+     *
+     * @param uid 用户 uid
+     * @return 充值结果
+     */
     @RequestMapping(value = "/switch", method = RequestMethod.POST)
     @ResponseBody
     public RollResponse charge(@RequestParam(name = "uid") String uid) {
         RollResponse resp = new RollResponse();
         RollRecord rollRecord = rollMapper.findOneByUid(uid);
+        // 免费金额
         Double freeAmount = 5.0 + new Random().nextInt(10000) / 100.0;
         RollContrast.FREE_BALANCE.setAmount(RollContrast.FREE_BALANCE.getAmount() - freeAmount);
+        // 更新
         rollMapper.updateAmount(uid, rollRecord.getAmount() + freeAmount, rollRecord.getStone());
+        // 格式器设定
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setGroupingUsed(false);
         nf.setMinimumFractionDigits(2);
         nf.setMaximumFractionDigits(2);
+        // response 填充
         resp.setUid(rollRecord.getUid());
         resp.setAmount(nf.format(rollRecord.getAmount() + freeAmount));
         resp.setStone(String.valueOf(rollRecord.getStone()));

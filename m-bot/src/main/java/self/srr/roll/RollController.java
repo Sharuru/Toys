@@ -24,6 +24,12 @@ public class RollController {
     @Autowired
     private BotRespDecorator botRespDecorator;
 
+    /**
+     * Roll 点接口
+     *
+     * @param botReq 请求实体
+     * @return 响应实体
+     */
     @RequestMapping(value = "")
     public BotResponseModel roll(BotRequestModel botReq) {
         BotResponseModel respModel = new BotResponseModel();

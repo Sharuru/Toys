@@ -53,8 +53,6 @@ public class RollProcessor {
         } else {
             // 普通 Roll 点
             botResp = rollDecorator(userCommand);
-
-
         }
 
         // 公开设置
@@ -199,6 +197,7 @@ public class RollProcessor {
 
             log.info("User '" + botReq.getUser_name() + "' card_gotcha: '" + resultStr + "'");
 
+            // 非酋嘲讽
             String gotchaType = "o".equalsIgnoreCase(type) ? "单抽" : "十一连";
             resp.setText("「" + botReq.getUser_name() + "」这位大佬进行了一次" + gotchaType + "，获得了：" + resultStr + "。");
             if (result.contains("**UR**")) {
@@ -213,8 +212,15 @@ public class RollProcessor {
         return resp;
     }
 
+    /**
+     * 转换水晶
+     *
+     * @param userCommand 用户命令
+     * @return 响应实体
+     */
     private BotResponseModel switchDecorator(String[] userCommand) {
         BotResponseModel resp = new BotResponseModel();
+
         int switchCount = 1;
         if (userCommand.length > 1) {
             try {
