@@ -9,6 +9,7 @@ import self.srr.common.BotRequestModel;
 import self.srr.common.BotRespDecorator;
 import self.srr.common.BotResponseModel;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -47,6 +48,9 @@ public class RollProcessor {
         } else if ("card".equalsIgnoreCase(mainCommand)) {
             // 抽卡
             botResp = cardDecorator(userCommand);
+        } else if ("status".equalsIgnoreCase(mainCommand)) {
+            // 查看余额
+            botResp = statusDecorator();
         } else if ("switch".equalsIgnoreCase(mainCommand)) {
             // 水晶充值
             botResp = switchDecorator(userCommand);
@@ -132,8 +136,27 @@ public class RollProcessor {
                 "`/roll help` 显示本帮助信息；\n" +
                 "`/roll card o` 进行一次单抽（3 水晶）；\n" +
                 "`/roll card e` 进行十一连（30 水晶，十一连必出 UR）；\n" +
+                "`/roll status` 查看个人帐户信息；\n" +
                 "`/roll switch 30` 获取 30 水晶（180 元）；\n" +
                 "在指令后追加 s 表示将本次响应公开；";
+        resp.setText(text);
+
+        return resp;
+    }
+
+    /**
+     * 显示余额信息
+     *
+     * @return 响应实体
+     */
+    private BotResponseModel statusDecorator() {
+        BotResponseModel resp = new BotResponseModel();
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setGroupingUsed(false);
+        nf.setMinimumFractionDigits(2);
+        nf.setMaximumFractionDigits(2);
+        RollRecord rollRecord = rollMapper.findOneByUid(botReq.getUser_id());
+        String text = "您好，" + botReq.getUser_name() + "，您当前的用户余额为：" + nf.format(rollRecord.getAmount()) + "，水晶余额为：" + nf.format(rollRecord.getStone());
         resp.setText(text);
 
         return resp;

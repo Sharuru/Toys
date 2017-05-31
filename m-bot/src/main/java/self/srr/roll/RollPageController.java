@@ -62,22 +62,34 @@ public class RollPageController {
     public RollResponse charge(@RequestParam(name = "uid") String uid) {
         RollResponse resp = new RollResponse();
         RollRecord rollRecord = rollMapper.findOneByUid(uid);
-        // 免费金额
-        Double freeAmount = 5.0 + new Random().nextInt(10000) / 100.0;
-        RollContrast.FREE_BALANCE.setAmount(RollContrast.FREE_BALANCE.getAmount() - freeAmount);
-        // 更新
-        rollMapper.updateAmount(uid, rollRecord.getAmount() + freeAmount, rollRecord.getStone());
         // 格式器设定
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setGroupingUsed(false);
         nf.setMinimumFractionDigits(2);
         nf.setMaximumFractionDigits(2);
+
+        Double freeAmount = 0.0;
+
         // response 填充
         resp.setUid(rollRecord.getUid());
-        resp.setAmount(nf.format(rollRecord.getAmount() + freeAmount));
         resp.setStone(String.valueOf(rollRecord.getStone()));
-        resp.setChargeAmount(nf.format(freeAmount));
-        resp.setFreeAmount(nf.format((RollContrast.FREE_BALANCE.getAmount())));
+
+        // 负数余额检测
+        if (RollContrast.FREE_BALANCE.getAmount() < 0) {
+            resp.setAmount(nf.format(rollRecord.getAmount()));
+            resp.setChargeAmount(nf.format(0.0));
+            resp.setFreeAmount(nf.format(0.0));
+        } else {
+            // 免费金额
+            freeAmount = 5.0 + new Random().nextInt(10000) / 100.0;
+            RollContrast.FREE_BALANCE.setAmount(RollContrast.FREE_BALANCE.getAmount() - freeAmount);
+            // 更新
+            rollMapper.updateAmount(uid, rollRecord.getAmount() + freeAmount, rollRecord.getStone());
+            resp.setAmount(nf.format(rollRecord.getAmount() + freeAmount));
+            resp.setChargeAmount(nf.format(freeAmount));
+            resp.setFreeAmount(nf.format((RollContrast.FREE_BALANCE.getAmount())));
+        }
+
 
         return resp;
     }
