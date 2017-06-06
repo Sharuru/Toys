@@ -27,4 +27,8 @@ public class BotResponseModel {
         }
     }
 
+    public void appendAtWho(String who) {
+        this.text += "  @" + who;
+    }
+
 }
