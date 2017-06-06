@@ -1,11 +1,13 @@
-package self.srr.common;
+package self.srr.bot.base.web;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import self.srr.bot.base.common.BotContrast;
 
 /**
- * Bot 主路由
+ * Bot main router
  * <p>
+ * Usually do nothing. ^_^
  * Created by Sharuru on 2017/04/28.
  */
 @RestController
@@ -14,6 +16,6 @@ public class BotController {
 
     @RequestMapping("")
     public String index() {
-        return "Welcome to this BOT.";
+        return BotContrast.BOT_DEFAULT_RESP;
     }
 }
