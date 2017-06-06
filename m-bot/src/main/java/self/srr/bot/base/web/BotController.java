@@ -11,7 +11,7 @@ import self.srr.bot.base.common.BotContrast;
  * Created by Sharuru on 2017/04/28.
  */
 @RestController
-@RequestMapping("/bot")
+@RequestMapping("/api")
 public class BotController {
 
     @RequestMapping("")

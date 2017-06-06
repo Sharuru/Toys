@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Configuration map of the bot
+ * <p>
+ * Global wide.
  * Created by Sharuru on 2017/06/05.
  */
 @ConfigurationProperties(prefix = "bot.global")

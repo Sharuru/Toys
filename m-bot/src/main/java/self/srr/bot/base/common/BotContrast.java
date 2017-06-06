@@ -12,6 +12,6 @@ public class BotContrast {
     public static final String BOT_RESP_TYPE_EPH = "ephemeral";      // only to sender
 
     // default response context
-    public static final String BOT_DEFAULT_RESP = "RESPONSE OK.";
+    public static final String BOT_DEFAULT_RESP = "RESPONSE_OK";
 
 }

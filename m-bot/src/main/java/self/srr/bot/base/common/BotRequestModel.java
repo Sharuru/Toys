@@ -1,34 +1,34 @@
-package self.srr.common;
+package self.srr.bot.base.common;
 
 import lombok.Data;
 
 /**
- * Bot 请求实体
+ * Bot request model
  * <p>
  * Created by Sharuru on 2017/04/28.
  */
 @Data
 public class BotRequestModel {
 
-    // 频道 ID
+    // channel id
     private String channel_id;
-    // 频道名称
+    // channel name
     private String channel_name;
-    // 指令
+    // user command
     private String command;
-    // 响应 URL
+    // wip
     private String response_url;
-    // 团队域
+    // team domain
     private String team_domain;
-    // 团队 ID
+    // team id
     private String team_id;
-    // 指令内容
+    // user input
     private String text;
-    // 命令 token
+    // request token
     private String token;
-    // 用户 ID
+    // user id
     private String user_id;
-    // 用户名
+    // user nickname
     private String user_name;
 
 }
