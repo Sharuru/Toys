@@ -19,4 +19,12 @@ public class BotResponseModel {
     // Bot icon address
     private String icon_url;
 
+    public void setIsPublic(boolean flag) {
+        if (flag) {
+            this.response_type = BotContrast.BOT_RESP_TYPE_ICH;
+        } else {
+            this.response_type = BotContrast.BOT_RESP_TYPE_EPH;
+        }
+    }
+
 }

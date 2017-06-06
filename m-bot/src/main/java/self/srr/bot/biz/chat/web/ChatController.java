@@ -30,7 +30,7 @@ public class ChatController {
 
         if (BotUtils.isUserMaster(botRequest.getUser_id())) {
             responseModel.setText(botRequest.getText());
-            responseModel.setResponse_type(BotContrast.BOT_RESP_TYPE_ICH);
+            responseModel.setIsPublic(true);
         }
 
         return responseModel;
