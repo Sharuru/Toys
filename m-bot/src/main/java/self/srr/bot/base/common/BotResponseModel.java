@@ -19,6 +19,12 @@ public class BotResponseModel {
     // Bot icon address
     private String icon_url;
 
+
+    /**
+     * Change response visible range
+     *
+     * @param flag is public
+     */
     public void setIsPublic(boolean flag) {
         if (flag) {
             this.response_type = BotContrast.BOT_RESP_TYPE_ICH;
@@ -27,6 +33,11 @@ public class BotResponseModel {
         }
     }
 
+    /**
+     * Append '@' mark at the end
+     *
+     * @param who username
+     */
     public void appendAtWho(String who) {
         this.text += "  @" + who;
     }

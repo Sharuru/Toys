@@ -85,8 +85,9 @@ public class BotUtils {
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
             HttpResponse response = HttpClients.createDefault().execute(httpPost);
+            log.info("Webhook triggered with code " + response.getStatusLine().getStatusCode() + ": " + response.getStatusLine().getReasonPhrase());
         } catch (Exception e) {
-            log.info("Error happened in 'triggerHook':" + e.getMessage());
+            log.info("Error happened in 'triggerHook': " + e.getMessage());
             return -1;
         }
         return 0;
