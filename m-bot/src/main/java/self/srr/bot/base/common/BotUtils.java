@@ -92,7 +92,7 @@ public class BotUtils {
             HttpResponse response = HttpClients.createDefault().execute(httpPost);
             log.info("Webhook triggered with code " + response.getStatusLine().getStatusCode() + ": " + response.getStatusLine().getReasonPhrase());
         } catch (Exception e) {
-            log.info("Error happened in 'triggerHook': " + e.getMessage());
+            log.error("Error happened in 'triggerHook': " + e.getMessage());
             return -1;
         }
         return 0;
