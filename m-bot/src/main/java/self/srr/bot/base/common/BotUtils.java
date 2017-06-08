@@ -50,15 +50,20 @@ public class BotUtils {
     /**
      * Get default response model
      *
-     * @return response model
+     * @param args user command
+     * @return response
      */
-    public static BotResponseModel getDefaultResponseModel() {
+    public static BotResponseModel getDefaultResponseModel(String... args) {
         BotResponseModel responseModel = new BotResponseModel();
 
         responseModel.setResponse_type(BotContrast.BOT_RESP_TYPE_EPH);
         responseModel.setUsername(_botConfiguration.getName());
         responseModel.setIcon_url(_botConfiguration.getIcon());
         responseModel.setText(BotContrast.BOT_DEFAULT_RESP);
+
+        if (args.length != 0 && "s".equalsIgnoreCase(args[args.length - 1])) {
+            responseModel.setIsPublic(true);
+        }
 
         return responseModel;
     }
@@ -92,5 +97,18 @@ public class BotUtils {
         }
         return 0;
     }
+
+    /**
+     * User command parser
+     *
+     * @param input command
+     * @return parsed string array
+     */
+    public static String[] commandParser(String input) {
+        return input.split("\\s+");
+    }
+
+
+
 
 }

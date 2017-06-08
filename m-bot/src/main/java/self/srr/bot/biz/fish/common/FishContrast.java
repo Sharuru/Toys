@@ -25,4 +25,5 @@ public class FishContrast {
 
     // seconds of 30 minutes
     public static final Long HALF_HOUR = 1800L;
+
 }

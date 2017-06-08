@@ -37,5 +37,8 @@ public class TblFishTimeRecord {
     @Temporal(TIMESTAMP)
     private Date updatedAt;
 
-
+    public TblFishTimeRecord(String username, Date checkInTime) {
+        this.username = username;
+        this.checkInTime = checkInTime;
+    }
 }
