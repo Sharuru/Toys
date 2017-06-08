@@ -29,6 +29,12 @@ public class FishService {
 
     private BotRequestModel botRequestModel = new BotRequestModel();
 
+    /**
+     * Fish service flow
+     *
+     * @param botRequestModel request
+     * @return response
+     */
     public BotResponseModel start(BotRequestModel botRequestModel) {
         this.botRequestModel = botRequestModel;
 
@@ -51,6 +57,12 @@ public class FishService {
         return botResponseModel;
     }
 
+    /**
+     * Help message business
+     *
+     * @param botResponseModel prev. response
+     * @return response
+     */
     private BotResponseModel helpMsgBiz(BotResponseModel botResponseModel) {
 
         String text = "" +
@@ -67,6 +79,13 @@ public class FishService {
         return botResponseModel;
     }
 
+    /**
+     * Check in time register business
+     *
+     * @param responseModel prev.response
+     * @param args          user command
+     * @return response
+     */
     private BotResponseModel checkInBiz(BotResponseModel responseModel, String[] args) {
         // parameter check
         if (args.length >= 2) {       // have HHmm info
