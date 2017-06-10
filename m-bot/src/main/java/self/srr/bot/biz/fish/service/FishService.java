@@ -10,10 +10,14 @@ import self.srr.bot.biz.fish.common.FishContrast;
 import self.srr.bot.biz.fish.entity.TblFishTimeRecord;
 import self.srr.bot.biz.fish.repository.FishRepository;
 
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Fish service
@@ -82,11 +86,11 @@ public class FishService {
     /**
      * Check in time register business
      *
-     * @param responseModel prev.response
-     * @param args          user command
+     * @param botResponseModel prev.response
+     * @param args             user command
      * @return response
      */
-    private BotResponseModel checkInBiz(BotResponseModel responseModel, String[] args) {
+    private BotResponseModel checkInBiz(BotResponseModel botResponseModel, String[] args) {
 
         // parameter check
         // have HHmm info
@@ -99,32 +103,60 @@ public class FishService {
                     if (record == null) {
                         // insert
                         TblFishTimeRecord newRecord = fishRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), inputDate));
+                        botResponseModel.setText("出勤时间已记录为：" + HHmmStr + "。");
                         log.info("Record inserted: " + newRecord.toString());
                     } else {
                         // update
                         record.setCheckInTime(inputDate);
                         fishRepository.save(record);
+                        botResponseModel.setText("出勤时间已更新为：" + HHmmStr + "。");
                         log.info("Record updated: " + record.toString());
                     }
                 } catch (Exception e) {
-                    responseModel.setText("似乎发生了奇怪的问题，麻烦稍后再试。");
+                    botResponseModel.setText("似乎发生了奇怪的问题，麻烦稍后再试。");
                     log.error("Error happened in 'checkInBiz': " + e.getMessage());
                     e.printStackTrace();
                 }
             } catch (Exception e) {
-                responseModel.setText("时间格式似乎输入错误了哟（HHmm）。");
+                botResponseModel.setText("时间格式似乎输入错误了哟（HHmm）。");
                 log.error("Error happened in 'checkInBiz': " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
+            // no args, using default
             fishRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), getSystemLocalDate(null, null, null, 9, 0, 0, FishContrast.ZONE_SHANGHAI)));
-            responseModel.setText("未指定出勤时间，已自动记录为： 0900。");
+            botResponseModel.setText("未指定出勤时间，已自动记录为： 0900。");
         }
 
-        return responseModel;
+        return botResponseModel;
+    }
+
+    private BotResponseModel etaBiz(BotResponseModel botResponseModel) {
+        // find record
+        TblFishTimeRecord record = fishRepository.findTodayByUserId(botRequestModel.getUser_id());
+        if (record == null) {
+            // no record
+            botResponseModel.setText("今日出勤时间未记录（使用 `/fish ci HHmm` 来记录）。");
+        } else {
+            // calculate
+            Map<String, BigDecimal> etaMap = etaCalculator(record.getCheckInTime());
+        }
+        return botResponseModel;
     }
 
 
+    /**
+     * Get time at system default timezone
+     *
+     * @param year   year
+     * @param month  month
+     * @param day    day
+     * @param hour   hour
+     * @param minute minute
+     * @param second second
+     * @param zoneId zone id(default: Asia/Shanghai +0800)
+     * @return date time at system default timezone
+     */
     private Date getSystemLocalDate(Integer year, Integer month, Integer day, Integer hour, Integer minute, Integer second, ZoneId zoneId) {
         ZonedDateTime now = ZonedDateTime.now(FishContrast.ZONE_SHANGHAI);
         int zYear = year == null ? now.getYear() : year;
@@ -133,10 +165,39 @@ public class FishService {
         int zHour = hour == null ? now.getHour() : hour;
         int zMinute = minute == null ? now.getMinute() : minute;
         int zSecond = second == null ? now.getSecond() : second;
-        ZoneId zZoneId = zoneId == null ? FishContrast.ZONE_SHANGHAI : zoneId;
+        ZoneId zZoneId = zoneId == null ? now.getZone() : zoneId;
 
         ZonedDateTime record = ZonedDateTime.of(zYear, zMonth, zDay, zHour, zMinute, zSecond, 0, zZoneId);
         return Date.from(Instant.from(record.toInstant().atZone(ZoneId.systemDefault())));
+    }
+
+    /**
+     * Calculate eta duty time
+     * <p>
+     * rules:
+     * if CHECK_IN < 0900 OR > 0930, END = 1800
+     * else END = 1800 + duration between CHECK_IN and BUFFER_END
+     *
+     * @param recordDatetime record time
+     * @return eta duty map
+     */
+    private Map<String, BigDecimal> etaCalculator(Date recordDatetime) {
+        ZonedDateTime checkInDateTime = ZonedDateTime.ofInstant(recordDatetime.toInstant(), FishContrast.ZONE_SHANGHAI);
+        ZonedDateTime startDateTime = ZonedDateTime.of(checkInDateTime.getYear(), checkInDateTime.getMonthValue(), checkInDateTime.getDayOfMonth(), 9, 0, 0, 0, FishContrast.ZONE_SHANGHAI);
+        ZonedDateTime bufferDateTime = startDateTime.plusMinutes(30L);
+        ZonedDateTime endDateTime = startDateTime.plusHours(9L);
+
+        if (checkInDateTime.isAfter(startDateTime) && checkInDateTime.isBefore(bufferDateTime)) {
+            endDateTime = endDateTime.plusSeconds(Duration.between(checkInDateTime, bufferDateTime).getSeconds());
+        }
+        Duration duration = Duration.between(ZonedDateTime.now(FishContrast.ZONE_SHANGHAI), endDateTime);
+
+        Map<String, BigDecimal> retMap = new HashMap<>();
+        retMap.put("SECOND", new BigDecimal(duration.getSeconds()));
+        retMap.put("MINUTE", new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP));
+        retMap.put("HOUR", new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP));
+        
+        return retMap;
     }
 
 }
