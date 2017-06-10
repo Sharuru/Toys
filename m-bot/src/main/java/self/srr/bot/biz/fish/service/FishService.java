@@ -87,14 +87,25 @@ public class FishService {
      * @return response
      */
     private BotResponseModel checkInBiz(BotResponseModel responseModel, String[] args) {
+
         // parameter check
-        if (args.length >= 2) {       // have HHmm info
+        // have HHmm info
+        if (args.length >= 2) {
             try {    // check args is legal
                 String HHmmStr = args[1];
                 Date inputDate = getSystemLocalDate(null, null, null, Integer.valueOf(HHmmStr.substring(0, 2)), Integer.valueOf(HHmmStr.substring(2, 4)), 0, FishContrast.ZONE_SHANGHAI);
                 try {
-                    TblFishTimeRecord record = fishRepository.save(new TblFishTimeRecord(botRequestModel.getUser_name(), inputDate));
-                    log.info("Record inserted: " + record.toString());
+                    TblFishTimeRecord record = fishRepository.findTodayByUserId(botRequestModel.getUser_id());
+                    if (record == null) {
+                        // insert
+                        TblFishTimeRecord newRecord = fishRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), inputDate));
+                        log.info("Record inserted: " + newRecord.toString());
+                    } else {
+                        // update
+                        record.setCheckInTime(inputDate);
+                        fishRepository.save(record);
+                        log.info("Record updated: " + record.toString());
+                    }
                 } catch (Exception e) {
                     responseModel.setText("似乎发生了奇怪的问题，麻烦稍后再试。");
                     log.error("Error happened in 'checkInBiz': " + e.getMessage());
@@ -106,7 +117,7 @@ public class FishService {
                 e.printStackTrace();
             }
         } else {
-            fishRepository.save(new TblFishTimeRecord(botRequestModel.getUser_name(), getSystemLocalDate(null, null, null, 9, 0, 0, FishContrast.ZONE_SHANGHAI)));
+            fishRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), getSystemLocalDate(null, null, null, 9, 0, 0, FishContrast.ZONE_SHANGHAI)));
             responseModel.setText("未指定出勤时间，已自动记录为： 0900。");
         }
 
@@ -117,7 +128,7 @@ public class FishService {
     private Date getSystemLocalDate(Integer year, Integer month, Integer day, Integer hour, Integer minute, Integer second, ZoneId zoneId) {
         ZonedDateTime now = ZonedDateTime.now(FishContrast.ZONE_SHANGHAI);
         int zYear = year == null ? now.getYear() : year;
-        int zMonth = month == null ? now.getDayOfMonth() : month;
+        int zMonth = month == null ? now.getMonthValue() : month;
         int zDay = day == null ? now.getDayOfMonth() : day;
         int zHour = hour == null ? now.getHour() : hour;
         int zMinute = minute == null ? now.getMinute() : minute;

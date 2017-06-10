@@ -21,6 +21,9 @@ public class TblFishTimeRecord {
     @SequenceGenerator(name = "seq", sequenceName = "fish_time_record_id_seq")
     private Long id;
 
+    @Column(name = "user_id")
+    private String userId;
+
     private String username;
 
     @Column(name = "checkin_time")
@@ -37,7 +40,11 @@ public class TblFishTimeRecord {
     @Temporal(TIMESTAMP)
     private Date updatedAt;
 
-    public TblFishTimeRecord(String username, Date checkInTime) {
+    public TblFishTimeRecord() {
+    }
+
+    public TblFishTimeRecord(String userId, String username, Date checkInTime) {
+        this.userId = userId;
         this.username = username;
         this.checkInTime = checkInTime;
     }
