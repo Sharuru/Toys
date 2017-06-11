@@ -55,6 +55,7 @@ public class FishService {
         } else if ("ci".equalsIgnoreCase(action)) {
             botResponseModel = checkInBiz(botResponseModel, args);
         } else {
+            botResponseModel = etaBiz(botResponseModel);
 
         }
 
@@ -131,6 +132,12 @@ public class FishService {
         return botResponseModel;
     }
 
+    /**
+     * Calculate eta duty time
+     *
+     * @param botResponseModel prev.response
+     * @return response
+     */
     private BotResponseModel etaBiz(BotResponseModel botResponseModel) {
         // find record
         TblFishTimeRecord record = fishRepository.findTodayByUserId(botRequestModel.getUser_id());
@@ -140,6 +147,22 @@ public class FishService {
         } else {
             // calculate
             Map<String, BigDecimal> etaMap = etaCalculator(record.getCheckInTime());
+            // decorate
+            String text = "";
+
+            if (etaMap.get("SECOND").compareTo(BigDecimal.ZERO) == 1) {
+                text += "哎呀，还得摸：" + etaMap.get("SECOND") + " 秒";
+            } else {
+                text += "嚯哟！你给自己续了：" + etaMap.get("SECOND") + " 秒";
+            }
+            if (etaMap.get("SECOND").divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
+                text += "，约 " + etaMap.get("MINUTE") + " 分钟";
+            }
+            if (etaMap.get("SECOND").divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
+                text += "，约 " + etaMap.get("HOUR") + " 小时";
+            }
+            text += "。";
+            botResponseModel.setText(text);
         }
         return botResponseModel;
     }
@@ -175,7 +198,7 @@ public class FishService {
      * Calculate eta duty time
      * <p>
      * rules:
-     * if CHECK_IN < 0900 OR > 0930, END = 1800
+     * if CHECK_IN < 0900 OR > 0931, END = 1800
      * else END = 1800 + duration between CHECK_IN and BUFFER_END
      *
      * @param recordDatetime record time
@@ -184,11 +207,11 @@ public class FishService {
     private Map<String, BigDecimal> etaCalculator(Date recordDatetime) {
         ZonedDateTime checkInDateTime = ZonedDateTime.ofInstant(recordDatetime.toInstant(), FishContrast.ZONE_SHANGHAI);
         ZonedDateTime startDateTime = ZonedDateTime.of(checkInDateTime.getYear(), checkInDateTime.getMonthValue(), checkInDateTime.getDayOfMonth(), 9, 0, 0, 0, FishContrast.ZONE_SHANGHAI);
-        ZonedDateTime bufferDateTime = startDateTime.plusMinutes(30L);
+        ZonedDateTime bufferDateTime = startDateTime.plusMinutes(31L);
         ZonedDateTime endDateTime = startDateTime.plusHours(9L);
 
         if (checkInDateTime.isAfter(startDateTime) && checkInDateTime.isBefore(bufferDateTime)) {
-            endDateTime = endDateTime.plusSeconds(Duration.between(checkInDateTime, bufferDateTime).getSeconds());
+            endDateTime = endDateTime.plusSeconds(Duration.between(startDateTime, checkInDateTime).getSeconds());
         }
         Duration duration = Duration.between(ZonedDateTime.now(FishContrast.ZONE_SHANGHAI), endDateTime);
 
@@ -196,7 +219,7 @@ public class FishService {
         retMap.put("SECOND", new BigDecimal(duration.getSeconds()));
         retMap.put("MINUTE", new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP));
         retMap.put("HOUR", new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP));
-        
+
         return retMap;
     }
 
