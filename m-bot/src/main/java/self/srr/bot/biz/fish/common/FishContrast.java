@@ -26,4 +26,8 @@ public class FishContrast {
     // seconds of 30 minutes
     public static final Long HALF_HOUR = 1800L;
 
+    public static final String KEY_SECOND = "SECOND";
+    public static final String KEY_MINUTE = "MINUTE";
+    public static final String KEY_HOUR = "HOUR";
+
 }

@@ -56,8 +56,9 @@ public class FishService {
             botResponseModel = checkInBiz(botResponseModel, args);
         } else {
             botResponseModel = etaBiz(botResponseModel);
-
         }
+
+        botResponseModel.appendAtWho(botRequestModel.getUser_name());
 
         return botResponseModel;
     }
@@ -150,18 +151,19 @@ public class FishService {
             // decorate
             String text = "";
 
-            if (etaMap.get("SECOND").compareTo(BigDecimal.ZERO) == 1) {
-                text += "哎呀，还得摸：" + etaMap.get("SECOND") + " 秒";
+            if (etaMap.get(FishContrast.KEY_SECOND).compareTo(BigDecimal.ZERO) == 1) {
+                text += "哎呀，还得摸：" + etaMap.get(FishContrast.KEY_SECOND) + " 秒";
             } else {
-                text += "嚯哟！你给自己续了：" + etaMap.get("SECOND") + " 秒";
+                text += "嚯哟！你给自己续了：" + etaMap.get(FishContrast.KEY_SECOND) + " 秒";
             }
-            if (etaMap.get("SECOND").divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
-                text += "，约 " + etaMap.get("MINUTE") + " 分钟";
+            if (etaMap.get(FishContrast.KEY_SECOND).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
+                text += "，约 " + etaMap.get(FishContrast.KEY_MINUTE) + " 分钟";
             }
-            if (etaMap.get("SECOND").divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
-                text += "，约 " + etaMap.get("HOUR") + " 小时";
+            if (etaMap.get(FishContrast.KEY_SECOND).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
+                text += "，约 " + etaMap.get(FishContrast.KEY_HOUR) + " 小时";
             }
             text += "。";
+
             botResponseModel.setText(text);
         }
         return botResponseModel;
@@ -213,12 +215,13 @@ public class FishService {
         if (checkInDateTime.isAfter(startDateTime) && checkInDateTime.isBefore(bufferDateTime)) {
             endDateTime = endDateTime.plusSeconds(Duration.between(startDateTime, checkInDateTime).getSeconds());
         }
+
         Duration duration = Duration.between(ZonedDateTime.now(FishContrast.ZONE_SHANGHAI), endDateTime);
 
         Map<String, BigDecimal> retMap = new HashMap<>();
-        retMap.put("SECOND", new BigDecimal(duration.getSeconds()));
-        retMap.put("MINUTE", new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP));
-        retMap.put("HOUR", new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP));
+        retMap.put(FishContrast.KEY_SECOND, new BigDecimal(duration.getSeconds()));
+        retMap.put(FishContrast.KEY_MINUTE, new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP));
+        retMap.put(FishContrast.KEY_HOUR, new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP));
 
         return retMap;
     }
