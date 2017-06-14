@@ -11,21 +11,10 @@ import java.util.Map;
  */
 public class FishContrast {
 
-    // API rate map
-    public static final Map<String, Long> RATE_MAP = new HashMap<>();
-
     // +8 time zone
     public static final ZoneId ZONE_SHANGHAI = ZoneId.of("Asia/Shanghai");
 
-    // seconds of 24 hours
-    public static final Long ONE_DAY = 86400L;
-
-    // seconds of 8 hours
-    public static final Long NINE_HOUR = 32400L;
-
-    // seconds of 30 minutes
-    public static final Long HALF_HOUR = 1800L;
-
+    // etaMap key
     public static final String KEY_SECOND = "SECOND";
     public static final String KEY_MINUTE = "MINUTE";
     public static final String KEY_HOUR = "HOUR";
