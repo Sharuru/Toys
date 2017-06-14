@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import self.srr.bot.base.common.BotRequestModel;
 import self.srr.bot.base.common.BotResponseModel;
 import self.srr.bot.base.common.BotUtils;
-import self.srr.bot.biz.fish.common.FishContrast;
+import self.srr.bot.biz.fish.common.FishConstant;
 import self.srr.bot.biz.fish.entity.TblFishTimeRecord;
-import self.srr.bot.biz.fish.repository.FishRepository;
+import self.srr.bot.biz.fish.repository.FishTimeRepository;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -18,6 +18,8 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+// TODO duty time setting in application.yml
 
 /**
  * Fish service
@@ -29,7 +31,7 @@ import java.util.Map;
 public class FishService {
 
     @Autowired
-    private FishRepository fishRepository;
+    private FishTimeRepository fishTimeRepository;
 
     private BotRequestModel botRequestModel = new BotRequestModel();
 
@@ -99,18 +101,18 @@ public class FishService {
         if (args.length >= 2) {
             try {    // check args is legal
                 String HHmmStr = args[1];
-                Date inputDate = getSystemLocalDate(null, null, null, Integer.valueOf(HHmmStr.substring(0, 2)), Integer.valueOf(HHmmStr.substring(2, 4)), 0, FishContrast.ZONE_SHANGHAI);
+                Date inputDate = getSystemLocalDate(null, null, null, Integer.valueOf(HHmmStr.substring(0, 2)), Integer.valueOf(HHmmStr.substring(2, 4)), 0, FishConstant.ZONE_SHANGHAI);
                 try {
-                    TblFishTimeRecord record = fishRepository.findTodayByUserId(botRequestModel.getUser_id());
+                    TblFishTimeRecord record = fishTimeRepository.findTodayByUserId(botRequestModel.getUser_id());
                     if (record == null) {
                         // insert
-                        TblFishTimeRecord newRecord = fishRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), inputDate));
+                        TblFishTimeRecord newRecord = fishTimeRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), inputDate));
                         botResponseModel.setText("出勤时间已记录为：" + HHmmStr + "。");
                         log.info("Record inserted: " + newRecord.toString());
                     } else {
                         // update
                         record.setCheckInTime(inputDate);
-                        fishRepository.save(record);
+                        fishTimeRepository.save(record);
                         botResponseModel.setText("出勤时间已更新为：" + HHmmStr + "。");
                         log.info("Record updated: " + record.toString());
                     }
@@ -126,7 +128,7 @@ public class FishService {
             }
         } else {
             // no args, using default
-            fishRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), getSystemLocalDate(null, null, null, 9, 0, 0, FishContrast.ZONE_SHANGHAI)));
+            fishTimeRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), getSystemLocalDate(null, null, null, 9, 0, 0, FishConstant.ZONE_SHANGHAI)));
             botResponseModel.setText("未指定出勤时间，已自动记录为： 0900。");
         }
 
@@ -141,7 +143,7 @@ public class FishService {
      */
     private BotResponseModel etaBiz(BotResponseModel botResponseModel) {
         // find record
-        TblFishTimeRecord record = fishRepository.findTodayByUserId(botRequestModel.getUser_id());
+        TblFishTimeRecord record = fishTimeRepository.findTodayByUserId(botRequestModel.getUser_id());
         if (record == null) {
             // no record
             botResponseModel.setText("今日出勤时间未记录（使用 `/fish ci HHmm` 来记录）。");
@@ -151,16 +153,16 @@ public class FishService {
             // decorate
             String text = "";
 
-            if (etaMap.get(FishContrast.KEY_SECOND).compareTo(BigDecimal.ZERO) == 1) {
-                text += "哎呀，还得摸：" + etaMap.get(FishContrast.KEY_SECOND) + " 秒";
+            if (etaMap.get(FishConstant.KEY_SECOND).compareTo(BigDecimal.ZERO) == 1) {
+                text += "哎呀，还得摸：" + etaMap.get(FishConstant.KEY_SECOND) + " 秒";
             } else {
-                text += "嚯哟！你给自己续了：" + etaMap.get(FishContrast.KEY_SECOND) + " 秒";
+                text += "嚯哟！你给自己续了：" + etaMap.get(FishConstant.KEY_SECOND) + " 秒";
             }
-            if (etaMap.get(FishContrast.KEY_SECOND).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
-                text += "，约 " + etaMap.get(FishContrast.KEY_MINUTE) + " 分钟";
+            if (etaMap.get(FishConstant.KEY_SECOND).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
+                text += "，约 " + etaMap.get(FishConstant.KEY_MINUTE) + " 分钟";
             }
-            if (etaMap.get(FishContrast.KEY_SECOND).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
-                text += "，约 " + etaMap.get(FishContrast.KEY_HOUR) + " 小时";
+            if (etaMap.get(FishConstant.KEY_SECOND).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
+                text += "，约 " + etaMap.get(FishConstant.KEY_HOUR) + " 小时";
             }
             text += "。";
 
@@ -183,7 +185,7 @@ public class FishService {
      * @return date time at system default timezone
      */
     private Date getSystemLocalDate(Integer year, Integer month, Integer day, Integer hour, Integer minute, Integer second, ZoneId zoneId) {
-        ZonedDateTime now = ZonedDateTime.now(FishContrast.ZONE_SHANGHAI);
+        ZonedDateTime now = ZonedDateTime.now(FishConstant.ZONE_SHANGHAI);
         int zYear = year == null ? now.getYear() : year;
         int zMonth = month == null ? now.getMonthValue() : month;
         int zDay = day == null ? now.getDayOfMonth() : day;
@@ -207,8 +209,8 @@ public class FishService {
      * @return eta duty map
      */
     private Map<String, BigDecimal> etaCalculator(Date recordDatetime) {
-        ZonedDateTime checkInDateTime = ZonedDateTime.ofInstant(recordDatetime.toInstant(), FishContrast.ZONE_SHANGHAI);
-        ZonedDateTime startDateTime = ZonedDateTime.of(checkInDateTime.getYear(), checkInDateTime.getMonthValue(), checkInDateTime.getDayOfMonth(), 9, 0, 0, 0, FishContrast.ZONE_SHANGHAI);
+        ZonedDateTime checkInDateTime = ZonedDateTime.ofInstant(recordDatetime.toInstant(), FishConstant.ZONE_SHANGHAI);
+        ZonedDateTime startDateTime = ZonedDateTime.of(checkInDateTime.getYear(), checkInDateTime.getMonthValue(), checkInDateTime.getDayOfMonth(), 9, 0, 0, 0, FishConstant.ZONE_SHANGHAI);
         ZonedDateTime bufferDateTime = startDateTime.plusMinutes(31L);
         ZonedDateTime endDateTime = startDateTime.plusHours(9L);
 
@@ -216,12 +218,12 @@ public class FishService {
             endDateTime = endDateTime.plusSeconds(Duration.between(startDateTime, checkInDateTime).getSeconds());
         }
 
-        Duration duration = Duration.between(ZonedDateTime.now(FishContrast.ZONE_SHANGHAI), endDateTime);
+        Duration duration = Duration.between(ZonedDateTime.now(FishConstant.ZONE_SHANGHAI), endDateTime);
 
         Map<String, BigDecimal> retMap = new HashMap<>();
-        retMap.put(FishContrast.KEY_SECOND, new BigDecimal(duration.getSeconds()));
-        retMap.put(FishContrast.KEY_MINUTE, new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP));
-        retMap.put(FishContrast.KEY_HOUR, new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP));
+        retMap.put(FishConstant.KEY_SECOND, new BigDecimal(duration.getSeconds()));
+        retMap.put(FishConstant.KEY_MINUTE, new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP));
+        retMap.put(FishConstant.KEY_HOUR, new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP));
 
         return retMap;
     }
