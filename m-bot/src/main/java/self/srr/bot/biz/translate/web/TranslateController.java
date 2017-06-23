@@ -1,10 +1,12 @@
 package self.srr.bot.biz.translate.web;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import self.srr.bot.base.common.BotRequestModel;
 import self.srr.bot.base.common.BotResponseModel;
+import self.srr.bot.biz.translate.service.TranslateService;
 
 /**
  * Translate router
@@ -12,14 +14,19 @@ import self.srr.bot.base.common.BotResponseModel;
  * Created by Sharuru on 2017/06/22.
  */
 @RestController
-@RequestMapping("/bot/translate")
+@RequestMapping("/api/translate")
 @Slf4j
 public class TranslateController {
+
+    @Autowired
+    TranslateService translateService;
 
     @RequestMapping(value = "")
     public BotResponseModel translate(BotRequestModel botReq) {
         BotResponseModel botResponseModel;
 
-        return null;
+        botResponseModel = translateService.start(botReq);
+
+        return botResponseModel;
     }
 }
