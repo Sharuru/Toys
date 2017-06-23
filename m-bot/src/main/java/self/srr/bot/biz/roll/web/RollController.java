@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import self.srr.bot.base.common.BotRequestModel;
 import self.srr.bot.base.common.BotResponseModel;
+import self.srr.bot.base.common.BotUtils;
 import self.srr.roll.RollProcessor;
 
 /**
@@ -21,8 +22,12 @@ public class RollController {
 
     @RequestMapping(value = "")
     public BotResponseModel roll(BotRequestModel botReq) {
-        BotResponseModel botResponseModel;
+        BotResponseModel botResponseModel = BotUtils.getDefaultResponseModel();
 
-        return null;
+        // TODO re-design
+        botResponseModel.setText("该功能正在回炉重做。");
+        botResponseModel.appendAtWho(botReq.getUser_name());
+
+        return botResponseModel;
     }
 }
