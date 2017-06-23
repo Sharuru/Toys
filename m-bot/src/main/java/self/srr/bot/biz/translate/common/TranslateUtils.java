@@ -1,11 +1,6 @@
 package self.srr.bot.biz.translate.common;
 
-/**
- * Translate
- * <p>
- * Created by Sharuru on 2017/06/23.
- */
-
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -18,14 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 import self.srr.bot.biz.translate.config.TranslateConfiguration;
+import self.srr.bot.biz.translate.model.TranslateResponseModel;
 
-import java.math.BigInteger;
-import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Translate
+ * <p>
+ * Created by Sharuru on 2017/06/23.
+ */
 @Component
 @Slf4j
 public class TranslateUtils {
@@ -40,7 +37,17 @@ public class TranslateUtils {
     // TODO salt is fixed
     private static final String SALT = "0000";
 
-    public static void requestApi(String text, String from, String to) {
+    /**
+     * Request API and return response
+     *
+     * @param text source text
+     * @param from from language code
+     * @param to   to language code
+     * @return response
+     */
+    public static TranslateResponseModel requestApi(String text, String from, String to) {
+        TranslateResponseModel responseModel = new TranslateResponseModel();
+
         HttpPost httpPost = new HttpPost(_translateConfiguration.getUrl());
 
         List<NameValuePair> params = new ArrayList<>();
@@ -56,14 +63,15 @@ public class TranslateUtils {
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
             HttpResponse response = HttpClients.createDefault().execute(httpPost);
-            log.info("API triggered with code " + response.getStatusLine().getStatusCode() + ": " + EntityUtils.toString(response.getEntity()));
+            String responseStr = EntityUtils.toString(response.getEntity());
+            log.info("API triggered with code " + response.getStatusLine().getStatusCode() + ": " + responseStr);
+            responseModel = new Gson().fromJson(responseStr, TranslateResponseModel.class);
         } catch (Exception e) {
             log.error("Error happened in 'requestApi': " + e.getMessage());
         }
 
-
+        return responseModel;
     }
-
 
     /**
      * Get sign for API request

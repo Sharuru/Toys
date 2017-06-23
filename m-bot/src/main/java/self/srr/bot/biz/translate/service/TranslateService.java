@@ -7,6 +7,7 @@ import self.srr.bot.base.common.BotResponseModel;
 import self.srr.bot.base.common.BotUtils;
 import self.srr.bot.biz.translate.common.TranslateConstant;
 import self.srr.bot.biz.translate.common.TranslateUtils;
+import self.srr.bot.biz.translate.model.TranslateResponseModel;
 
 /**
  * Translate service
@@ -53,16 +54,17 @@ public class TranslateService {
                 "翻译功能的帮助信息：\n" +
                 "使用方法：输入 `/translate 语种 文本。`\n" +
                 "`/translate jp2zh こんにちは` 将日语こんにちは翻译成中文。\n" +
-                "在原文文本较少的情况下，会自动提供一份英文翻译以辅助参考。\n" +
-                "目前支持的语种参考下表：\n" +
-                "| 语种代码 |  名称   | \n" +
-                "| :-------:|:-------:| \n" +
-                "|    zh    |  中文   | \n" +
-                "|    en    |  英语   | \n" +
-                "|    jp    |  日语   | \n" +
-                "|    de    |  德语   | \n" +
-                "|    ru    |  俄语   | \n" +
-                "|    cht   | 繁体中文| \n";
+                "在原文文本少于 50 字的情况下，会自动提供一份英文翻译以辅助参考。\n" +
+                "目前支持的语种如下：\n" +
+                "\n" +
+                "| 语种代码    | 名称                     |\n" +
+                "|:------------|:-------------------------|\n" +
+                "| zh          | 中文                     |\n" +
+                "| en          | 英语                     |\n" +
+                "| jp          | 日语                     |\n" +
+                "| de          | 德语                     |\n" +
+                "| ru          | 俄语                     |\n" +
+                "| cht         | 繁体中文                 |\n";
 
         botResponseModel.setText(text);
 
@@ -99,7 +101,25 @@ public class TranslateService {
 
             // request api
             if (passFlag) {
-                TranslateUtils.requestApi(args[1], fromLangCode, toLangCode);
+                StringBuilder srcText = new StringBuilder();
+                for (int i = 1; i < args.length; i++) {
+                    srcText.append(args[i]);
+                }
+                TranslateResponseModel responseModel = TranslateUtils.requestApi(srcText.toString(), fromLangCode, toLangCode);
+                if (responseModel.getError_code() == null) {
+                    // no error
+                    String text = "翻译结果：[" + fromLangCode + "]" + srcText + " -> [" + toLangCode + "]" + responseModel.getTrans_result().get(0).getDst();
+                    // if short, give addition example
+                    if (!"en".equalsIgnoreCase(fromLangCode) && !"en".equalsIgnoreCase(toLangCode) && !"zh".equalsIgnoreCase(toLangCode) && srcText.length() <= 50) {
+                        TranslateResponseModel additionalResponseModel = TranslateUtils.requestApi(args[1], fromLangCode, "en");
+                        text += "\n";
+                        text += "参考结果：[" + fromLangCode + "]" + srcText + " -> [en]" + additionalResponseModel.getTrans_result().get(0).getDst();
+                    }
+                    botResponseModel.setText(text);
+                } else {
+                    botResponseModel.setText("查询时发生了异常，" + responseModel.toString());
+                    log.error("Error happened in `translateBiz`: " + responseModel.toString());
+                }
             }
 
 
