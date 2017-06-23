@@ -6,6 +6,7 @@ import self.srr.bot.base.common.BotRequestModel;
 import self.srr.bot.base.common.BotResponseModel;
 import self.srr.bot.base.common.BotUtils;
 import self.srr.bot.biz.translate.common.TranslateConstant;
+import self.srr.bot.biz.translate.common.TranslateUtils;
 
 /**
  * Translate service
@@ -70,8 +71,9 @@ public class TranslateService {
 
     private BotResponseModel translateBiz(BotResponseModel botResponseModel, String[] args) {
 
-        String fromLangCode;
-        String toLangCode;
+        String fromLangCode = null;
+        String toLangCode = null;
+        Boolean passFlag = false;
 
         try {
             // parameter check
@@ -87,12 +89,19 @@ public class TranslateService {
                     } else {
                         fromLangCode = langCode[0];
                         toLangCode = langCode[1];
+                        passFlag = true;
                     }
                 }
             } else {
                 botResponseModel.setText("指令输入错误，请确认。");
                 log.error("Error happened in 'translateBiz': COMMAND_NOT_KNOWN: " + botRequestModel.getText());
             }
+
+            // request api
+            if (passFlag) {
+                TranslateUtils.requestApi(args[1], fromLangCode, toLangCode);
+            }
+
 
         } catch (Exception e) {
             botResponseModel.setText("似乎发生了奇怪的问题，麻烦稍后再试。");
