@@ -103,14 +103,17 @@ public class TranslateService {
             if (passFlag) {
                 StringBuilder srcText = new StringBuilder();
                 for (int i = 1; i < args.length; i++) {
-                    srcText.append(args[i]);
+                    if (!"s".equalsIgnoreCase(args[i])) {
+                        srcText.append(args[i]);
+                    }
+
                 }
                 TranslateResponseModel responseModel = TranslateUtils.requestApi(srcText.toString(), fromLangCode, toLangCode);
                 if (responseModel.getError_code() == null) {
                     // no error
                     String text = "翻译结果：[" + fromLangCode + "]" + srcText + " -> [" + toLangCode + "]" + responseModel.getTrans_result().get(0).getDst();
                     // if short, give addition example
-                    if (!"en".equalsIgnoreCase(fromLangCode) && !"en".equalsIgnoreCase(toLangCode) && !"zh".equalsIgnoreCase(toLangCode) && srcText.length() <= 50) {
+                    if (!"en".equalsIgnoreCase(fromLangCode) && !"en".equalsIgnoreCase(toLangCode) && "zh".equalsIgnoreCase(toLangCode) && srcText.length() <= 50) {
                         TranslateResponseModel additionalResponseModel = TranslateUtils.requestApi(args[1], fromLangCode, "en");
                         text += "\n";
                         text += "参考结果：[" + fromLangCode + "]" + srcText + " -> [en]" + additionalResponseModel.getTrans_result().get(0).getDst();
