@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Translate
+ * Translate utils
  * <p>
  * Created by Sharuru on 2017/06/23.
  */

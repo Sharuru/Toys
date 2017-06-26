@@ -54,7 +54,7 @@ public class TranslateService {
                 "翻译功能的帮助信息：\n" +
                 "使用方法：输入 `/translate 语种 文本。`\n" +
                 "`/translate jp2zh こんにちは` 将日语こんにちは翻译成中文。\n" +
-                "在原文文本少于 50 字的情况下，会自动提供一份英文翻译以辅助参考。\n" +
+                "在原文文本少于 100 字的情况下，会自动提供一份英文翻译以辅助参考。\n" +
                 "目前支持的语种如下：\n" +
                 "\n" +
                 "| 语种代码    | 名称                     |\n" +
@@ -71,6 +71,13 @@ public class TranslateService {
         return botResponseModel;
     }
 
+    /**
+     * Translate biz
+     *
+     * @param botResponseModel prev.response
+     * @param args             parameters
+     * @return response
+     */
     private BotResponseModel translateBiz(BotResponseModel botResponseModel, String[] args) {
 
         String fromLangCode = null;
@@ -86,8 +93,11 @@ public class TranslateService {
                     log.error("Error happened in 'translateBiz': LANG_CODE_INCORRECT: " + args[0]);
                 } else {
                     if (!TranslateConstant.supportedLangCode.contains(langCode[0]) || !TranslateConstant.supportedLangCode.contains(langCode[1])) {
-                        botResponseModel.setText("该语种（" + langCode[0] + " -> " + langCode[1] + " ）暂时不支持，请确认。");
-                        log.error("Error happened in 'translateBiz': LANG_CODE_NOT_SUPPORTED: " + langCode[0] + " -> " + langCode[1]);
+                        // TODO Experiment method, current master only
+                        if (!BotUtils.isUserMaster(botRequestModel.getUser_id())) {
+                            botResponseModel.setText("该语种（" + langCode[0] + " -> " + langCode[1] + " ）暂时不支持，请确认。");
+                            log.error("Error happened in 'translateBiz': LANG_CODE_NOT_SUPPORTED: " + langCode[0] + " -> " + langCode[1]);
+                        }
                     } else {
                         fromLangCode = langCode[0];
                         toLangCode = langCode[1];
@@ -102,21 +112,23 @@ public class TranslateService {
             // request api
             if (passFlag) {
                 StringBuilder srcText = new StringBuilder();
+                // TODO English space support, but CJK not working well
                 for (int i = 1; i < args.length; i++) {
                     if (!"s".equalsIgnoreCase(args[i])) {
                         srcText.append(args[i]);
+                        srcText.append(" ");
                     }
-
                 }
+
                 TranslateResponseModel responseModel = TranslateUtils.requestApi(srcText.toString(), fromLangCode, toLangCode);
                 if (responseModel.getError_code() == null) {
                     // no error
-                    String text = "翻译结果：[" + fromLangCode + "]" + srcText + " -> [" + toLangCode + "]" + responseModel.getTrans_result().get(0).getDst();
+                    String text = "翻译结果：[" + fromLangCode + "]" + srcText + " \n-> [" + toLangCode + "]" + responseModel.getTrans_result().get(0).getDst();
                     // if short, give addition example
-                    if (!"en".equalsIgnoreCase(fromLangCode) && !"en".equalsIgnoreCase(toLangCode) && "zh".equalsIgnoreCase(toLangCode) && srcText.length() <= 50) {
+                    if (!"en".equalsIgnoreCase(fromLangCode) && !"en".equalsIgnoreCase(toLangCode) && "zh".equalsIgnoreCase(toLangCode) && srcText.length() <= 100) {
                         TranslateResponseModel additionalResponseModel = TranslateUtils.requestApi(args[1], fromLangCode, "en");
                         text += "\n";
-                        text += "参考结果：[" + fromLangCode + "]" + srcText + " -> [en]" + additionalResponseModel.getTrans_result().get(0).getDst();
+                        text += "参考结果：[" + fromLangCode + "]" + srcText + " \n-> [en]" + additionalResponseModel.getTrans_result().get(0).getDst();
                     }
                     botResponseModel.setText(text);
                 } else {
@@ -124,8 +136,6 @@ public class TranslateService {
                     log.error("Error happened in `translateBiz`: " + responseModel.toString());
                 }
             }
-
-
         } catch (Exception e) {
             botResponseModel.setText("似乎发生了奇怪的问题，麻烦稍后再试。");
             log.error("Error happened in 'translateBiz': " + e.getMessage());

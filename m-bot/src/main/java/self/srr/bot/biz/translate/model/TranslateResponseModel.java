@@ -1,7 +1,6 @@
 package self.srr.bot.biz.translate.model;
 
 import lombok.Data;
-import org.apache.commons.lang.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.List;

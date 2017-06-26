@@ -1,6 +1,50 @@
- spring:
+spring:
   datasource:
-    url: jdbc:sqlite:DB_LOCATION
-    username:
-    password:
-    driver-class-name: org.sqlite.JDBC
+    url: jdbc:postgresql://DB_ADDRESS
+    username: DB_USER
+    password: DB_PASSWD
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8282
+
+logging:
+    level:
+      org:
+        springframework:
+          web: DEBUG
+        hibernate:
+          SQL: DEBUG
+          type:
+            descriptor:
+              sql: TRACE
+
+# Bot Configuration START
+
+bot:
+  global:
+    name: BOT_NAME
+    icon: http://BOT_ICON
+    masters:
+      - MASTER_USER_ID
+
+  translate:
+    url: BAIDU_TRANSLATE_API_ADDRESS
+    appid: APP_ID
+    secret: APP_SECRET
+
+
+# Bot Configuration END
+---
+spring:
+  profiles: development
+  thymeleaf:
+      cache: false
+
+  datasource:
+    url: jdbc:postgresql://DB_ADDRESS
+    username: DB_USER
+    password: DB_PASSWD
+    driver-class-name: org.postgresql.Driver
+
+

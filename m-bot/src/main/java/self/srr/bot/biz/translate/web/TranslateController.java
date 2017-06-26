@@ -22,10 +22,10 @@ public class TranslateController {
     TranslateService translateService;
 
     @RequestMapping(value = "")
-    public BotResponseModel translate(BotRequestModel botReq) {
+    public BotResponseModel translate(BotRequestModel botRequestModel) {
         BotResponseModel botResponseModel;
 
-        botResponseModel = translateService.start(botReq);
+        botResponseModel = translateService.start(botRequestModel);
 
         return botResponseModel;
     }
