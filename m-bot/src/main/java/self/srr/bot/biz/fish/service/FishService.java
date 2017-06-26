@@ -221,9 +221,9 @@ public class FishService {
         Duration duration = Duration.between(ZonedDateTime.now(FishConstant.ZONE_SHANGHAI), endDateTime);
 
         Map<String, BigDecimal> retMap = new HashMap<>();
-        retMap.put(FishConstant.KEY_SECOND, new BigDecimal(duration.getSeconds()));
-        retMap.put(FishConstant.KEY_MINUTE, new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP));
-        retMap.put(FishConstant.KEY_HOUR, new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP));
+        retMap.put(FishConstant.KEY_SECOND, (new BigDecimal(duration.getSeconds())).abs());
+        retMap.put(FishConstant.KEY_MINUTE, (new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP)).abs());
+        retMap.put(FishConstant.KEY_HOUR, (new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP)).abs());
 
         return retMap;
     }
