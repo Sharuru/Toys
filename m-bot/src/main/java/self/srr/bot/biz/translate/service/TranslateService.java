@@ -97,6 +97,10 @@ public class TranslateService {
                         if (!BotUtils.isUserMaster(botRequestModel.getUser_id())) {
                             botResponseModel.setText("该语种（" + langCode[0] + " -> " + langCode[1] + " ）暂时不支持，请确认。");
                             log.error("Error happened in 'translateBiz': LANG_CODE_NOT_SUPPORTED: " + langCode[0] + " -> " + langCode[1]);
+                        }else{
+                            fromLangCode = langCode[0];
+                            toLangCode = langCode[1];
+                            passFlag = true;
                         }
                     } else {
                         fromLangCode = langCode[0];
