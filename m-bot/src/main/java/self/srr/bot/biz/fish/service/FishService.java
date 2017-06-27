@@ -154,15 +154,15 @@ public class FishService {
             String text = "";
 
             if (etaMap.get(FishConstant.KEY_SECOND).compareTo(BigDecimal.ZERO) == 1) {
-                text += "哎呀，还得摸：" + etaMap.get(FishConstant.KEY_SECOND) + " 秒";
+                text += "哎呀，还得摸：" + etaMap.get(FishConstant.KEY_SECOND).abs() + " 秒";
             } else {
-                text += "嚯哟！你给自己续了：" + etaMap.get(FishConstant.KEY_SECOND) + " 秒";
+                text += "嚯哟！你给自己续了：" + etaMap.get(FishConstant.KEY_SECOND).abs() + " 秒";
             }
             if (etaMap.get(FishConstant.KEY_SECOND).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
-                text += "，约 " + etaMap.get(FishConstant.KEY_MINUTE) + " 分钟";
+                text += "，约 " + etaMap.get(FishConstant.KEY_MINUTE).abs() + " 分钟";
             }
             if (etaMap.get(FishConstant.KEY_SECOND).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
-                text += "，约 " + etaMap.get(FishConstant.KEY_HOUR) + " 小时";
+                text += "，约 " + etaMap.get(FishConstant.KEY_HOUR).abs() + " 小时";
             }
             text += "。";
 
@@ -221,9 +221,9 @@ public class FishService {
         Duration duration = Duration.between(ZonedDateTime.now(FishConstant.ZONE_SHANGHAI), endDateTime);
 
         Map<String, BigDecimal> retMap = new HashMap<>();
-        retMap.put(FishConstant.KEY_SECOND, (new BigDecimal(duration.getSeconds())).abs());
-        retMap.put(FishConstant.KEY_MINUTE, (new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP)).abs());
-        retMap.put(FishConstant.KEY_HOUR, (new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP)).abs());
+        retMap.put(FishConstant.KEY_SECOND, (new BigDecimal(duration.getSeconds())));
+        retMap.put(FishConstant.KEY_MINUTE, (new BigDecimal(duration.getSeconds()).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP)));
+        retMap.put(FishConstant.KEY_HOUR, (new BigDecimal(duration.getSeconds()).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP)));
 
         return retMap;
     }
