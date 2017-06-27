@@ -212,6 +212,13 @@ public class RollService {
         return botResponseModel;
     }
 
+    /**
+     * Charge biz
+     *
+     * @param botResponseModel prev.response
+     * @param args             parameters
+     * @return response
+     */
     private BotResponseModel chargeBiz(BotResponseModel botResponseModel, String[] args) {
 
         int charge = 1;

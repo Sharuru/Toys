@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import self.srr.bot.base.common.BotRequestModel;
 import self.srr.bot.base.common.BotResponseModel;
-import self.srr.bot.base.common.BotUtils;
 import self.srr.bot.biz.roll.service.RollService;
-import self.srr.roll.RollProcessor;
 
 /**
  * Roll router
