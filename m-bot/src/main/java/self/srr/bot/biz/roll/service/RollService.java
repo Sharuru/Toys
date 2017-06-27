@@ -172,7 +172,7 @@ public class RollService {
             resultStr = new StringBuilder(resultStr.substring(0, resultStr.length() - 2));
             log.info("User '" + botRequestModel.getUser_name() + "' gotcha result: '" + resultStr + "'");
 
-            String gotchaType = RollConstant.CARD_ONE.equals(rollType) ? "单抽" : "十一连";
+            String gotchaType = RollConstant.CARD_ONE.equals(rollType) ? "单抽" : "十连";
             botResponseModel.setText("「" + botRequestModel.getUser_name() + "」这位大佬进行了一次" + gotchaType + "，获得了：" + resultStr + "。");
             if (result.contains("**UR**")) {
                 botResponseModel.setText(botResponseModel.getText() + "嚯哟！还是个欧皇！");
@@ -199,6 +199,7 @@ public class RollService {
         TblBotStock userCrystal = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_CRYSTAL);
 
         DecimalFormat df = new DecimalFormat();
+        df.setGroupingUsed(false);
         df.setMinimumFractionDigits(0);
         df.setMaximumFractionDigits(0);
 
