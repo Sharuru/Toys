@@ -44,4 +44,5 @@ public class TblBotStock {
     public TblBotStock() {
 
     }
+
 }

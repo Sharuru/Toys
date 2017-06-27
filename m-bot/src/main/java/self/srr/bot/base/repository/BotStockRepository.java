@@ -12,4 +12,6 @@ import self.srr.bot.base.entity.TblBotStock;
  */
 @Repository
 public interface BotStockRepository extends JpaRepository<TblBotStock, Long>, QueryByExampleExecutor<TblBotStock> {
+
+    TblBotStock findOneByUserIdAndItemId(String userId, Long itemId);
 }

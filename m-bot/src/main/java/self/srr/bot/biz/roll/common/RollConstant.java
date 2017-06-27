@@ -2,6 +2,7 @@ package self.srr.bot.biz.roll.common;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,9 +15,6 @@ public class RollConstant {
     // 调用频率
     public static final Map<String, Long> DICE_RATE_MAP = new HashMap<>();
 
-    // 抽卡类型
-    public static final String CARD_SINGLE = "CARD_SINGLE";
-    public static final String CARD_ELEVEN = "CARD_ELEVEN";
 
     // 抽卡价格
     public static final Integer CARD_SINGLE_COST = 3;
@@ -39,4 +37,15 @@ public class RollConstant {
         Double amount;
         Long lastCall;
     }
+
+    // item type
+    public static final Long TYPE_CRYSTAL = 2L;
+
+    // roll type
+    public static final String CARD_ONE = "CARD_ONE";
+    public static final String CARD_TEN = "CARD_TEN";
+
+    // roll cost
+    public static final BigDecimal COST_ONE = new BigDecimal(3);
+    public static final BigDecimal COST_TEN = new BigDecimal(30);
 }
