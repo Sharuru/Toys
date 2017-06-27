@@ -49,4 +49,7 @@ public class RollConstant {
     // roll cost
     public static final BigDecimal COST_ONE = new BigDecimal(3);
     public static final BigDecimal COST_TEN = new BigDecimal(30);
+
+    // crystal cost
+    public static final BigDecimal COST_CRYSTAL = new BigDecimal(6);
 }

@@ -48,6 +48,8 @@ public class RollService {
             botResponseModel = cardBiz(botResponseModel, args);
         } else if ("status".equalsIgnoreCase(action)) {
             botResponseModel = statusBiz(botResponseModel);
+        } else if ("charge".equalsIgnoreCase(action)) {
+            botResponseModel = chargeBiz(botResponseModel, args);
         } else {
             botResponseModel = rollBiz(botResponseModel);
         }
@@ -205,6 +207,48 @@ public class RollService {
                 "水晶余额为：" + (userCrystal == null ? "0" : df.format(userCrystal.getItemCount())) + " 枚。";
 
         botResponseModel.setText(text);
+
+        return botResponseModel;
+    }
+
+    private BotResponseModel chargeBiz(BotResponseModel botResponseModel, String[] args) {
+
+        int charge = 1;
+        if (args.length >= 2) {
+            try {
+                charge = Integer.valueOf(args[1]);
+            } catch (Exception e) {
+                charge = 1;
+            }
+        }
+
+        //query record
+        TblBotStock userAmount = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_MONEY);
+        TblBotStock userCrystal = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_CRYSTAL);
+
+        if (userAmount != null && userAmount.getItemCount().compareTo(RollConstant.COST_CRYSTAL.multiply(new BigDecimal(charge))) >= 0) {
+            // charge
+            if (userCrystal == null) {
+                // first charge
+                userCrystal = new TblBotStock();
+                userCrystal.setUserId(botRequestModel.getUser_id());
+                userCrystal.setItemId(RollConstant.TYPE_CRYSTAL);
+                userCrystal.setItemCount(new BigDecimal(35 + new Random().nextInt(10)));
+            }
+            userAmount.setItemCount(userAmount.getItemCount().subtract(RollConstant.COST_CRYSTAL.multiply(new BigDecimal(charge))));
+            userCrystal.setItemCount(userCrystal.getItemCount().add(new BigDecimal(charge)));
+
+            userAmount = botStockRepository.save(userAmount);
+            log.info("User '" + botRequestModel.getUser_name() + "' cost " + RollConstant.COST_CRYSTAL.multiply(new BigDecimal(charge)) + " money." + userAmount.toString());
+            userCrystal = botStockRepository.save(userCrystal);
+            log.info("User '" + botRequestModel.getUser_name() + "' charged " + charge + " crystals." + userCrystal.toString());
+
+            botResponseModel.setText("已花费：" + RollConstant.COST_CRYSTAL.multiply(new BigDecimal(charge)) + " 元，获得：" + charge + " 枚水晶。");
+
+        } else {
+            botResponseModel.setText("用户余额不足，充值失败。");
+            log.info("User '" + botRequestModel.getUser_name() + "' biz skipped(INSUFFICIENT_BALANCE)");
+        }
 
         return botResponseModel;
     }
