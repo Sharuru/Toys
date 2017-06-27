@@ -25,11 +25,8 @@ public class RollController {
 
     @RequestMapping(value = "")
     public BotResponseModel roll(BotRequestModel botRequestModel) {
-        BotResponseModel botResponseModel = BotUtils.getDefaultResponseModel();
+        BotResponseModel botResponseModel;
 
-        // TODO re-design
-        //botResponseModel.setText("该功能正在回炉重做。");
-        //botResponseModel.appendAtWho(botReq.getUser_name());
         botResponseModel = rollService.start(botRequestModel);
 
         return botResponseModel;

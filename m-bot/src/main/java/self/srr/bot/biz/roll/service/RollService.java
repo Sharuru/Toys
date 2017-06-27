@@ -12,6 +12,7 @@ import self.srr.bot.base.repository.BotStockRepository;
 import self.srr.bot.biz.roll.common.RollConstant;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -45,6 +46,8 @@ public class RollService {
             botResponseModel = helpMsgBiz(botResponseModel);
         } else if ("card".equalsIgnoreCase(action)) {
             botResponseModel = cardBiz(botResponseModel, args);
+        } else if ("status".equalsIgnoreCase(action)) {
+            botResponseModel = statusBiz(botResponseModel);
         } else {
             botResponseModel = rollBiz(botResponseModel);
         }
@@ -180,6 +183,32 @@ public class RollService {
 
         return botResponseModel;
     }
+
+    /**
+     * Status biz
+     *
+     * @param botResponseModel prev.response
+     * @return response
+     */
+    private BotResponseModel statusBiz(BotResponseModel botResponseModel) {
+
+        //query record
+        TblBotStock userAmount = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_MONEY);
+        TblBotStock userCrystal = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_CRYSTAL);
+
+        DecimalFormat df = new DecimalFormat();
+        df.setMinimumFractionDigits(0);
+        df.setMaximumFractionDigits(0);
+
+        String text = "您好，" + botRequestModel.getUser_name() + "，" +
+                "您当前的用户余额为：" + (userAmount == null ? "0.00" : userAmount.getItemCount()) + " 元，" +
+                "水晶余额为：" + (userCrystal == null ? "0" : df.format(userCrystal.getItemCount())) + " 枚。";
+
+        botResponseModel.setText(text);
+
+        return botResponseModel;
+    }
+
 
     /**
      * Card entity

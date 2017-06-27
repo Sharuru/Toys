@@ -40,6 +40,7 @@ public class RollConstant {
 
     // item type
     public static final Long TYPE_CRYSTAL = 2L;
+    public static final Long TYPE_MONEY = 3L;
 
     // roll type
     public static final String CARD_ONE = "CARD_ONE";
