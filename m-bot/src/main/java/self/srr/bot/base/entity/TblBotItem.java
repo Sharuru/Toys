@@ -1,4 +1,4 @@
-package self.srr.bot.biz.roll.entitiy;
+package self.srr.bot.base.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -6,31 +6,26 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Date;
 
 import static javax.persistence.TemporalType.TIMESTAMP;
 
-/**
- * Created by Sharuru on 2017/06/14.
- */
 @Data
 @Entity
-@Table(name = "roll_user")
+@Table(name = "bot_item")
 @EntityListeners(AuditingEntityListener.class)
-public class TblRollUser {
+public class TblBotItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
-    @SequenceGenerator(name = "seq", sequenceName = "roll_user_id_seq")
+    @SequenceGenerator(name = "seq", sequenceName = "bot_item_id_seq")
     private Long id;
 
-    @Column(name = "user_id")
-    private String userId;
+    @Column(name = "item_name")
+    private String itemName;
 
-    private String username;
-
-    @Column(name = "user_amount")
-    private BigDecimal userAmount;
+    @Column(name = "item_description")
+    private String itemDescription;
 
     @Column(name = "created_at")
     @CreatedDate
@@ -42,7 +37,9 @@ public class TblRollUser {
     @Temporal(TIMESTAMP)
     private Date updatedAt;
 
-    public TblRollUser() {
+    public TblBotItem() {
 
     }
+
+
 }
