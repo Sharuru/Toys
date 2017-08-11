@@ -19,12 +19,6 @@ public class CliBiz {
 
         try {
             cli = CliUtils.initializeCLI(args);
-
-            // passed
-            System.out.println("-----");
-            System.out.println("PARAMETER CHECK PASSED.");
-            System.out.println("-----");
-            System.out.println("Reading file at: " + cli.getOptionValue(CliArgs.FILE_PATH));
         } catch (ParseException e) {
             System.out.println("-----");
             System.out.println("ILLEGAL_INPUT_DETECTED.");

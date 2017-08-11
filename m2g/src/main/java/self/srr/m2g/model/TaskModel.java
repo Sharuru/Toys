@@ -10,6 +10,10 @@ import java.util.Date;
 @Data
 public class TaskModel {
 
+    private String taskName;
+
+    private String parentTaskName;
+
     private String taskId;
 
     private String functionName;

@@ -31,7 +31,10 @@ public class MppBiz {
 
         // get MPP file
         try {
+            System.out.println("-----");
+            System.out.println("Reading file at: " + param.getFilePath());
             project = getMppFile(param.getFilePath());
+            System.out.println("-----");
             System.out.println("Get " + project.getAllTasks().size() + " task(s) under project.");
         } catch (MPXJException e) {
             System.out.println("-----");
@@ -51,51 +54,56 @@ public class MppBiz {
 
         // loop & return trimmed tasks
         for (Task task : project.getAllTasks()) {
-            if (task.getStart().after(opStartDt) && task.getStart().before(opEndDt)) {
-                if (task.getOutlineLevel() == 3) {  // only fetch sub tasks
+            if (task.getName() != null) {   // illegal task check
+                if (task.getStart().after(opStartDt) && task.getStart().before(opEndDt)) {
+                    if (task.getOutlineLevel() == 3) {  // only fetch sub tasks
+                        if (task.getResourceAssignments() != null) {  // have resources
 
-                    String resourceNames = "";
+                            String resourceNames = "";
 
-                    for (ResourceAssignment resourceAssignment : task.getResourceAssignments()) {
-                        resourceNames = resourceAssignment.getResource().getName().trim() + ",";
-                        resourceNames = resourceNames.substring(0, resourceNames.length() - 1);
-                    }
+                            for (ResourceAssignment resourceAssignment : task.getResourceAssignments()) {
+                                resourceNames = resourceAssignment.getResource().getName().trim() + ",";
+                                resourceNames = resourceNames.substring(0, resourceNames.length() - 1);
+                            }
 
-                    if (resourceNames.contains(param.getTargetResourceName())) {
-                        System.out.println("-----");
-                        System.out.println("Found target task: " + task.getName());
-                        System.out.println("Parent task: " + task.getParentTask().getName());
+                            if (resourceNames.contains(param.getTargetResourceName())) {
+                                System.out.println("-----");
+                                System.out.println("Found target task: " + task.getName());
+                                System.out.println("Parent task: " + task.getParentTask().getName());
 
-                        Task parentTask = task.getParentTask();
+                                Task parentTask = task.getParentTask();
 
-                        String adminId = parentTask.getCachedValue(TaskField.TEXT1) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT1).toString();
-                        String taskId = parentTask.getCachedValue(TaskField.TEXT2) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT2).toString();
-                        String functionId = parentTask.getCachedValue(TaskField.TEXT3) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT3).toString();
-                        String functionName = parentTask.getCachedValue(TaskField.TEXT4) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT4).toString();
-                        String taskType = parentTask.getCachedValue(TaskField.TEXT5) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT5).toString();
+                                String adminId = parentTask.getCachedValue(TaskField.TEXT1) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT1).toString();
+                                String taskId = parentTask.getCachedValue(TaskField.TEXT2) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT2).toString();
+                                String functionId = parentTask.getCachedValue(TaskField.TEXT3) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT3).toString();
+                                String functionName = parentTask.getCachedValue(TaskField.TEXT4) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT4).toString();
+                                String taskType = parentTask.getCachedValue(TaskField.TEXT5) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT5).toString();
 
-                        System.out.println("Task ID: " + adminId + "_" + taskId + "_" + functionId);
-                        System.out.println("Function name: " + functionName);
-                        System.out.println("Original task type: " + taskType);
-                        System.out.println("Started at: " + task.getStart());
-                        System.out.println("Finished at: " + task.getFinish());
-                        System.out.println("Resources: " + resourceNames);
+                                // add to list
+                                TaskModel model = new TaskModel();
+                                model.setTaskName(task.getName());
+                                model.setParentTaskName(task.getParentTask().getName());
+                                model.setTaskId(adminId + "_" + taskId + "_" + functionId);
+                                model.setFunctionName(functionName);
+                                model.setOrigTaskType(taskType);
+                                model.setStartDate(task.getStart());
+                                model.setFinishDate(task.getFinish());
+                                model.setResourceName(resourceNames);
 
-                        // add to list
-                        TaskModel model = new TaskModel();
-                        model.setTaskId(adminId + "_" + taskId + "_" + functionId);
-                        model.setFunctionName(functionName);
-                        model.setOrigTaskType(taskType);
-                        model.setStartDate(task.getStart());
-                        model.setFinishDate(task.getFinish());
-                        model.setResourceName(resourceNames);
+                                System.out.println("Task ID: " + model.getTaskId());
+                                System.out.println("Function name: " + model.getFunctionName());
+                                System.out.println("Original task type: " + model.getOrigTaskType());
+                                System.out.println("Started at: " + model.getStartDate());
+                                System.out.println("Finished at: " + model.getFinishDate());
+                                System.out.println("Resources: " + model.getResourceName());
 
-                        tasks.add(model);
+                                tasks.add(model);
+                            }
+                        }
                     }
                 }
             }
         }
-
 
         return tasks;
     }
@@ -104,6 +112,5 @@ public class MppBiz {
         ProjectReader reader = new MPPReader();
         return reader.read(filePath);
     }
-
 
 }

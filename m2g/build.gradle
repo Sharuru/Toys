@@ -26,6 +26,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	compile('net.sf.mpxj:mpxj:6.1.0')
 	compile('commons-cli:commons-cli:1.4')
+    compile('org.apache.httpcomponents:httpclient:4.5.3')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	compileOnly('org.springframework.boot:spring-boot-configuration-processor')
 	compileOnly('org.projectlombok:lombok')

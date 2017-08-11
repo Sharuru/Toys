@@ -15,5 +15,12 @@ public class CliArgs {
 
     public static final String END_DATE = "end-date";
 
+    public static final String TASK_TYPE = "task";
+
+    public static final String TASK_TYPE_LOCAL = "LOCAL";
+
+    public static final String TASK_TPYE_CHECK = "CHECK";
+
+    public static final String TASK_TYPE_PUSH = "PUSH";
 
 }
