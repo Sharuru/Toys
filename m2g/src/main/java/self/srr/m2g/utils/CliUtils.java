@@ -35,10 +35,12 @@ public class CliUtils {
         options.addOption(Option.builder().longOpt(CliArgs.TASK_TYPE).desc(
                 "setting single task\n" +
                         CliArgs.TASK_TYPE_LOCAL + ": output local .mpp file info \n" +
-                        CliArgs.TASK_TPYE_CHECK + ": diff local tasks with remote \n" +
+                        CliArgs.TASK_TYPE_CHECK + ": diff local tasks with remote \n" +
                         CliArgs.TASK_TYPE_PUSH + ": after TASK LOCAL, TASK CHECK, push diffed tasks to remote \n" +
                         "default task is: TASK LOCAL only"
         ).hasArg().argName("TASK").build());
+        options.addOption(Option.builder().longOpt(CliArgs.ISSUE_LINK).desc("address of remote issues").hasArg().argName("ADDRESS").required().build());
+        options.addOption(Option.builder().longOpt(CliArgs.AUTH_TOKEN).desc("token for authentication").hasArg().argName("TOKEN").required().build());
 
         return options;
     }

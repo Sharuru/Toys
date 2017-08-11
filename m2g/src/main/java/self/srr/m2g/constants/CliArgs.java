@@ -19,8 +19,12 @@ public class CliArgs {
 
     public static final String TASK_TYPE_LOCAL = "LOCAL";
 
-    public static final String TASK_TPYE_CHECK = "CHECK";
+    public static final String TASK_TYPE_CHECK = "CHECK";
 
     public static final String TASK_TYPE_PUSH = "PUSH";
+
+    public static final String ISSUE_LINK = "issue-link";
+
+    public static final String AUTH_TOKEN = "auth-token";
 
 }
