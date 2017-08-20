@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Sharuru on 2017/08/08.
@@ -62,9 +63,12 @@ public class MppBiz {
                             String resourceNames = "";
 
                             for (ResourceAssignment resourceAssignment : task.getResourceAssignments()) {
-                                resourceNames = resourceAssignment.getResource().getName().trim() + ",";
-                                resourceNames = resourceNames.substring(0, resourceNames.length() - 1);
+                                if (resourceAssignment.getResource() != null) {     // skip no resource tasks
+                                    resourceNames = resourceAssignment.getResource().getName().trim() + ", ";
+                                }
                             }
+
+                            resourceNames = resourceNames.length() > 0 ? resourceNames.substring(0, resourceNames.length() - 2) : resourceNames;
 
                             if (resourceNames.contains(param.getTargetResourceName())) {
                                 System.out.println("-----");
@@ -73,6 +77,47 @@ public class MppBiz {
 
                                 Task parentTask = task.getParentTask();
 
+                                // copy to model
+                                TaskModel model = new TaskModel();
+
+                                // TODO START
+
+                                // get relation of current tasks
+                                List<Relation> predecessors = task.getPredecessors();
+
+                                if (predecessors != null && !predecessors.isEmpty()) {
+
+                                    for (Relation relation : predecessors) {
+
+                                        TaskModel previousTask = new TaskModel();
+
+                                        Task preTask = relation.getTargetTask();
+
+                                        previousTask.setTaskName(preTask.getName());
+
+                                        String prevResourceNames = "";
+
+                                        if (preTask.getResourceAssignments() != null) {
+                                            for (ResourceAssignment resourceAssignment : preTask.getResourceAssignments()) {
+                                                if (resourceAssignment.getResource() != null) {     // skip no resource tasks
+                                                    prevResourceNames = resourceAssignment.getResource().getName().trim() + ", ";
+                                                }
+                                            }
+
+                                            prevResourceNames = prevResourceNames.length() > 0 ? prevResourceNames.substring(0, prevResourceNames.length() - 2) : prevResourceNames;
+                                        }
+
+                                        previousTask.setResourceName(prevResourceNames);
+
+                                        previousTask.setFinishDate(preTask.getFinish());
+                                        previousTask.setTaskPercentage(preTask.getPercentageComplete());
+
+                                        model.getPreviousTasks().add(previousTask);
+                                    }
+                                }
+
+                                // TODO END
+
                                 String adminId = parentTask.getCachedValue(TaskField.TEXT1) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT1).toString();
                                 String taskId = parentTask.getCachedValue(TaskField.TEXT2) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT2).toString();
                                 String functionId = parentTask.getCachedValue(TaskField.TEXT3) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT3).toString();
@@ -80,7 +125,7 @@ public class MppBiz {
                                 String taskType = parentTask.getCachedValue(TaskField.TEXT5) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT5).toString();
 
                                 // add to list
-                                TaskModel model = new TaskModel();
+
                                 model.setTaskName(task.getName());
                                 model.setParentTaskName(task.getParentTask().getName());
                                 model.setTaskId(adminId + "_" + taskId + "_" + functionId);
@@ -96,6 +141,12 @@ public class MppBiz {
                                 System.out.println("Started at: " + model.getStartDate());
                                 System.out.println("Finished at: " + model.getFinishDate());
                                 System.out.println("Resources: " + model.getResourceName());
+                                for (TaskModel prevTask : model.getPreviousTasks()) {
+                                    System.out.println("Prev task name: " + prevTask.getTaskName());
+                                    System.out.println("Prev task finished at: " + prevTask.getFinishDate());
+                                    System.out.println("Prev task percentage: " + prevTask.getTaskPercentage());
+                                    System.out.println("Prev task resources: " + prevTask.getResourceName());
+                                }
 
                                 tasks.add(model);
                             }

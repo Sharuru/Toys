@@ -111,6 +111,7 @@ public class MainLogic {
             System.out.println("-----");
             System.out.println("OPERATION_ABORTED.");
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

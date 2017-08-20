@@ -2,7 +2,9 @@ package self.srr.m2g.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Sharuru on 2017/08/08.
@@ -25,4 +27,8 @@ public class TaskModel {
     private Date finishDate;
 
     private String resourceName;
+
+    private Number taskPercentage;
+
+    private List<TaskModel> previousTasks = new ArrayList<>();
 }
