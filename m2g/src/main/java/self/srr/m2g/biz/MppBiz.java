@@ -60,15 +60,7 @@ public class MppBiz {
                     if (task.getOutlineLevel() == 3) {  // only fetch sub tasks
                         if (task.getResourceAssignments() != null) {  // have resources
 
-                            String resourceNames = "";
-
-                            for (ResourceAssignment resourceAssignment : task.getResourceAssignments()) {
-                                if (resourceAssignment.getResource() != null) {     // skip no resource tasks
-                                    resourceNames = resourceAssignment.getResource().getName().trim() + ", ";
-                                }
-                            }
-
-                            resourceNames = resourceNames.length() > 0 ? resourceNames.substring(0, resourceNames.length() - 2) : resourceNames;
+                            String resourceNames = getResourceStr(task.getResourceAssignments());
 
                             if (resourceNames.contains(param.getTargetResourceName())) {
                                 System.out.println("-----");
@@ -93,26 +85,29 @@ public class MppBiz {
 
                                         Task preTask = relation.getTargetTask();
 
-                                        previousTask.setTaskName(preTask.getName());
-
-                                        String prevResourceNames = "";
-
                                         if (preTask.getResourceAssignments() != null) {
-                                            for (ResourceAssignment resourceAssignment : preTask.getResourceAssignments()) {
-                                                if (resourceAssignment.getResource() != null) {     // skip no resource tasks
-                                                    prevResourceNames = resourceAssignment.getResource().getName().trim() + ", ";
-                                                }
-                                            }
+                                            previousTask.setTaskName(preTask.getName());
 
-                                            prevResourceNames = prevResourceNames.length() > 0 ? prevResourceNames.substring(0, prevResourceNames.length() - 2) : prevResourceNames;
+                                            String prevResourceNames = getResourceStr(preTask.getResourceAssignments());
+
+                                            String pAdminId = preTask.getCachedValue(TaskField.TEXT1) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT1).toString();
+                                            String pTaskId = preTask.getCachedValue(TaskField.TEXT2) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT2).toString();
+                                            String pFunctionId = preTask.getCachedValue(TaskField.TEXT3) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT3).toString();
+                                            String pFunctionName = preTask.getCachedValue(TaskField.TEXT4) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT4).toString();
+                                            String pTaskType = preTask.getCachedValue(TaskField.TEXT5) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT5).toString();
+
+                                            previousTask.setParentTaskName(task.getParentTask().getName());
+                                            previousTask.setTaskId(pAdminId + "_" + pTaskId + "_" + pFunctionId);
+                                            previousTask.setFunctionName(pFunctionName);
+                                            model.setOrigTaskType(pTaskType);
+
+                                            previousTask.setResourceName(prevResourceNames);
+
+                                            previousTask.setFinishDate(preTask.getFinish());
+                                            previousTask.setTaskPercentage(preTask.getPercentageComplete());
+
+                                            model.getPreviousTasks().add(previousTask);
                                         }
-
-                                        previousTask.setResourceName(prevResourceNames);
-
-                                        previousTask.setFinishDate(preTask.getFinish());
-                                        previousTask.setTaskPercentage(preTask.getPercentageComplete());
-
-                                        model.getPreviousTasks().add(previousTask);
                                     }
                                 }
 
@@ -141,11 +136,20 @@ public class MppBiz {
                                 System.out.println("Started at: " + model.getStartDate());
                                 System.out.println("Finished at: " + model.getFinishDate());
                                 System.out.println("Resources: " + model.getResourceName());
-                                for (TaskModel prevTask : model.getPreviousTasks()) {
-                                    System.out.println("Prev task name: " + prevTask.getTaskName());
-                                    System.out.println("Prev task finished at: " + prevTask.getFinishDate());
-                                    System.out.println("Prev task percentage: " + prevTask.getTaskPercentage());
-                                    System.out.println("Prev task resources: " + prevTask.getResourceName());
+                                if (!model.getPreviousTasks().isEmpty()) {
+                                    System.out.println("  Have previous tasks: ");
+                                }
+                                for (int i = 0; i < model.getPreviousTasks().size(); i++) {
+                                    if (i > 0) {
+                                        System.out.println("    -----");
+                                    }
+                                    System.out.println("    Prev task name #" + (i + 1) + ": " + model.getPreviousTasks().get(i).getTaskName());
+                                    System.out.println("    Prev task ID: " + model.getTaskId());
+                                    System.out.println("    Prev function name: " + model.getFunctionName());
+                                    System.out.println("    Prev original task type: " + model.getOrigTaskType());
+                                    System.out.println("    Prev task finished at: " + model.getPreviousTasks().get(i).getFinishDate());
+                                    System.out.println("    Prev task percentage: " + model.getPreviousTasks().get(i).getTaskPercentage() + "%");
+                                    System.out.println("    Prev task resources: " + model.getPreviousTasks().get(i).getResourceName());
                                 }
 
                                 tasks.add(model);
@@ -162,6 +166,19 @@ public class MppBiz {
     private ProjectFile getMppFile(String filePath) throws MPXJException {
         ProjectReader reader = new MPPReader();
         return reader.read(filePath);
+    }
+
+    private String getResourceStr(List<ResourceAssignment> resAssigns) {
+
+        String resStr = "";
+
+        for (ResourceAssignment aAssign : resAssigns) {
+            if (aAssign.getResource() != null) {     // skip no resource tasks
+                resStr = aAssign.getResource().getName().trim() + ", ";
+            }
+        }
+
+        return resStr.length() > 0 ? resStr.substring(0, resStr.length() - 2) : resStr;
     }
 
 }
