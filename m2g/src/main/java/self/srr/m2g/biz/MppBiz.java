@@ -4,7 +4,6 @@ import net.sf.mpxj.*;
 import net.sf.mpxj.mpp.MPPReader;
 import net.sf.mpxj.reader.ProjectReader;
 import org.springframework.stereotype.Service;
-import self.srr.m2g.constants.CliArgs;
 import self.srr.m2g.model.MppBizParam;
 import self.srr.m2g.model.TaskModel;
 
@@ -13,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Sharuru on 2017/08/08.
@@ -54,6 +52,10 @@ public class MppBiz {
         }
 
         // loop & return trimmed tasks
+        assert project != null;
+        assert opStartDt != null;
+        assert opEndDt != null;
+
         for (Task task : project.getAllTasks()) {
             if (task.getName() != null) {   // illegal task check
                 if (task.getStart().after(opStartDt) && task.getStart().before(opEndDt)) {
@@ -63,72 +65,23 @@ public class MppBiz {
                             String resourceNames = getResourceStr(task.getResourceAssignments());
 
                             if (resourceNames.contains(param.getTargetResourceName())) {
+
                                 System.out.println("-----");
                                 System.out.println("Found target task: " + task.getName());
                                 System.out.println("Parent task: " + task.getParentTask().getName());
 
-                                Task parentTask = task.getParentTask();
-
                                 // copy to model
-                                TaskModel model = new TaskModel();
-
-                                // TODO START
+                                TaskModel model = new TaskModel(task);
 
                                 // get relation of current tasks
                                 List<Relation> predecessors = task.getPredecessors();
 
+                                // add association task to list
                                 if (predecessors != null && !predecessors.isEmpty()) {
-
                                     for (Relation relation : predecessors) {
-
-                                        TaskModel previousTask = new TaskModel();
-
-                                        Task preTask = relation.getTargetTask();
-
-                                        if (preTask.getResourceAssignments() != null) {
-                                            previousTask.setTaskName(preTask.getName());
-
-                                            String prevResourceNames = getResourceStr(preTask.getResourceAssignments());
-
-                                            String pAdminId = preTask.getCachedValue(TaskField.TEXT1) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT1).toString();
-                                            String pTaskId = preTask.getCachedValue(TaskField.TEXT2) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT2).toString();
-                                            String pFunctionId = preTask.getCachedValue(TaskField.TEXT3) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT3).toString();
-                                            String pFunctionName = preTask.getCachedValue(TaskField.TEXT4) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT4).toString();
-                                            String pTaskType = preTask.getCachedValue(TaskField.TEXT5) == null ? "N/A" : preTask.getCachedValue(TaskField.TEXT5).toString();
-
-                                            previousTask.setParentTaskName(task.getParentTask().getName());
-                                            previousTask.setTaskId(pAdminId + "_" + pTaskId + "_" + pFunctionId);
-                                            previousTask.setFunctionName(pFunctionName);
-                                            model.setOrigTaskType(pTaskType);
-
-                                            previousTask.setResourceName(prevResourceNames);
-
-                                            previousTask.setFinishDate(preTask.getFinish());
-                                            previousTask.setTaskPercentage(preTask.getPercentageComplete());
-
-                                            model.getPreviousTasks().add(previousTask);
-                                        }
+                                        model.getPreviousTasks().add(new TaskModel(relation.getTargetTask()));
                                     }
                                 }
-
-                                // TODO END
-
-                                String adminId = parentTask.getCachedValue(TaskField.TEXT1) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT1).toString();
-                                String taskId = parentTask.getCachedValue(TaskField.TEXT2) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT2).toString();
-                                String functionId = parentTask.getCachedValue(TaskField.TEXT3) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT3).toString();
-                                String functionName = parentTask.getCachedValue(TaskField.TEXT4) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT4).toString();
-                                String taskType = parentTask.getCachedValue(TaskField.TEXT5) == null ? "N/A" : parentTask.getCachedValue(TaskField.TEXT5).toString();
-
-                                // add to list
-
-                                model.setTaskName(task.getName());
-                                model.setParentTaskName(task.getParentTask().getName());
-                                model.setTaskId(adminId + "_" + taskId + "_" + functionId);
-                                model.setFunctionName(functionName);
-                                model.setOrigTaskType(taskType);
-                                model.setStartDate(task.getStart());
-                                model.setFinishDate(task.getFinish());
-                                model.setResourceName(resourceNames);
 
                                 System.out.println("Task ID: " + model.getTaskId());
                                 System.out.println("Function name: " + model.getFunctionName());
@@ -147,7 +100,7 @@ public class MppBiz {
                                     System.out.println("    Prev task ID: " + model.getTaskId());
                                     System.out.println("    Prev function name: " + model.getFunctionName());
                                     System.out.println("    Prev original task type: " + model.getOrigTaskType());
-                                    System.out.println("    Prev task finished at: " + model.getPreviousTasks().get(i).getFinishDate());
+                                    System.out.println("    Prev task should finished at: " + model.getPreviousTasks().get(i).getFinishDate());
                                     System.out.println("    Prev task percentage: " + model.getPreviousTasks().get(i).getTaskPercentage() + "%");
                                     System.out.println("    Prev task resources: " + model.getPreviousTasks().get(i).getResourceName());
                                 }
@@ -168,7 +121,7 @@ public class MppBiz {
         return reader.read(filePath);
     }
 
-    private String getResourceStr(List<ResourceAssignment> resAssigns) {
+    public static String getResourceStr(List<ResourceAssignment> resAssigns) {
 
         String resStr = "";
 
