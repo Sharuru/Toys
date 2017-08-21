@@ -1,6 +1,14 @@
 package self.srr.m2g;
 
+import net.sf.mpxj.Task;
 import org.apache.commons.cli.CommandLine;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import self.srr.m2g.biz.CliBiz;
@@ -10,6 +18,7 @@ import self.srr.m2g.model.MppBizParam;
 import self.srr.m2g.model.TaskModel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,12 +90,20 @@ public class MainLogic {
 //
 //                for (TaskModel t : tasks) {
 //
-//                    httpPost.setHeader("PRIVATE-TOKEN","1XiFxtaYKgy_SbQ-zCh8");
+//                    httpPost.setHeader("PRIVATE-TOKEN", "1XiFxtaYKgy_SbQ-zCh8");
 //
 //                    List<NameValuePair> params = new ArrayList<>();
 //
 //                    params.add(new BasicNameValuePair("title", t.getTaskId() + " / " + t.getParentTaskName() + " / " + t.getFunctionName() + " / " + t.getTaskName() + " / " + t.getOrigTaskType()));
-//                    params.add(new BasicNameValuePair("description", t.getTaskName()));
+//                    StringBuilder desc = new StringBuilder("Source: " + t.getTaskName());
+//                    if (!t.getPreviousTasks().isEmpty()) {
+//                        desc.append("\n\nHave previous tasks!");
+//                        for (int i = 0; i < t.getPreviousTasks().size(); i++) {
+//                            TaskModel tt = t.getPreviousTasks().get(i);
+//                            desc.append("\n\n").append(i).append(". ").append(tt.getTaskName()).append(" / ").append(tt.getTaskId()).append(" / ").append(tt.getFunctionName()).append(" / ").append(tt.getOrigTaskType()).append(" / ").append(tt.getFinishDate()).append(" / ").append(tt.getTaskPercentage()).append(" / ").append(tt.getResourceName());
+//                        }
+//                    }
+//                    params.add(new BasicNameValuePair("description", desc.toString()));
 //                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //                    params.add(new BasicNameValuePair("due_date", sdf.format(t.getFinishDate())));
 //                    params.add(new BasicNameValuePair("charset", "UTF-8"));
