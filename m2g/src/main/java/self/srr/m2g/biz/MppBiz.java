@@ -21,6 +21,12 @@ public class MppBiz {
 
     private static final SimpleDateFormat S_D_F = new SimpleDateFormat("yyyyMMdd");
 
+    /**
+     * get task list of a mpp file
+     *
+     * @param param filter parameters
+     * @return task list of a mpp file
+     */
     public List<TaskModel> getTasks(MppBizParam param) {
 
         List<TaskModel> tasks = new ArrayList<>();
@@ -79,7 +85,7 @@ public class MppBiz {
                                 // add association task to list
                                 if (predecessors != null && !predecessors.isEmpty()) {
                                     for (Relation relation : predecessors) {
-                                        model.getPreviousTasks().add(new TaskModel(relation.getTargetTask()));
+                                        model.getRelyTasks().add(new TaskModel(relation.getTargetTask()));
                                     }
                                 }
 
@@ -89,20 +95,20 @@ public class MppBiz {
                                 System.out.println("Started at: " + model.getStartDate());
                                 System.out.println("Finished at: " + model.getFinishDate());
                                 System.out.println("Resources: " + model.getResourceName());
-                                if (!model.getPreviousTasks().isEmpty()) {
+                                if (!model.getRelyTasks().isEmpty()) {
                                     System.out.println("  Have previous tasks: ");
                                 }
-                                for (int i = 0; i < model.getPreviousTasks().size(); i++) {
+                                for (int i = 0; i < model.getRelyTasks().size(); i++) {
                                     if (i > 0) {
                                         System.out.println("    -----");
                                     }
-                                    System.out.println("    Prev task name #" + (i + 1) + ": " + model.getPreviousTasks().get(i).getTaskName());
+                                    System.out.println("    Prev task name #" + (i + 1) + ": " + model.getRelyTasks().get(i).getTaskName());
                                     System.out.println("    Prev task ID: " + model.getTaskId());
                                     System.out.println("    Prev function name: " + model.getFunctionName());
                                     System.out.println("    Prev original task type: " + model.getOrigTaskType());
-                                    System.out.println("    Prev task should finished at: " + model.getPreviousTasks().get(i).getFinishDate());
-                                    System.out.println("    Prev task percentage: " + model.getPreviousTasks().get(i).getTaskPercentage() + "%");
-                                    System.out.println("    Prev task resources: " + model.getPreviousTasks().get(i).getResourceName());
+                                    System.out.println("    Prev task should finished at: " + model.getRelyTasks().get(i).getFinishDate());
+                                    System.out.println("    Prev task percentage: " + model.getRelyTasks().get(i).getTaskPercentage() + "%");
+                                    System.out.println("    Prev task resources: " + model.getRelyTasks().get(i).getResourceName());
                                 }
 
                                 tasks.add(model);
@@ -116,11 +122,24 @@ public class MppBiz {
         return tasks;
     }
 
+    /**
+     * read and get mpp file
+     *
+     * @param filePath file path
+     * @return mpp file
+     * @throws MPXJException mpxj exception
+     */
     private ProjectFile getMppFile(String filePath) throws MPXJException {
         ProjectReader reader = new MPPReader();
         return reader.read(filePath);
     }
 
+    /**
+     * generate resources string of a task
+     *
+     * @param resAssigns resource assignment of a task
+     * @return generated resources string, split by comma
+     */
     public static String getResourceStr(List<ResourceAssignment> resAssigns) {
 
         String resStr = "";

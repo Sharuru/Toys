@@ -3,7 +3,6 @@ package self.srr.m2g.biz;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 import org.springframework.stereotype.Service;
-import self.srr.m2g.constants.CliArgs;
 import self.srr.m2g.utils.CliUtils;
 
 /**
@@ -12,7 +11,13 @@ import self.srr.m2g.utils.CliUtils;
 @Service
 public class CliBiz {
 
-
+    /**
+     * get cli instances
+     *
+     * @param args user input
+     * @return cli instances
+     * @throws ParseException parse exception
+     */
     public CommandLine initializeCli(String[] args) throws ParseException {
 
         CommandLine cli = null;
@@ -24,6 +29,7 @@ public class CliBiz {
             System.out.println("ILLEGAL_INPUT_DETECTED.");
             System.out.println(e.getMessage());
         }
+
         return cli;
     }
 }

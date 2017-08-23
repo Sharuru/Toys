@@ -10,6 +10,13 @@ import self.srr.m2g.constants.CliArgs;
  */
 public class CliUtils {
 
+    /**
+     * get cli instances
+     *
+     * @param args user input
+     * @return cli instances
+     * @throws ParseException parse exception
+     */
     public static CommandLine initializeCLI(String[] args) throws ParseException {
 
         CommandLineParser parser = new DefaultParser();
@@ -23,7 +30,11 @@ public class CliUtils {
         }
     }
 
-
+    /**
+     * initialize argument options
+     *
+     * @return argument options
+     */
     private static Options initializeOptions() {
 
         Options options = new Options();

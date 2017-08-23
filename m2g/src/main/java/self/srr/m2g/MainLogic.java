@@ -38,7 +38,12 @@ public class MainLogic {
     @Autowired
     MppBiz mppBiz;
 
-    public void run(String[] args) {
+    /**
+     * main method
+     *
+     * @param args user input
+     */
+    void run(String[] args) {
         System.out.println("-----");
         System.out.println("STARTING.");
 
@@ -96,13 +101,14 @@ public class MainLogic {
 //
 //                    params.add(new BasicNameValuePair("title", t.getTaskId() + " / " + t.getParentTaskName() + " / " + t.getFunctionName() + " / " + t.getTaskName() + " / " + t.getOrigTaskType()));
 //                    StringBuilder desc = new StringBuilder("Source: " + t.getTaskName());
-//                    if (!t.getPreviousTasks().isEmpty()) {
-//                        desc.append("\n\nHave previous tasks!");
-//                        for (int i = 0; i < t.getPreviousTasks().size(); i++) {
-//                            TaskModel tt = t.getPreviousTasks().get(i);
+//                    if (!t.getRelyTasks().isEmpty()) {
+//                        desc.append("\n\nHave rely tasks!");
+//                        for (int i = 0; i < t.getRelyTasks().size(); i++) {
+//                            TaskModel tt = t.getRelyTasks().get(i);
 //                            desc.append("\n\n").append(i).append(". ").append(tt.getTaskName()).append(" / ").append(tt.getTaskId()).append(" / ").append(tt.getFunctionName()).append(" / ").append(tt.getOrigTaskType()).append(" / ").append(tt.getFinishDate()).append(" / ").append(tt.getTaskPercentage()).append(" / ").append(tt.getResourceName());
 //                        }
 //                    }
+//                    desc.append("\n\n").append("Updated at: ").append("ISSUE OPEN DATE");
 //                    params.add(new BasicNameValuePair("description", desc.toString()));
 //                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //                    params.add(new BasicNameValuePair("due_date", sdf.format(t.getFinishDate())));

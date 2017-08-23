@@ -34,7 +34,7 @@ public class TaskModel {
 
     private Number taskPercentage;
 
-    private List<TaskModel> previousTasks = new ArrayList<>();
+    private List<TaskModel> relyTasks = new ArrayList<>();
 
     public TaskModel() {
 
