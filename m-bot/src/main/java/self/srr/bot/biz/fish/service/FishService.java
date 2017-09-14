@@ -11,6 +11,7 @@ import self.srr.bot.biz.fish.entity.TblFishTimeRecord;
 import self.srr.bot.biz.fish.repository.FishTimeRepository;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -18,6 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 // TODO duty time setting in application.yml
 
@@ -151,7 +153,10 @@ public class FishService {
             // calculate
             Map<String, BigDecimal> etaMap = etaCalculator(record.getCheckInTime());
             // decorate
-            String text = "";
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            sdf.setTimeZone(TimeZone.getTimeZone(FishConstant.ZONE_SHANGHAI));
+
+            String text = "今日出勤时间：" + sdf.format(record.getCheckInTime()) + "，";
 
             if (etaMap.get(FishConstant.KEY_SECOND).compareTo(BigDecimal.ZERO) == 1) {
                 text += "哎呀，还得摸：" + etaMap.get(FishConstant.KEY_SECOND).abs() + " 秒";
