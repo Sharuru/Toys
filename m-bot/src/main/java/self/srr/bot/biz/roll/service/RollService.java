@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Roll service
@@ -50,6 +51,8 @@ public class RollService {
             botResponseModel = statusBiz(botResponseModel);
         } else if ("charge".equalsIgnoreCase(action)) {
             botResponseModel = chargeBiz(botResponseModel, args);
+        } else if ("b".equalsIgnoreCase(action)) {
+            botResponseModel = bCountBiz(botResponseModel, args);
         } else {
             botResponseModel = rollBiz(botResponseModel);
         }
@@ -71,6 +74,7 @@ public class RollService {
                 "Roll 点功能的帮助信息：\n" +
                 "使用方法：输入 `/roll 指令。`\n" +
                 "`/roll` 从 1-100 中随意 roll 出一种点数；\n" +
+                "`/roll b 9,233` 从 9-233 中随意 roll 出一个 B 数，默认 1-100；\n" +
                 "`/roll help` 显示本帮助信息；\n" +
                 "`/roll card o` 进行一次单抽（3 水晶）；\n" +
                 "`/roll card e` 进行十连（30 水晶）；\n" +
@@ -95,6 +99,40 @@ public class RollService {
 
         String text = "「" + botRequestModel.getUser_name() + "」掷出了：" + number + "点。";
         log.info("User: " + botResponseModel.getUsername() + " rolled " + number + " points.");
+
+        botResponseModel.setText(text);
+
+        return botResponseModel;
+    }
+
+    /**
+     * B count from range
+     *
+     * @param botResponseModel prev.response
+     * @param args             parameters
+     * @return response
+     */
+    private BotResponseModel bCountBiz(BotResponseModel botResponseModel, String[] args) {
+
+        int start = 0;
+        int end = 100;
+
+        if (args.length >= 2) {
+            try {
+                String[] range = args[1].split(",");
+                start = Integer.valueOf(range[0]);
+                end = Integer.valueOf(range[1]);
+            } catch (Exception e) {
+                botResponseModel.setText("参数输入错误");
+                log.info("User '" + botRequestModel.getUser_name() + "' biz skipped(ILLEGAL_PARAMS)");
+                return botResponseModel;
+            }
+        }
+
+        int number = ThreadLocalRandom.current().nextInt(start, end + 1);
+
+        String text = botRequestModel.getUser_name() + "，你自己心里没点 B 数？（B 数值：" + number + "）";
+        log.info("User: " + botResponseModel.getUsername() + " B counted " + number + " points.");
 
         botResponseModel.setText(text);
 
