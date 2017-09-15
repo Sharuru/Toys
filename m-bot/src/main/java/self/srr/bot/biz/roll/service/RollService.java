@@ -117,13 +117,14 @@ public class RollService {
         int start = 0;
         int end = 100;
 
-        if (args.length >= 2) {
+        // have input, not s:public
+        if (args.length >= 2 && !args[1].equalsIgnoreCase("s")) {
             try {
                 String[] range = args[1].split(",");
-                start = Integer.valueOf(range[0]);
-                end = Integer.valueOf(range[1]);
+                start = Double.valueOf(range[0]).intValue();
+                end = Double.valueOf(range[1]).intValue();
             } catch (Exception e) {
-                botResponseModel.setText("参数输入错误");
+                botResponseModel.setText("你太事儿 B 了，无法测量。（参数输入错误）");
                 log.info("User '" + botRequestModel.getUser_name() + "' biz skipped(ILLEGAL_PARAMS)");
                 return botResponseModel;
             }
