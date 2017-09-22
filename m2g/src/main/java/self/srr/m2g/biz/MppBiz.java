@@ -64,7 +64,7 @@ public class MppBiz {
 
         for (Task task : project.getAllTasks()) {
             if (task.getName() != null) {   // illegal task check
-                if (task.getStart().after(opStartDt) && task.getStart().before(opEndDt)) {
+                if (task.getStart().after(opStartDt) && task.getStart().before(opEndDt)) {  // task time
                     if (task.getOutlineLevel() == 3) {  // only fetch sub tasks
                         if (task.getResourceAssignments() != null) {  // have resources
 
@@ -72,46 +72,16 @@ public class MppBiz {
 
                             if (resourceNames.contains(param.getTargetResourceName())) {
 
-                                System.out.println("-----");
-                                System.out.println("Found target task: " + task.getName());
-                                System.out.println("Parent task: " + task.getParentTask().getName());
-
                                 // copy to model
                                 TaskModel model = new TaskModel(task);
 
-                                // get relation of current tasks
-                                List<Relation> predecessors = task.getPredecessors();
-
-                                // add association task to list
-                                if (predecessors != null && !predecessors.isEmpty()) {
-                                    for (Relation relation : predecessors) {
-                                        model.getRelyTasks().add(new TaskModel(relation.getTargetTask()));
+                                if (!param.getTargetTaskIds().isEmpty()) {
+                                    if (param.getTargetTaskIds().contains(model.getTaskId())) {
+                                        tasks.add(trimTask(task));
                                     }
+                                } else {
+                                    tasks.add(trimTask(task));
                                 }
-
-                                System.out.println("Task ID: " + model.getTaskId());
-                                System.out.println("Function name: " + model.getFunctionName());
-                                System.out.println("Original task type: " + model.getOrigTaskType());
-                                System.out.println("Started at: " + model.getStartDate());
-                                System.out.println("Finished at: " + model.getFinishDate());
-                                System.out.println("Resources: " + model.getResourceName());
-                                if (!model.getRelyTasks().isEmpty()) {
-                                    System.out.println("  Have previous tasks: ");
-                                }
-                                for (int i = 0; i < model.getRelyTasks().size(); i++) {
-                                    if (i > 0) {
-                                        System.out.println("    -----");
-                                    }
-                                    System.out.println("    Prev task name #" + (i + 1) + ": " + model.getRelyTasks().get(i).getTaskName());
-                                    System.out.println("    Prev task ID: " + model.getTaskId());
-                                    System.out.println("    Prev function name: " + model.getFunctionName());
-                                    System.out.println("    Prev original task type: " + model.getOrigTaskType());
-                                    System.out.println("    Prev task should finished at: " + model.getRelyTasks().get(i).getFinishDate());
-                                    System.out.println("    Prev task percentage: " + model.getRelyTasks().get(i).getTaskPercentage() + "%");
-                                    System.out.println("    Prev task resources: " + model.getRelyTasks().get(i).getResourceName());
-                                }
-
-                                tasks.add(model);
                             }
                         }
                     }
@@ -151,6 +121,57 @@ public class MppBiz {
         }
 
         return resStr.length() > 0 ? resStr.substring(0, resStr.length() - 2) : resStr;
+    }
+
+    /**
+     * Trim mpp task model
+     *
+     * @param task task
+     * @return trimmed task model
+     */
+    private TaskModel trimTask(Task task) {
+
+        // copy model
+        TaskModel model = new TaskModel(task);
+
+        System.out.println("-----");
+        System.out.println("Found target task: " + model.getTaskName());
+        System.out.println("Parent task: " + model.getParentTaskName());
+
+
+        // get relation of current tasks
+        List<Relation> predecessors = task.getPredecessors();
+
+        // add association task to list
+        if (predecessors != null && !predecessors.isEmpty()) {
+            for (Relation relation : predecessors) {
+                model.getRelyTasks().add(new TaskModel(relation.getTargetTask()));
+            }
+        }
+
+        System.out.println("Task ID: " + model.getTaskId());
+        System.out.println("Function name: " + model.getFunctionName());
+        System.out.println("Original task type: " + model.getOrigTaskType());
+        System.out.println("Started at: " + model.getStartDate());
+        System.out.println("Finished at: " + model.getFinishDate());
+        System.out.println("Resources: " + model.getResourceName());
+        if (!model.getRelyTasks().isEmpty()) {
+            System.out.println("  Have previous tasks: ");
+        }
+        for (int i = 0; i < model.getRelyTasks().size(); i++) {
+            if (i > 0) {
+                System.out.println("    -----");
+            }
+            System.out.println("    Prev task name #" + (i + 1) + ": " + model.getRelyTasks().get(i).getTaskName());
+            System.out.println("    Prev task ID: " + model.getTaskId());
+            System.out.println("    Prev function name: " + model.getFunctionName());
+            System.out.println("    Prev original task type: " + model.getOrigTaskType());
+            System.out.println("    Prev task should finished at: " + model.getRelyTasks().get(i).getFinishDate());
+            System.out.println("    Prev task percentage: " + model.getRelyTasks().get(i).getTaskPercentage() + "%");
+            System.out.println("    Prev task resources: " + model.getRelyTasks().get(i).getResourceName());
+        }
+
+        return model;
     }
 
 }
