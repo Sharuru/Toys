@@ -50,6 +50,7 @@ public class CliUtils {
                         CliArgs.TASK_TYPE_PUSH + ": after TASK LOCAL, TASK CHECK, push diffed tasks to remote \n" +
                         "default task is: TASK LOCAL only"
         ).hasArg().argName("TASK").build());
+        options.addOption(Option.builder().longOpt(CliArgs.TARGET_TASK_ID).desc("specific task selection").hasArg().argName("IDs").build());
         options.addOption(Option.builder().longOpt(CliArgs.ISSUE_LINK).desc("address of remote issues").hasArg().argName("ADDRESS").required().build());
         options.addOption(Option.builder().longOpt(CliArgs.AUTH_TOKEN).desc("token for authentication").hasArg().argName("TOKEN").required().build());
 

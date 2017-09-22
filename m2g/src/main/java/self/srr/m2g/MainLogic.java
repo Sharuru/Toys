@@ -1,14 +1,6 @@
 package self.srr.m2g;
 
-import net.sf.mpxj.Task;
 import org.apache.commons.cli.CommandLine;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import self.srr.m2g.biz.CliBiz;
@@ -19,8 +11,6 @@ import self.srr.m2g.model.MppBizParam;
 import self.srr.m2g.model.PushBizParam;
 import self.srr.m2g.model.TaskModel;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,8 +18,6 @@ import java.util.List;
  */
 @Component
 public class MainLogic {
-
-    private static final SimpleDateFormat S_D_F = new SimpleDateFormat("yyyyMMdd");
 
     private static boolean pushFlg = false;
 

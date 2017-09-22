@@ -27,4 +27,6 @@ public class CliArgs {
 
     public static final String AUTH_TOKEN = "auth-token";
 
+    public static final String TARGET_TASK_ID = "target-tids";
+
 }
