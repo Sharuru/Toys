@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane maxHeight="600.0" maxWidth="560.0" minHeight="600.0" minWidth="560.0" prefHeight="600.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="self.srr.m2gg.Controller">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="M2GG - MS mpp tasks to Gitlab issue GUI version">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <AnchorPane layoutY="41.0" maxHeight="600.0" maxWidth="560.0" minHeight="600.0" minWidth="560.0" prefHeight="600.0" prefWidth="560.0">
+         <children>
+            <Label layoutX="14.0" layoutY="7.0" text="Settings:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="18.0" layoutY="26.0" text=".mpp file location:">
+               <padding>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <Label layoutX="18.0" layoutY="51.0" text="resource name:">
+               <padding>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <TextField layoutX="142.0" layoutY="52.0" prefHeight="23.0" prefWidth="395.0" />
+            <TextField layoutX="142.0" layoutY="27.0" prefHeight="23.0" prefWidth="336.0" />
+            <Button layoutX="482.0" layoutY="27.0" mnemonicParsing="false" text="Button" />
+            <Label layoutX="17.0" layoutY="76.0" text="filter time from:">
+               <padding>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <DatePicker layoutX="142.0" layoutY="77.0" />
+            <DatePicker layoutX="351.0" layoutY="77.0" prefHeight="23.0" prefWidth="186.0" />
+            <Label layoutX="328.0" layoutY="76.0" text="to">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <Label layoutX="18.0" layoutY="101.0" text="task type:">
+               <padding>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <ChoiceBox layoutX="142.0" layoutY="102.0" prefHeight="23.0" prefWidth="395.0" />
+            <TextField layoutX="142.0" layoutY="127.0" prefHeight="23.0" prefWidth="395.0" />
+            <Label layoutX="17.0" layoutY="126.0" text="gitlab link:">
+               <padding>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <TextField layoutX="142.0" layoutY="152.0" prefHeight="23.0" prefWidth="395.0" />
+            <Label layoutX="18.0" layoutY="151.0" text="auth token:">
+               <padding>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <Label layoutX="17.0" layoutY="176.0" text="custom key word:">
+               <padding>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <TextArea layoutX="142.0" layoutY="180.0" prefHeight="60.0" prefWidth="395.0" />
+            <Separator layoutY="319.0" prefHeight="3.0" prefWidth="560.0" />
+            <Button layoutX="14.0" layoutY="255.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="524.0" text="Button" />
+            <TextArea layoutX="14.0" layoutY="326.0" prefHeight="227.0" prefWidth="524.0" />
+         </children>
+      </AnchorPane>
+      <Separator layoutY="40.0" prefHeight="3.0" prefWidth="560.0" />
+   </children>
+</AnchorPane>
