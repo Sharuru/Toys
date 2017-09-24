@@ -1,4 +1,4 @@
-package self.srr.m2gg;
+package self.srr.m2gg.ui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

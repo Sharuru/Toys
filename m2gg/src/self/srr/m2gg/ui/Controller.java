@@ -1,4 +1,4 @@
-package self.srr.m2gg;
+package self.srr.m2gg.ui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
