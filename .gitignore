@@ -216,3 +216,4 @@ pip-log.txt
 m-bot/src/main/resources/application.yml
 m-bot/ddl/dev.db
 /m2g/out/
+/m2gg/out/
