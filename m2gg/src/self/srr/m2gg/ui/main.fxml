@@ -34,7 +34,7 @@
                   <Insets bottom="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-            <TextField layoutX="142.0" layoutY="52.0" prefHeight="23.0" prefWidth="395.0" />
+            <TextField fx:id="resNameInput" layoutX="142.0" layoutY="52.0" prefHeight="23.0" prefWidth="395.0" />
             <TextField fx:id="fileLocationInput" layoutX="142.0" layoutY="27.0" prefHeight="23.0" prefWidth="336.0" />
             <Button fx:id="fileLocationButton" layoutX="479.0" layoutY="27.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="58.0" text="Open" />
             <Label layoutX="17.0" layoutY="76.0" text="filter time from:">
@@ -42,8 +42,8 @@
                   <Insets bottom="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-            <DatePicker layoutX="142.0" layoutY="77.0" />
-            <DatePicker layoutX="351.0" layoutY="77.0" prefHeight="23.0" prefWidth="186.0" />
+            <DatePicker fx:id="fromDtPicker" layoutX="142.0" layoutY="77.0" />
+            <DatePicker fx:id="toDtPicker" layoutX="351.0" layoutY="77.0" prefHeight="23.0" prefWidth="186.0" />
             <Label layoutX="328.0" layoutY="76.0" text="to">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -74,8 +74,10 @@
             </Label>
             <TextArea layoutX="142.0" layoutY="180.0" prefHeight="60.0" prefWidth="395.0" />
             <Separator layoutY="319.0" prefHeight="3.0" prefWidth="560.0" />
-            <Button layoutX="14.0" layoutY="255.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="524.0" text="Begin task" />
-            <TextArea fx:id="logTextArea" editable="false" layoutX="14.0" layoutY="326.0" prefHeight="227.0" prefWidth="524.0" />
+            <Button fx:id="beginTaskBtn" layoutX="14.0" layoutY="255.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="524.0" text="Begin task" />
+            <TextArea fx:id="logTextArea" editable="false" layoutX="14.0" layoutY="352.0" prefHeight="201.0" prefWidth="524.0" />
+            <Text layoutX="14.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Logs:" />
+            <CheckBox layoutX="433.0" layoutY="328.0" mnemonicParsing="false" text="Output to files" />
          </children>
       </AnchorPane>
       <Separator layoutY="40.0" prefHeight="3.0" prefWidth="560.0" />
