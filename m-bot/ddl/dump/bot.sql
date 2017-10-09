@@ -345,7 +345,7 @@ ALTER TABLE ONLY fish_time_record ALTER COLUMN id SET DEFAULT nextval('fish_time
 --
 
 COPY bot_item (id, item_name, item_description, created_at, updated_at) FROM stdin;
-2	水晶	ROLL 功能抽卡用的水晶	2017-06-27 11:06:00	2017-06-27 11:06:02
+2	无色小晶块	ROLL 功能抽卡用的基础素材	2017-06-27 11:06:00	2017-06-27 11:06:02
 3	金额	系统基础货币	2017-06-27 11:10:16	2017-06-27 11:10:18
 \.
 
