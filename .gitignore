@@ -283,3 +283,4 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/intellij+all
 /m2gg/.idea/workspace.xml
+/m2gg/META-INF/MANIFEST.MF
