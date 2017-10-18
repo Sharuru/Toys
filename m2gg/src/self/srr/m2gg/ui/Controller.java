@@ -4,12 +4,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import self.srr.m2gg.core.biz.MppBiz;
 import self.srr.m2gg.core.model.MppBizParam;
 import self.srr.m2gg.core.model.TaskModel;
 
+import javax.sound.sampled.Clip;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.time.ZoneId;
@@ -43,6 +46,12 @@ public class Controller {
     @FXML
     public TextField resNameInput;
 
+    @FXML
+    public Button copyClipboardBtn;
+
+    @FXML
+    public Button clearLogBtn;
+
 
     @FXML
     public void initialize() {
@@ -52,6 +61,8 @@ public class Controller {
         fileLocationButton.setOnMouseClicked(this::fileChooserEvents);
 
         beginTaskBtn.setOnMouseClicked(this::beginTaskButtonEvents);
+        copyClipboardBtn.setOnMouseClicked(this::copyClipboardButtonEvents);
+        clearLogBtn.setOnMouseClicked(this::clearLogButtonEvents);
 
 
     }
@@ -109,6 +120,22 @@ public class Controller {
                 logTextArea.appendText("    Prev task resources: " + task.getRelyTasks().get(i).getResourceName() + "\n");
             }
         }
+    }
+
+    private void copyClipboardButtonEvents(MouseEvent event) {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+
+        content.putString(logTextArea.getText());
+
+        clipboard.setContent(content);
+
+        logTextArea.appendText("Log copied!" + "\n");
+    }
+
+    private void clearLogButtonEvents(MouseEvent event) {
+        logTextArea.setText("");
+        logTextArea.appendText("Log cleared!" + "\n");
     }
 
 
