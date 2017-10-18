@@ -6,7 +6,6 @@
         <option name="appClass" value="self.srr.m2gg.ui.Main" />
         <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
-        <option name="nativeBundle" value="exe" />
         <option name="title" value="" />
         <option name="vendor" value="" />
         <option name="version" value="" />
@@ -15,6 +14,13 @@
     <root id="root">
       <element id="archive" name="m2gg.jar">
         <element id="module-output" name="m2gg" />
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-collections4-4.1.jar" path-in-jar="/" />
+        <element id="extracted-dir" path="$PROJECT_DIR$/lib/lombok-1.16.18.jar" path-in-jar="/" />
+        <element id="extracted-dir" path="$PROJECT_DIR$/lib/mpxj-6.1.0.jar" path-in-jar="/" />
+        <element id="extracted-dir" path="$PROJECT_DIR$/lib/poi-3.16.jar" path-in-jar="/" />
       </element>
     </root>
   </artifact>

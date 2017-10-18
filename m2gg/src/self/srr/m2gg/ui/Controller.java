@@ -61,7 +61,7 @@ public class Controller {
         logTextArea.appendText("File chooser opened. \n");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose the mpp file");
-        fileChooser.setInitialDirectory(new File("F:\\"));
+        fileChooser.setInitialDirectory(new File("D:\\"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPP files (*.mpp)", "*.mpp"));
         File mppFileLocation = fileChooser.showOpenDialog(fileLocationButton.getScene().getWindow());
         if (mppFileLocation != null) {

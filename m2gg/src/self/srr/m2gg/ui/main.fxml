@@ -75,9 +75,11 @@
             <TextArea layoutX="142.0" layoutY="180.0" prefHeight="60.0" prefWidth="395.0" />
             <Separator layoutY="319.0" prefHeight="3.0" prefWidth="560.0" />
             <Button fx:id="beginTaskBtn" layoutX="14.0" layoutY="255.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="524.0" text="Begin task" />
-            <TextArea fx:id="logTextArea" editable="false" layoutX="14.0" layoutY="352.0" prefHeight="201.0" prefWidth="524.0" />
+            <TextArea fx:id="logTextArea" editable="false" layoutX="14.0" layoutY="352.0" prefHeight="181.0" prefWidth="524.0" />
             <Text layoutX="14.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Logs:" />
-            <CheckBox layoutX="433.0" layoutY="328.0" mnemonicParsing="false" text="Output to files" />
+            <CheckBox layoutX="432.0" layoutY="538.0" mnemonicParsing="false" text="Output to files" />
+            <Button layoutX="472.0" layoutY="325.0" mnemonicParsing="false" text="Clearlog" />
+            <Button layoutX="340.0" layoutY="325.0" mnemonicParsing="false" text="Copy to clipboard" />
          </children>
       </AnchorPane>
       <Separator layoutY="40.0" prefHeight="3.0" prefWidth="560.0" />
