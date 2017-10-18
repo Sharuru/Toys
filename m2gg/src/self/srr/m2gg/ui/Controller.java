@@ -1,7 +1,6 @@
 package self.srr.m2gg.ui;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
@@ -12,11 +11,7 @@ import self.srr.m2gg.core.biz.MppBiz;
 import self.srr.m2gg.core.model.MppBizParam;
 import self.srr.m2gg.core.model.TaskModel;
 
-import javax.sound.sampled.Clip;
-import java.awt.event.ActionEvent;
 import java.io.File;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 
@@ -92,34 +87,38 @@ public class Controller {
         param.setFinishDtStr(toDtPicker.getValue().toString());
         param.setTargetResourceName(resNameInput.getText());
 
-        List<TaskModel> a = new MppBiz().getTasks(param);
+        List<TaskModel> tasks = new MppBiz().getTasks(param);
 
-        for (TaskModel task : a) {
+        for (TaskModel aTask : tasks) {
             logTextArea.appendText("-----" + "\n");
-            logTextArea.appendText("Found target task: " + task.getTaskName() + "\n");
-            logTextArea.appendText("Parent task: " + task.getParentTaskName() + "\n");
-            logTextArea.appendText("Task ID: " + task.getTaskId() + "\n");
-            logTextArea.appendText("Function name: " + task.getFunctionName() + "\n");
-            logTextArea.appendText("Original task type: " + task.getOrigTaskType() + "\n");
-            logTextArea.appendText("Started at: " + task.getStartDate() + "\n");
-            logTextArea.appendText("Finished at: " + task.getFinishDate() + "\n");
-            logTextArea.appendText("Resources: " + task.getResourceName() + "\n");
-            if (!task.getRelyTasks().isEmpty()) {
+            logTextArea.appendText("Found target task: " + aTask.getTaskName() + "\n");
+            logTextArea.appendText("Parent task: " + aTask.getParentTaskName() + "\n");
+            logTextArea.appendText("Task ID: " + aTask.getTaskId() + "\n");
+            logTextArea.appendText("Function name: " + aTask.getFunctionName() + "\n");
+            logTextArea.appendText("Original task type: " + aTask.getOrigTaskType() + "\n");
+            logTextArea.appendText("Started at: " + aTask.getStartDate() + "\n");
+            logTextArea.appendText("Finished at: " + aTask.getFinishDate() + "\n");
+            logTextArea.appendText("Resources: " + aTask.getResourceName() + "\n");
+            if (!aTask.getRelyTasks().isEmpty()) {
                 logTextArea.appendText("  Have previous tasks: " + "\n");
             }
-            for (int i = 0; i < task.getRelyTasks().size(); i++) {
+            for (int i = 0; i < aTask.getRelyTasks().size(); i++) {
                 if (i > 0) {
                     logTextArea.appendText("    -----" + "\n");
                 }
-                logTextArea.appendText("    Prev task name #" + (i + 1) + ": " + task.getRelyTasks().get(i).getTaskName() + "\n");
-                logTextArea.appendText("    Prev task ID: " + task.getTaskId() + "\n");
-                logTextArea.appendText("    Prev function name: " + task.getFunctionName() + "\n");
-                logTextArea.appendText("    Prev original task type: " + task.getOrigTaskType() + "\n");
-                logTextArea.appendText("    Prev task should finished at: " + task.getRelyTasks().get(i).getFinishDate() + "\n");
-                logTextArea.appendText("    Prev task percentage: " + task.getRelyTasks().get(i).getTaskPercentage() + "%" + "\n");
-                logTextArea.appendText("    Prev task resources: " + task.getRelyTasks().get(i).getResourceName() + "\n");
+                logTextArea.appendText("    Prev task name #" + (i + 1) + ": " + aTask.getRelyTasks().get(i).getTaskName() + "\n");
+                logTextArea.appendText("    Prev task ID: " + aTask.getTaskId() + "\n");
+                logTextArea.appendText("    Prev function name: " + aTask.getFunctionName() + "\n");
+                logTextArea.appendText("    Prev original task type: " + aTask.getOrigTaskType() + "\n");
+                logTextArea.appendText("    Prev task should finished at: " + aTask.getRelyTasks().get(i).getFinishDate() + "\n");
+                logTextArea.appendText("    Prev task percentage: " + aTask.getRelyTasks().get(i).getTaskPercentage() + "%" + "\n");
+                logTextArea.appendText("    Prev task resources: " + aTask.getRelyTasks().get(i).getResourceName() + "\n");
             }
         }
+
+        logTextArea.appendText("-----" + "\n");
+        logTextArea.appendText("Task finished!" + "\n");
+        logTextArea.appendText("Filtered: " + tasks.size() + " task(s). \n");
     }
 
     private void copyClipboardButtonEvents(MouseEvent event) {
