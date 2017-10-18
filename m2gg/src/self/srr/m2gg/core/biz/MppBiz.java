@@ -16,9 +16,6 @@ import java.util.List;
 
 public class MppBiz {
 
-    @FXML
-    public TextArea logTextArea;
-
     private static final SimpleDateFormat S_D_F = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
