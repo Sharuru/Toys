@@ -12,10 +12,8 @@ import self.srr.bot.biz.fish.repository.FishTimeRepository;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +56,8 @@ public class FishService {
             botResponseModel = helpMsgBiz(botResponseModel);
         } else if ("ci".equalsIgnoreCase(action)) {
             botResponseModel = checkInBiz(botResponseModel, args);
+        } else if ("time".equalsIgnoreCase(action)) {
+            botResponseModel = timeCountDownBiz(botResponseModel, args);
         } else {
             botResponseModel = etaBiz(botResponseModel);
         }
@@ -81,10 +81,50 @@ public class FishService {
                 "`/fish` 显示今天还得摸多久才能跑路；\n" +
                 "`/fish help` 显示本帮助信息；\n" +
                 "`/fish ci 0900` 记录今天的出勤时间为上午九点，再次使用则进行修改；\n" +
+                "`/fish time 20201001` 计算从现时起，至目标时刻（2020 年 10 月 01 日）的倒计时；\n" +
                 "在指令后追加 s 表示将本次响应公开；\n" +
                 "**所有时间均已 +8 区为基准进行计算。**";
 
         botResponseModel.setText(text);
+
+        return botResponseModel;
+    }
+
+
+    private BotResponseModel timeCountDownBiz(BotResponseModel botResponseModel, String[] args) {
+        // parameter check
+        // can format time
+        if (args.length >= 2) {
+            try {    // check args is legal
+                String yyyyMMddStr = args[1];
+                LocalDate lDate = LocalDate.parse(yyyyMMddStr, DateTimeFormatter.BASIC_ISO_DATE);
+                LocalDate nDate = LocalDate.now();
+
+                Period dPeriod = Period.between(lDate, nDate);
+
+                String contextText;
+
+                if (lDate.isAfter(nDate)) {
+                    contextText = "距离 " + lDate.getYear() + " 年 " + lDate.getMonthValue() + " 月 " + lDate.getDayOfMonth() + " 日还有：";
+                    contextText += Math.abs(dPeriod.getYears()) + " 年 " + Math.abs(dPeriod.getMonths()) + " 个月 " + Math.abs(dPeriod.getDays()) + " 天。";
+                } else if (lDate.isBefore(nDate)) {
+                    contextText = "距离 " + lDate.getYear() + " 年 " + lDate.getMonthValue() + " 月 " + lDate.getDayOfMonth() + " 日已经过去了：";
+                    contextText += Math.abs(dPeriod.getYears()) + " 年 " + Math.abs(dPeriod.getMonths()) + " 个月 " + Math.abs(dPeriod.getDays()) + " 天。";
+                } else {
+                    contextText = "梦醒了，就是今天，该起来传火了。";
+                }
+
+                botResponseModel.setText(contextText);
+
+            } catch (Exception e) {
+                botResponseModel.setText("日期格式似乎输入错误了哟（yyyyMMdd）。");
+                log.error("Error happened in 'timeCountDownBiz': " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            // no args, using eta biz
+            botResponseModel = etaBiz(botResponseModel);
+        }
 
         return botResponseModel;
     }
@@ -158,15 +198,15 @@ public class FishService {
 
             String text = "今日出勤时间：" + sdf.format(record.getCheckInTime()) + "，";
 
-            if (etaMap.get(FishConstant.KEY_SECOND).compareTo(BigDecimal.ZERO) == 1) {
+            if (etaMap.get(FishConstant.KEY_SECOND).compareTo(BigDecimal.ZERO) > 0) {
                 text += "哎呀，还得摸：" + etaMap.get(FishConstant.KEY_SECOND).abs() + " 秒";
             } else {
                 text += "嚯哟！你给自己续了：" + etaMap.get(FishConstant.KEY_SECOND).abs() + " 秒";
             }
-            if (etaMap.get(FishConstant.KEY_SECOND).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
+            if (etaMap.get(FishConstant.KEY_SECOND).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) > 0) {
                 text += "，约 " + etaMap.get(FishConstant.KEY_MINUTE).abs() + " 分钟";
             }
-            if (etaMap.get(FishConstant.KEY_SECOND).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) == 1) {
+            if (etaMap.get(FishConstant.KEY_SECOND).divide(new BigDecimal(3600L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) > 0) {
                 text += "，约 " + etaMap.get(FishConstant.KEY_HOUR).abs() + " 小时";
             }
             text += "。";
