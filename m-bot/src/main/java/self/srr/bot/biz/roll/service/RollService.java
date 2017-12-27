@@ -53,6 +53,8 @@ public class RollService {
             botResponseModel = chargeBiz(botResponseModel, args);
         } else if ("b".equalsIgnoreCase(action)) {
             botResponseModel = bCountBiz(botResponseModel, args);
+        } else if ("py".equalsIgnoreCase(action)) {
+            botResponseModel = pyBiz(botResponseModel);
         } else {
             botResponseModel = rollBiz(botResponseModel);
         }
@@ -76,10 +78,11 @@ public class RollService {
                 "`/roll` 从 1-100 中随意 roll 出一种点数；\n" +
                 "`/roll b 9,233` 从 9-233 中随意 roll 出一个 B 数，默认 1-100；\n" +
                 "`/roll help` 显示本帮助信息；\n" +
-                "`/roll card o` 进行一次单抽（3 无色小晶块）；\n" +
-                "`/roll card e` 进行十连（30 无色小晶块）；\n" +
+                "`/roll card o` 进行一次单抽（40 星彩石）；\n" +
+                "`/roll card e` 进行十连（300 星彩石）；\n" +
                 "`/roll status` 查看个人帐户信息；\n" +
-                "`/roll charge 30` 充值 30 无色小晶块（180 元）；\n" +
+                "`/roll charge 10` 充值 10 星彩石（6 元）；\n" +
+                "`/roll py` 和路西法进行 PY 交易以获得免费金钱与星彩石；\n" +
                 "在指令后追加 s 表示将本次响应公开；";
 
         botResponseModel.setText(text);
@@ -150,15 +153,28 @@ public class RollService {
     private BotResponseModel cardBiz(BotResponseModel botResponseModel, String[] args) {
 
         // user type check
-        TblBotStock userStock = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_CRYSTAL);
-        if (userStock == null) {
+        TblBotStock userStoneStock = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_CRYSTAL);
+
+        if (userStoneStock == null) {
+            // new user, first time free charge
+            TblBotStock newUserStockForRoll = new TblBotStock();
+            newUserStockForRoll.setUserId(botRequestModel.getUser_id());
+            newUserStockForRoll.setItemId(RollConstant.TYPE_CRYSTAL);
+            newUserStockForRoll.setItemCount(new BigDecimal(400 + new Random().nextInt(10)));
+            userStoneStock = botStockRepository.save(newUserStockForRoll);
+            log.info("Free stone charge created: " + newUserStockForRoll.toString());
+        }
+
+        TblBotStock userMoneyStock = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_MONEY);
+
+        if (userMoneyStock == null) {
             // new user, first time free charge
             TblBotStock newUserStock = new TblBotStock();
             newUserStock.setUserId(botRequestModel.getUser_id());
-            newUserStock.setItemId(RollConstant.TYPE_CRYSTAL);
-            newUserStock.setItemCount(new BigDecimal(35 + new Random().nextInt(10)));
-            userStock = botStockRepository.save(newUserStock);
-            log.info("Free charge created: " + userStock.toString());
+            newUserStock.setItemId(RollConstant.TYPE_MONEY);
+            newUserStock.setItemCount(new BigDecimal(2400 + new Random().nextInt(100)));
+            userMoneyStock = botStockRepository.save(newUserStock);
+            log.info("Free money charge created: " + userMoneyStock.toString());
         }
 
         // roll type identify
@@ -166,7 +182,7 @@ public class RollService {
 
         // balance check
         BigDecimal rollCost = RollConstant.CARD_ONE.equals(rollType) ? RollConstant.COST_ONE : RollConstant.COST_TEN;
-        if (userStock.getItemCount().compareTo(rollCost) >= 0) {
+        if (userStoneStock.getItemCount().compareTo(rollCost) >= 0) {
             // enough, roll
 
             // make card list
@@ -199,9 +215,9 @@ public class RollService {
             }
 
             // after roll, charge
-            userStock.setItemCount(userStock.getItemCount().subtract(rollCost));
-            userStock = botStockRepository.save(userStock);
-            log.info("User '" + botRequestModel.getUser_name() + "' cost CRYSTAL: " + rollCost + ", " + userStock.toString());
+            userStoneStock.setItemCount(userStoneStock.getItemCount().subtract(rollCost));
+            userStoneStock = botStockRepository.save(userStoneStock);
+            log.info("User '" + botRequestModel.getUser_name() + "' cost CRYSTAL: " + rollCost + ", " + userStoneStock.toString());
 
             // result trim
             StringBuilder resultStr = new StringBuilder();
@@ -218,11 +234,77 @@ public class RollService {
             }
         } else {
             // not enough
-            botResponseModel.setText("当前无色小晶块余额不足，无法抽卡。（使用 `/roll charge` 命令充值无色小晶块）");
+            botResponseModel.setText("当前星彩石余额不足，无法抽卡。（使用 `/roll charge` 命令充值星彩石）");
             log.info("User '" + botRequestModel.getUser_name() + "' biz skipped(INSUFFICIENT_BALANCE)");
         }
 
         return botResponseModel;
+    }
+
+    /**
+     * PY trade biz
+     *
+     * @param botResponseModel prev. response
+     * @return new response
+     */
+    private BotResponseModel pyBiz(BotResponseModel botResponseModel) {
+
+        TblBotStock userMoneyStock = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_MONEY);
+
+        if (userMoneyStock == null) {
+            // new user, first time free charge
+            TblBotStock newUserStock = new TblBotStock();
+            newUserStock.setItemId(RollConstant.TYPE_MONEY);
+            newUserStock.setUserId(botRequestModel.getUser_id());
+            newUserStock.setItemCount(new BigDecimal(2400 + new Random().nextInt(100)));
+            userMoneyStock = botStockRepository.save(newUserStock);
+            botResponseModel.setText("与路西法的 PY 交易已完成，灵视 +1。");
+            log.info("Free money charge created: " + userMoneyStock.toString());
+            return botResponseModel;
+        } else {
+            BigDecimal userMoney = userMoneyStock.getItemCount();
+            if (userMoney.compareTo(new BigDecimal(1000000)) > 0) {
+                botResponseModel.setText("你已经比路西法富有了，因此路西法不想与你交易，人性 -1。");
+                return botResponseModel;
+            } else {
+                BigDecimal freeMoney = new BigDecimal(10000 + new Random().nextInt(2500));
+                userMoney = userMoney.add(freeMoney);
+                userMoneyStock.setItemCount(userMoney);
+                userMoneyStock = botStockRepository.save(userMoneyStock);
+                //botResponseModel.setText("与路西法的 PY 交易已完成，灵视 +5。");
+                log.info("Free money charge charged(+" + freeMoney.toPlainString() + "): " + userMoneyStock.toString());
+            }
+        }
+
+        TblBotStock userStoneStock = botStockRepository.findOneByUserIdAndItemId(botRequestModel.getUser_id(), RollConstant.TYPE_CRYSTAL);
+
+        if (userStoneStock == null) {
+            // new user, first time free charge
+            TblBotStock newUserStock = new TblBotStock();
+            newUserStock.setItemId(RollConstant.TYPE_CRYSTAL);
+            newUserStock.setUserId(botRequestModel.getUser_id());
+            newUserStock.setItemCount(new BigDecimal(400 + new Random().nextInt(10)));
+            userStoneStock = botStockRepository.save(newUserStock);
+            botResponseModel.setText("与路西法的 PY 交易已完成，人性 +2。");
+            log.info("Free stone charge created: " + userStoneStock.toString());
+            return botResponseModel;
+        } else {
+            BigDecimal userStone = userStoneStock.getItemCount();
+            if (userStone.compareTo(new BigDecimal(100000)) > 0) {
+                botResponseModel.setText("“你的石头已经足够填海了。”路西法这样说道。（PY 交易失败，灵视 -1。）");
+                return botResponseModel;
+            } else {
+                BigDecimal freeStone = new BigDecimal(500 + new Random().nextInt(500));
+                userStone = userStone.add(freeStone);
+                userStoneStock.setItemCount(userStone);
+                userStoneStock = botStockRepository.save(userStoneStock);
+                botResponseModel.setText("与路西法的 PY 交易已完成，人性 +3。");
+                log.info("Free stone charge charged(+" + freeStone.toPlainString() + "): " + userStoneStock.toString());
+            }
+        }
+
+        return botResponseModel;
+
     }
 
     /**
@@ -244,7 +326,7 @@ public class RollService {
 
         String text = "您好，" + botRequestModel.getUser_name() + "，" +
                 "您当前的用户余额为：" + (userAmount == null ? "0.00" : userAmount.getItemCount()) + " 元，" +
-                "无色小晶块余额为：" + (userCrystal == null ? "0" : df.format(userCrystal.getItemCount())) + " 枚。";
+                "星彩石余额为：" + (userCrystal == null ? "0" : df.format(userCrystal.getItemCount())) + " 枚。";
 
         botResponseModel.setText(text);
 
@@ -290,7 +372,7 @@ public class RollService {
             userCrystal = botStockRepository.save(userCrystal);
             log.info("User '" + botRequestModel.getUser_name() + "' charged " + charge + " crystals." + userCrystal.toString());
 
-            botResponseModel.setText("已花费：" + RollConstant.COST_CRYSTAL.multiply(new BigDecimal(charge)) + " 元，获得：" + charge + " 枚无色小晶块。");
+            botResponseModel.setText("已花费：" + RollConstant.COST_CRYSTAL.multiply(new BigDecimal(charge)) + " 元，获得：" + charge + " 枚星彩石。");
 
         } else {
             botResponseModel.setText("用户余额不足，充值失败。");

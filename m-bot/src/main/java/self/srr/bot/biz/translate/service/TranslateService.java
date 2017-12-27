@@ -53,7 +53,7 @@ public class TranslateService {
         String text = "" +
                 "翻译功能的帮助信息：\n" +
                 "使用方法：输入 `/translate 语种 文本。`\n" +
-                "`/translate jp2zh こんにちは` 将日语こんにちは翻译成中文。\n" +
+                "`/fyp jp2zh こんにちは` 将日语こんにちは翻译成中文。\n" +
                 "在原文文本少于 100 字的情况下，会自动提供一份英文翻译以辅助参考。\n" +
                 "目前支持的语种如下：\n" +
                 "\n" +

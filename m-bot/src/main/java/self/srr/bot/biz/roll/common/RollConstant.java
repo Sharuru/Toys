@@ -18,8 +18,8 @@ public class RollConstant {
     public static final String CARD_TEN = "CARD_TEN";
 
     // roll cost
-    public static final BigDecimal COST_ONE = new BigDecimal(3);
-    public static final BigDecimal COST_TEN = new BigDecimal(30);
+    public static final BigDecimal COST_ONE = new BigDecimal(40);
+    public static final BigDecimal COST_TEN = new BigDecimal(300);
 
     // crystal cost
     public static final BigDecimal COST_CRYSTAL = new BigDecimal(6);
