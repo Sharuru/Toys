@@ -176,7 +176,7 @@ public class RollService {
             TblBotStock newUserStock = new TblBotStock();
             newUserStock.setUserId(botRequestModel.getUser_id());
             newUserStock.setItemId(RollConstant.TYPE_MONEY);
-            newUserStock.setItemCount(new BigDecimal(2400 + new Random().nextInt(100)));
+            newUserStock.setItemCount(new BigDecimal(2500 + new Random().nextInt(100)));
             userMoneyStock = botStockRepository.save(newUserStock);
             log.info("Free money charge created: " + userMoneyStock.toString());
         }
@@ -278,7 +278,7 @@ public class RollService {
                 userMoney = userMoney.add(freeMoney);
                 userMoneyStock.setItemCount(userMoney);
                 userMoneyStock = botStockRepository.save(userMoneyStock);
-                //botResponseModel.setText("与路西法的 PY 交易已完成，灵视 +5。");
+                botResponseModel.setText("与路西法的 PY 交易已完成，灵视 +5。");
                 log.info("Free money charge charged(+" + freeMoney.toPlainString() + "): " + userMoneyStock.toString());
             }
         }
