@@ -48,6 +48,15 @@ public class BotUtils {
     }
 
     /**
+     * Get bot configurations
+     *
+     * @return bot configuration
+     */
+    public static BotConfiguration getBotConfiguraion(){
+        return BotUtils._botConfiguration;
+    }
+
+    /**
      * Get default response model
      *
      * @param args user command

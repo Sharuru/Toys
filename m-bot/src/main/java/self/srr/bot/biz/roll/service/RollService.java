@@ -4,9 +4,11 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import self.srr.bot.base.common.BotContrast;
 import self.srr.bot.base.common.BotRequestModel;
 import self.srr.bot.base.common.BotResponseModel;
 import self.srr.bot.base.common.BotUtils;
+import self.srr.bot.base.config.BotConfiguration;
 import self.srr.bot.base.entity.TblBotStock;
 import self.srr.bot.base.repository.BotStockRepository;
 import self.srr.bot.biz.roll.common.RollConstant;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 /**
  * Roll service
@@ -78,11 +81,12 @@ public class RollService {
                 "`/roll` 从 1-100 中随意 roll 出一种点数；\n" +
                 "`/roll b 9,233` 从 9-233 中随意 roll 出一个 B 数，默认 1-100；\n" +
                 "`/roll help` 显示本帮助信息；\n" +
-                "`/roll card o` 进行一次单抽（40 星彩石）；\n" +
-                "`/roll card e` 进行十连（300 星彩石）；\n" +
+                "`/roll card o` 进行一次单抽（40 " + BotContrast.BOT_CRYSTAL_TEXT + "）；\n" +
+                "`/roll card e` 进行十连（300 " + BotContrast.BOT_CRYSTAL_TEXT + "，保底活动进行中）；\n" +
                 "`/roll status` 查看个人帐户信息；\n" +
-                "`/roll charge 10` 充值 10 星彩石（6 元）；\n" +
-                "`/roll py` 和路西法进行 PY 交易以获得免费金钱与星彩石；\n" +
+                "`/roll charge 10` 充值 10 " + BotContrast.BOT_CRYSTAL_TEXT + "（6 元）；\n" +
+                "`/roll py` 和路西法进行 PY 交易以获得免费" + BotContrast.BOT_COIN_TEXT + "与" + BotContrast.BOT_CRYSTAL_TEXT + "；\n" +
+                "目前卡池抽取概率：N 卡 40%，R 卡 30%，SR 卡 20%，SSR 卡 5%，UR 卡 1%（概率近似取得）；\n" +
                 "在指令后追加 s 表示将本次响应公开；";
 
         botResponseModel.setText(text);
@@ -188,15 +192,16 @@ public class RollService {
             // make card list
             List<RollService.Card> cards = new ArrayList<>();
             cards.add(new RollService.Card(1, "N", 0.4d));
-            cards.add(new RollService.Card(2, "R", 0.3d));
-            cards.add(new RollService.Card(3, "SR", 0.18d));
-            cards.add(new RollService.Card(4, "SSR", 0.11d));
+            cards.add(new RollService.Card(2, "R", 0.33d));
+            cards.add(new RollService.Card(3, "SR", 0.21d));
+            cards.add(new RollService.Card(4, "SSR", 0.05d));
             cards.add(new RollService.Card(5, "UR", 0.01d));
 
             // make result
             List<String> result = new ArrayList<>();
 
             // roll logic
+            boolean needSpecialHelp = true;
             int rollTimes = RollConstant.CARD_ONE.equals(rollType) ? 1 : 10;
             for (int i = 0; i < rollTimes; i++) {
                 Double total = 0d;
@@ -206,6 +211,7 @@ public class RollService {
                     if (a < total) {
                         if ("SSR".equalsIgnoreCase(aCard.getName()) || "UR".equalsIgnoreCase(aCard.getName())) {
                             result.add("**" + aCard.getName() + "**");
+                            needSpecialHelp = false;
                         } else {
                             result.add(aCard.getName());
                         }
@@ -219,22 +225,23 @@ public class RollService {
             userStoneStock = botStockRepository.save(userStoneStock);
             log.info("User '" + botRequestModel.getUser_name() + "' cost CRYSTAL: " + rollCost + ", " + userStoneStock.toString());
 
-            // result trim
-            StringBuilder resultStr = new StringBuilder();
-            for (String card : result) {
-                resultStr.append(card).append(", ");
+            // save africa user
+            if (rollTimes >= 10 && needSpecialHelp) {
+                result.set(result.size() - 1, "**SSR**");
             }
-            resultStr = new StringBuilder(resultStr.substring(0, resultStr.length() - 2));
+
+            // result trim
+            String resultStr = result.stream().collect(Collectors.joining(","));
             log.info("User '" + botRequestModel.getUser_name() + "' gotcha result: '" + resultStr + "'");
 
             String gotchaType = RollConstant.CARD_ONE.equals(rollType) ? "单抽" : "十连";
             botResponseModel.setText("「" + botRequestModel.getUser_name() + "」这位大佬进行了一次" + gotchaType + "，获得了：" + resultStr + "。");
             if (result.contains("**UR**")) {
-                botResponseModel.setText(botResponseModel.getText() + "嚯哟！还是个欧皇！");
+                botResponseModel.setText(botResponseModel.getText() + "嚯哟！还是个欧皇！ \n\n" + "![](" + BotUtils.getBotConfiguraion().getStorageLocation() + "/kakinn.png =100)");
             }
         } else {
             // not enough
-            botResponseModel.setText("当前星彩石余额不足，无法抽卡。（使用 `/roll charge` 命令充值星彩石）");
+            botResponseModel.setText("当前" + BotContrast.BOT_CRYSTAL_TEXT + "余额不足，无法抽卡。（使用 `/roll charge` 命令充值" + BotContrast.BOT_CRYSTAL_TEXT + "）");
             log.info("User '" + botRequestModel.getUser_name() + "' biz skipped(INSUFFICIENT_BALANCE)");
         }
 
@@ -326,7 +333,7 @@ public class RollService {
 
         String text = "您好，" + botRequestModel.getUser_name() + "，" +
                 "您当前的用户余额为：" + (userAmount == null ? "0.00" : userAmount.getItemCount()) + " 元，" +
-                "星彩石余额为：" + (userCrystal == null ? "0" : df.format(userCrystal.getItemCount())) + " 枚。";
+                BotContrast.BOT_CRYSTAL_TEXT + "余额为：" + (userCrystal == null ? "0" : df.format(userCrystal.getItemCount())) + " 枚。";
 
         botResponseModel.setText(text);
 
@@ -372,7 +379,7 @@ public class RollService {
             userCrystal = botStockRepository.save(userCrystal);
             log.info("User '" + botRequestModel.getUser_name() + "' charged " + charge + " crystals." + userCrystal.toString());
 
-            botResponseModel.setText("已花费：" + RollConstant.COST_CRYSTAL.multiply(new BigDecimal(charge)) + " 元，获得：" + charge + " 枚星彩石。");
+            botResponseModel.setText("已花费：" + RollConstant.COST_CRYSTAL.multiply(new BigDecimal(charge)) + " 元，获得：" + charge + " 枚" + BotContrast.BOT_CRYSTAL_TEXT + "。");
 
         } else {
             botResponseModel.setText("用户余额不足，充值失败。");

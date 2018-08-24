@@ -27,6 +27,9 @@ public class TblBotItem {
     @Column(name = "item_description")
     private String itemDescription;
 
+    @Column(name = "item_type")
+    private String itemType;
+
     @Column(name = "created_at")
     @CreatedDate
     @Temporal(TIMESTAMP)

@@ -21,4 +21,6 @@ public class BotConfiguration {
     private String icon;
 
     private List<String> masters = new ArrayList<>();
+
+    private String storageLocation;
 }
