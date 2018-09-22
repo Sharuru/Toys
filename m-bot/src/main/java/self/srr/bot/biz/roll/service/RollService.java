@@ -8,18 +8,17 @@ import self.srr.bot.base.common.BotContrast;
 import self.srr.bot.base.common.BotRequestModel;
 import self.srr.bot.base.common.BotResponseModel;
 import self.srr.bot.base.common.BotUtils;
-import self.srr.bot.base.config.BotConfiguration;
 import self.srr.bot.base.entity.TblBotStock;
 import self.srr.bot.base.repository.BotStockRepository;
 import self.srr.bot.biz.roll.common.RollConstant;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 /**
  * Roll service
@@ -231,13 +230,14 @@ public class RollService {
             }
 
             // result trim
-            String resultStr = result.stream().collect(Collectors.joining(","));
+            String resultStr = String.join(",", result);
             log.info("User '" + botRequestModel.getUser_name() + "' gotcha result: '" + resultStr + "'");
 
             String gotchaType = RollConstant.CARD_ONE.equals(rollType) ? "单抽" : "十连";
             botResponseModel.setText("「" + botRequestModel.getUser_name() + "」这位大佬进行了一次" + gotchaType + "，获得了：" + resultStr + "。");
             if (result.contains("**UR**")) {
-                botResponseModel.setText(botResponseModel.getText() + "嚯哟！还是个欧皇！ \n\n" + "![](" + BotUtils.getBotConfiguraion().getStorageLocation() + "/kakinn.png =100)");
+                int imgNo = ThreadLocalRandom.current().nextInt(1, 5 + 1);
+                botResponseModel.setText(MessageFormat.format("{0}嚯哟！还是个欧皇！ \n\n![]({1}/kakinn-{2}.png =100)", botResponseModel.getText(), BotUtils.getBotConfiguraion().getStorageLocation(), imgNo));
             }
         } else {
             // not enough
