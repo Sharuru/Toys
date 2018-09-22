@@ -8,16 +8,23 @@ spring:
 server:
   port: 8282
 
+
 logging:
-    level:
-      org:
-        springframework:
-          web: DEBUG
-        hibernate:
-          SQL: DEBUG
-          type:
-            descriptor:
-              sql: TRACE
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    max-size: 10MB
+    max-history: 10
+  level:
+    org:
+      springframework:
+        web: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql: TRACE
+logging.file: chiya.log
 
 # Bot Configuration START
 
@@ -27,6 +34,7 @@ bot:
     icon: http://BOT_ICON
     masters:
       - MASTER_USER_ID
+    storageLocation:  URI/TO/FOLDER
 
   translate:
     url: BAIDU_TRANSLATE_API_ADDRESS
@@ -39,7 +47,7 @@ bot:
 spring:
   profiles: development
   thymeleaf:
-      cache: false
+    cache: false
 
   datasource:
     url: jdbc:postgresql://DB_ADDRESS
