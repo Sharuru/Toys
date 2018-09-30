@@ -424,7 +424,7 @@ public class RollService {
                 String resultStr = StringUtils.join(results, ", ");
 
                 botResponseModel.setText("掷出了 " + count + " 个 " + number + " 面骰子，结果：" + resultStr + "。\n"
-                        + "总计：" + stats.getSum() + "，" + " 最小值：" + stats.getMin() + "，最大值：" + stats.getMax() + "，平均值：" + String.format("%.2f", stats.getAverage()));
+                        + "总计：" + stats.getSum() + "，" + " 最小值：" + stats.getMin() + "，最大值：" + stats.getMax() + "，平均值：" + String.format("%.2f", stats.getAverage()) + "。");
 
                 log.info("User: " + botResponseModel.getUsername() + " rolled " + number + " points.");
             }
