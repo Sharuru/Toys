@@ -2,6 +2,7 @@ package self.srr.bot.biz.roll.service;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import self.srr.bot.base.common.BotContrast;
@@ -16,9 +17,12 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Roll service
@@ -57,6 +61,8 @@ public class RollService {
             botResponseModel = bCountBiz(botResponseModel, args);
         } else if ("py".equalsIgnoreCase(action)) {
             botResponseModel = pyBiz(botResponseModel);
+        } else if ("dice".equalsIgnoreCase(action)) {
+            botResponseModel = diceBiz(botResponseModel, args);
         } else {
             botResponseModel = rollBiz(botResponseModel);
         }
@@ -85,6 +91,7 @@ public class RollService {
                 "`/roll status` 查看个人帐户信息；\n" +
                 "`/roll charge 10` 充值 10 " + BotContrast.BOT_CRYSTAL_TEXT + "（6 元）；\n" +
                 "`/roll py` 和路西法进行 PY 交易以获得免费" + BotContrast.BOT_COIN_TEXT + "与" + BotContrast.BOT_CRYSTAL_TEXT + "；\n" +
+                "`/roll dice 3D6` 投掷 3 个 6 面骰子；\n" +
                 "目前卡池抽取概率：N 卡 40%，R 卡 30%，SR 卡 20%，SSR 卡 5%，UR 卡 1%（概率近似取得）；\n" +
                 "在指令后追加 s 表示将本次响应公开；";
 
@@ -384,6 +391,47 @@ public class RollService {
         } else {
             botResponseModel.setText("用户余额不足，充值失败。");
             log.info("User '" + botRequestModel.getUser_name() + "' biz skipped(INSUFFICIENT_BALANCE)");
+        }
+
+        return botResponseModel;
+    }
+
+    /**
+     * Dice biz
+     *
+     * @param botResponseModel prev.response
+     * @param args             parameters
+     * @return
+     */
+    private BotResponseModel diceBiz(BotResponseModel botResponseModel, String[] args) {
+        try {
+            String[] operations = args[1].toUpperCase().split("D");
+            List<Integer> results = new ArrayList<>();
+            if (operations.length >= 2) {
+                int count = Integer.parseInt(operations[0]);
+                int number = Integer.parseInt(operations[1]);
+                if (count < 0 || count > 10000 || number < 0 || number > 10000) {
+                    botResponseModel.setText("这骰子掷不起，告辞。");
+                    return botResponseModel;
+                }
+                for (int i = 0; i < count; i++) {
+                    results.add(new Random().nextInt(number) + 1);
+                }
+                IntSummaryStatistics stats = results.stream()
+                        .mapToInt(x -> x)
+                        .summaryStatistics();
+
+                String resultStr = StringUtils.join(results, ", ");
+
+                botResponseModel.setText("掷出了 " + count + " 个 " + number + " 面骰子，结果：" + resultStr + "。\n"
+                        + "总计：" + stats.getSum() + "，" + " 最小值：" + stats.getMin() + "，最大值：" + stats.getMax() + "，平均值：" + String.format("%.2f", stats.getAverage()));
+
+                log.info("User: " + botResponseModel.getUsername() + " rolled " + number + " points.");
+            }
+        } catch (Exception e) {
+            botResponseModel.setText("这骰子掷不起，告辞。");
+            log.error("Error happened in 'diceBiz': " + e.getMessage());
+            e.printStackTrace();
         }
 
         return botResponseModel;
