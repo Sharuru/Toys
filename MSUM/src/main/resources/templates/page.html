@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MSUM - Mattermost 简易用户管理</title>
+    <link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet"/>
+</head>
+<body>
+<div style="padding:20px;">
+    <div class="jumbotron">
+        <h1 class="display-4">MSUM</h1>
+        <p class="lead">Mattermost Simple User Management - Mattermost 简易用户管理</p>
+        <hr class="my-4">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">当前令牌用户</span>
+            </div>
+            <input type="text" class="form-control" disabled="disabled" value="TOKEN***TOKEN : SOMEBODY : NOT_GRANTED">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2">重新授权</button>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">创建新用户</h5>
+                <h6 class="card-subtitle mb-2 text-muted">请管理员填妥各项信息后点击“确认”按钮创建新用户。</h6>
+                <hr/>
+                <div th:switch="${operationResults}">
+                    <div th:case="true" class="alert alert-success" role="alert">
+                        新用户创建成功。
+                    </div>
+                    <div th:case="false" class="alert alert-danger" role="alert">
+                        新用户创建失败。
+                    </div>
+                </div>
+                <form action="#" th:action="@{/biz/createNewUser}" th:object="${createUserForm}" method="post">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="lastname">姓</label>
+                            <input type="text" class="form-control" id="lastname" th:field="*{lastname}" th:errorclass="is-invalid" placeholder="李" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="firstname">名</label>
+                            <input type="text" class="form-control" id="firstname" th:field="*{firstname}" th:errorclass="is-invalid" placeholder="小狼" required>
+                            <div class="invalid-feedback">
+                                Please choose a username.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="username">用户名</label>
+                            <input type="text" class="form-control" id="username" th:field="*{username}" th:errorclass="is-invalid" placeholder="xiaolang_li" required>
+                            <small id="usernameHelp" class="form-text text-muted">请尽量以“名_姓”的方式设立，如李小狼应设置为：xiaolang_li。</small>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="nickname">昵称</label>
+                            <input type="text" class="form-control" id="nickname" th:field="*{nickname}" th:errorclass="is-invalid" placeholder="李小狼" required>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="email">邮箱地址</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}" th:errorclass="is-invalid" placeholder="xl.li@mbpsoft.net" required>
+                            <small id="emailHelp" class="form-text text-muted">未持有社内邮箱的用户可使用“@mbpsoft.net”后缀，如：xl.li@mbpsoft.net。</small>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="password">密码</label>
+                            <input type="password" class="form-control" id="password" th:field="*{password}" th:errorclass="is-invalid" required>
+                            <small id="passwordHelp" class="form-text text-muted">默认密码为：mbpsoft+用户名头2位大写。</small>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">确认</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/webjars/jquery/3.3.1-2/jquery.slim.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.14.7/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/page.js}"></script>
+</body>
+
+</html>
