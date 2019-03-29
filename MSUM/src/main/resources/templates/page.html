@@ -15,14 +15,15 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">当前令牌用户</span>
             </div>
-            <input type="text" class="form-control" disabled="disabled" value="TOKEN***TOKEN : SOMEBODY : NOT_GRANTED">
+            <input type="text" class="form-control" id="access-token" placeholder="请管理员填入“个人访问令牌”后，单击按钮进行授权。">
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">重新授权</button>
+                <button class="btn btn-outline-secondary" type="button" id="access-grant-button">进行授权</button>
             </div>
         </div>
+        <small class="form-text text-muted">“个人访问令牌”可在 Mattermost 中的“账户设置”、“安全”菜单中申请。</small>
     </div>
     <div>
-        <div class="card">
+        <div class="card" style="display:none;" id="function">
             <div class="card-body">
                 <h5 class="card-title">创建新用户</h5>
                 <h6 class="card-subtitle mb-2 text-muted">请管理员填妥各项信息后点击“确认”按钮创建新用户。</h6>
@@ -45,9 +46,6 @@
                         <div class="form-group col-md-4">
                             <label for="firstname">名</label>
                             <input type="text" class="form-control" id="firstname" th:field="*{firstname}" th:errorclass="is-invalid" placeholder="小狼" required>
-                            <div class="invalid-feedback">
-                                Please choose a username.
-                            </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="username">用户名</label>
@@ -79,7 +77,7 @@
         </div>
     </div>
 </div>
-<script th:src="@{/webjars/jquery/3.3.1-2/jquery.slim.min.js}"></script>
+<script th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/1.14.7/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
 <script th:src="@{/static/page.js}"></script>
