@@ -28,4 +28,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compile 'org.webjars:bootstrap:4.3.1'
+    compile 'org.webjars:jquery:3.3.1-2'
+    compile 'org.webjars:popper.js:1.14.7'
 }
