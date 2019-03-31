@@ -1,4 +1,4 @@
-package me.sharuru.mattermost.sum.config;
+package me.sharuru.mattermost.sum.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

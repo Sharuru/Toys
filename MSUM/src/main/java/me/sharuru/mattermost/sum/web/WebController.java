@@ -1,7 +1,6 @@
 package me.sharuru.mattermost.sum.web;
 
-import lombok.extern.slf4j.Slf4j;
-import me.sharuru.mattermost.sum.service.MattermostApiService;
+import me.sharuru.mattermost.sum.service.BusinessService;
 import me.sharuru.mattermost.sum.model.CreateUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +15,7 @@ import javax.validation.Valid;
 public class WebController {
 
     @Autowired
-    MattermostApiService mattermostApiService;
+    BusinessService businessService;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -27,17 +26,11 @@ public class WebController {
     @PostMapping("/biz/createNewUser")
     public String createNewUser(@ModelAttribute @Valid CreateUserForm createUserForm, BindingResult bindingResult, Model model, RedirectAttributes redirectAttribute) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("operationResults", false);
+            model.addAttribute("operationResults", 10);
             return "page";
         }
-        redirectAttribute.addFlashAttribute("operationResults", true);
+        redirectAttribute.addFlashAttribute("operationResults", businessService.createUser(createUserForm));
         return "redirect:/";
-    }
-
-    @PostMapping("/biz/grantAccess")
-    @ResponseBody
-    public Boolean grantAccess(@RequestParam("token") String token) {
-        return mattermostApiService.grantAccess(token);
     }
 
 

@@ -10,34 +10,35 @@
     <div class="jumbotron">
         <h1 class="display-4">MSUM</h1>
         <p class="lead">Mattermost Simple User Management - Mattermost 简易用户管理</p>
-        <hr class="my-4">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">当前令牌用户</span>
-            </div>
-            <input type="text" class="form-control" id="access-token" placeholder="请管理员填入“个人访问令牌”后，单击按钮进行授权。">
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="access-grant-button">进行授权</button>
-            </div>
-        </div>
-        <small class="form-text text-muted">“个人访问令牌”可在 Mattermost 中的“账户设置”、“安全”菜单中申请。</small>
     </div>
     <div>
-        <div class="card" style="display:none;" id="function">
+        <div class="card" id="function">
             <div class="card-body">
                 <h5 class="card-title">创建新用户</h5>
                 <h6 class="card-subtitle mb-2 text-muted">请管理员填妥各项信息后点击“确认”按钮创建新用户。</h6>
                 <hr/>
                 <div th:switch="${operationResults}">
-                    <div th:case="true" class="alert alert-success" role="alert">
+                    <div th:case="0" class="alert alert-success" role="alert">
                         新用户创建成功。
                     </div>
-                    <div th:case="false" class="alert alert-danger" role="alert">
+                    <div th:case="-1" class="alert alert-danger" role="alert">
                         新用户创建失败。
+                    </div>
+                    <div th:case="10" class="alert alert-warning" role="alert">
+                        表单内容填写有误，请确认。
+                    </div>
+                    <div th:case="100" class="alert alert-warning" role="alert">
+                        无法认证用户权限，新用户创建失败。
                     </div>
                 </div>
                 <form action="#" th:action="@{/biz/createNewUser}" th:object="${createUserForm}" method="post">
-
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="token">个人访问令牌</label>
+                            <input type="password" class="form-control" id="token" th:field="*{token}" th:errorclass="is-invalid" required>
+                            <small id="tokenHelp" class="form-text text-muted">“个人访问令牌”可在 Mattermost 中的“账户设置”、“安全”菜单中申请。</small>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="lastname">姓</label>

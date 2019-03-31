@@ -9,6 +9,9 @@ import javax.validation.constraints.NotBlank;
 public class CreateUserForm {
 
     @NotBlank
+    private String token;
+
+    @NotBlank
     private String username;
 
     @Email
@@ -26,5 +29,6 @@ public class CreateUserForm {
 
     @NotBlank
     private String password;
+
 
 }

@@ -285,3 +285,4 @@ fabric.properties
 /m2gg/.idea/workspace.xml
 /m2gg/META-INF/MANIFEST.MF
 /MSUM/src/main/resources/application.yml
+/MSUM/msum.log.*.gz
