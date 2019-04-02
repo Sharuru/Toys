@@ -25,4 +25,36 @@ public class MsumUtils {
         }
         return response;
     }
+
+    public static HttpResponse<String> httpPutResponse(String url, String body, String token) {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Authorization", "Bearer ".concat(token))
+                .PUT(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            log.error("Error on HTTP PUT request: {}, {}.", url, e.getMessage());
+        }
+        return response;
+    }
+
+    public static HttpResponse<String> httpPostResponse(String url, String body, String token) {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Authorization", "Bearer ".concat(token))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            log.error("Error on HTTP POST request: {}, {}.", url, e.getMessage());
+        }
+        return response;
+    }
 }

@@ -19,16 +19,25 @@
                 <hr/>
                 <div th:switch="${operationResults}">
                     <div th:case="0" class="alert alert-success" role="alert">
-                        新用户创建成功。
+                        CODE_0: 新用户创建成功。<br/>
+                        <span th:text="'用户名: ' + ${createdResponse.username}"></span>
+                        <span th:text="' / 邮箱: ' + ${createdResponse.email}"></span>
+                        <span th:text="' / 姓名: ' + ${createdResponse.lastname} + ${createdResponse.firstname}"></span>
                     </div>
                     <div th:case="-1" class="alert alert-danger" role="alert">
-                        新用户创建失败。
+                        CODE_-1: 新用户创建失败。
                     </div>
                     <div th:case="10" class="alert alert-warning" role="alert">
-                        表单内容填写有误，请确认。
+                        CODE_10: 表单内容填写有误，请确认。
                     </div>
-                    <div th:case="100" class="alert alert-warning" role="alert">
-                        无法认证用户权限，新用户创建失败。
+                    <div th:case="101" class="alert alert-warning" role="alert">
+                        CODE_101: 用户权限不足，新用户创建失败。
+                    </div>
+                    <div th:case="102" class="alert alert-warning" role="alert">
+                        CODE_102: 用户权限不足，新用户创建失败。
+                    </div>
+                    <div th:case="103" class="alert alert-warning" role="alert">
+                        CODE_103: 用户创建时发生问题，新用户创建失败（存在同名帐户？）。
                     </div>
                 </div>
                 <form action="#" th:action="@{/biz/createNewUser}" th:object="${createUserForm}" method="post">

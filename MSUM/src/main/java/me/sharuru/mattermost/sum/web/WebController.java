@@ -1,5 +1,6 @@
 package me.sharuru.mattermost.sum.web;
 
+import me.sharuru.mattermost.sum.model.BusinessResponse;
 import me.sharuru.mattermost.sum.service.BusinessService;
 import me.sharuru.mattermost.sum.model.CreateUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,10 @@ public class WebController {
             model.addAttribute("operationResults", 10);
             return "page";
         }
-        redirectAttribute.addFlashAttribute("operationResults", businessService.createUser(createUserForm));
+        BusinessResponse response = businessService.createUser(createUserForm);
+        redirectAttribute.addFlashAttribute("operationResults", response.getCode());
+        redirectAttribute.addFlashAttribute("createdResponse", response);
         return "redirect:/";
     }
-
 
 }
