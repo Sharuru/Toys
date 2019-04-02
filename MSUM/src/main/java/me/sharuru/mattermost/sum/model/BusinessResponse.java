@@ -1,8 +1,10 @@
 package me.sharuru.mattermost.sum.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class BusinessResponse extends CreateUserForm {
 
     private boolean status;

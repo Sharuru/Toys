@@ -78,10 +78,11 @@
                         <div class="form-group col-md-4">
                             <label for="password">密码</label>
                             <input type="password" class="form-control" id="password" th:field="*{password}" th:errorclass="is-invalid" required>
-                            <small id="passwordHelp" class="form-text text-muted">默认密码为：mbpsoft+用户名头2位大写。</small>
+                            <small id="passwordHelp" class="form-text text-muted">默认密码为：mbpsoft。</small>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">确认</button>
+                    <button type="button" class="btn btn-primary" onclick="autoFill()">根据姓名自动填写</button>
+                    <button type="submit" style="float:right;" class="btn btn-primary">确认</button>
                 </form>
             </div>
         </div>
@@ -90,6 +91,9 @@
 <script th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/1.14.7/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/pinyinjs/pinyin_dict_notone.js}"></script>
+<script th:src="@{/static/pinyinjs/pinyinUtil.js}"></script>
+<script th:src="@{/static/page.js}"></script>
 <script th:src="@{/static/page.js}"></script>
 </body>
 
