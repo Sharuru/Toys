@@ -11,8 +11,8 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**","/webjars/**")
-                .addResourceLocations("classpath:/static/","/webjars/");
+        registry.addResourceHandler("/static/**", "/webjars/**")
+                .addResourceLocations("classpath:/static/", "/webjars/");
     }
 
 }

@@ -19,12 +19,15 @@ function autoFill() {
         .concat('_')
         .concat(pinyinUtil.getPinyin(lastnameDom.val(), '', false, false)).toLowerCase();
     usernameDom.val(usernameVal);
+
     nicknameDom.val(lastnameDom.val() + firstnameDom.val());
+
     var emailVal = pinyinUtil.getFirstLetter(firstnameDom.val(), false).toLowerCase()
         .concat('.')
         .concat(pinyinUtil.getPinyin(lastnameDom.val(), '', false, false)).toLowerCase()
         .concat('@mbpsoft.net');
     emailDom.val(emailVal);
+
     passwordDom.val('mbpsoft');
     localStorage.setItem("_MSUM_LAST_USED_TOKEN", $("#token").val());
 }

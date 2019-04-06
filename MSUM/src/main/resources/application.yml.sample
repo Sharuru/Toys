@@ -13,6 +13,9 @@ logging:
         web: DEBUG
 logging.file: msum.log
 
+msum:
+  api-url: http://path-to-endpoints:port/api/v4
+
 ---
 spring:
   profiles: development

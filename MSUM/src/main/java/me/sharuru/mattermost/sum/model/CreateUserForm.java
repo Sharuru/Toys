@@ -29,6 +29,5 @@ public class CreateUserForm {
 
     @NotBlank
     private String password;
-
-
+    
 }
