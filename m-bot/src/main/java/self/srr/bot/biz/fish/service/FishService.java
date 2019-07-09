@@ -76,7 +76,7 @@ public class FishService {
     private BotResponseModel helpMsgBiz(BotResponseModel botResponseModel) {
 
         String text = "" +
-                "摸鱼计时的帮助信息：\n" +
+                "Doctor，摸鱼计时的帮助信息：\n" +
                 "使用方法：输入 `/fish 指令。`\n" +
                 "`/fish` 显示今天还得摸多久才能跑路；\n" +
                 "`/fish help` 显示本帮助信息；\n" +
@@ -149,13 +149,13 @@ public class FishService {
                     if (record == null) {
                         // insert
                         TblFishTimeRecord newRecord = fishTimeRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), inputDate));
-                        botResponseModel.setText("出勤时间已记录为：" + HHmmStr + "。");
+                        botResponseModel.setText("Doctor，出勤时间已记录为：" + HHmmStr + "。");
                         log.info("Record inserted: " + newRecord.toString());
                     } else {
                         // update
                         record.setCheckInTime(inputDate);
                         fishTimeRepository.save(record);
-                        botResponseModel.setText("出勤时间已更新为：" + HHmmStr + "。");
+                        botResponseModel.setText("出勤时间已更新为：" + HHmmStr + "，Doctor。");
                         log.info("Record updated: " + record.toString());
                     }
                 } catch (Exception e) {
@@ -164,14 +164,14 @@ public class FishService {
                     e.printStackTrace();
                 }
             } catch (Exception e) {
-                botResponseModel.setText("时间格式似乎输入错误了哟（HHmm）。");
+                botResponseModel.setText("Doctor，时间格式似乎输入错误了呢（HHmm）。");
                 log.error("Error happened in 'checkInBiz': " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
             // no args, using default
             fishTimeRepository.save(new TblFishTimeRecord(botRequestModel.getUser_id(), botRequestModel.getUser_name(), getSystemLocalDate(null, null, null, 9, 0, 0, FishConstant.ZONE_SHANGHAI)));
-            botResponseModel.setText("未指定出勤时间，已自动记录为： 0900。");
+            botResponseModel.setText("未指定出勤时间，已为 Doctor 自动记录为 0900。");
         }
 
         return botResponseModel;
@@ -188,7 +188,7 @@ public class FishService {
         TblFishTimeRecord record = fishTimeRepository.findTodayByUserId(botRequestModel.getUser_id());
         if (record == null) {
             // no record
-            botResponseModel.setText("今日出勤时间未记录（使用 `/fish ci HHmm` 来记录）。");
+            botResponseModel.setText("Doctor，今日的出勤时间还没有记录（使用 `/fish ci HHmm` 来记录）。");
         } else {
             // calculate
             Map<String, BigDecimal> etaMap = etaCalculator(record.getCheckInTime());
@@ -196,12 +196,12 @@ public class FishService {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             sdf.setTimeZone(TimeZone.getTimeZone(FishConstant.ZONE_SHANGHAI));
 
-            String text = "今日出勤时间：" + sdf.format(record.getCheckInTime()) + "，";
+            String text = "Doctor，今日出勤时间：" + sdf.format(record.getCheckInTime()) + "，";
 
             if (etaMap.get(FishConstant.KEY_SECOND).compareTo(BigDecimal.ZERO) > 0) {
-                text += "哎呀，还得摸：" + etaMap.get(FishConstant.KEY_SECOND).abs() + " 秒";
+                text += "哎呀，还得摸：" + etaMap.get(FishConstant.KEY_SECOND).abs() + " 秒哦";
             } else {
-                text += "嚯哟！你给自己续了：" + etaMap.get(FishConstant.KEY_SECOND).abs() + " 秒";
+                text += "已经给自己续了：" + etaMap.get(FishConstant.KEY_SECOND).abs() + " 秒了，早点下班吧";
             }
             if (etaMap.get(FishConstant.KEY_SECOND).divide(new BigDecimal(60L), 2, BigDecimal.ROUND_HALF_UP).compareTo(BigDecimal.ONE) > 0) {
                 text += "，约 " + etaMap.get(FishConstant.KEY_MINUTE).abs() + " 分钟";
