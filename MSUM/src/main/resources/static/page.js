@@ -25,9 +25,9 @@ function autoFill() {
     var emailVal = pinyinUtil.getFirstLetter(firstnameDom.val(), false).toLowerCase()
         .concat('.')
         .concat(pinyinUtil.getPinyin(lastnameDom.val(), '', false, false)).toLowerCase()
-        .concat('@mbpsoft.net');
+        .concat('@mail.i-solver.com.cn');
     emailDom.val(emailVal);
 
-    passwordDom.val('mbpsoft');
+    passwordDom.val('i-solver');
     localStorage.setItem("_MSUM_LAST_USED_TOKEN", $("#token").val());
 }
