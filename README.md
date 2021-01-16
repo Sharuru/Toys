@@ -27,3 +27,4 @@ But still happy if they can help you :smile:
 - m2gg: m2g GUI version.
 - MSUM: Mattermost Simple User Management for special use.
 - DatuiPrer: Generate download link from datui.app.
+- ScreenSaver: Arknights screen saver for Windows.
