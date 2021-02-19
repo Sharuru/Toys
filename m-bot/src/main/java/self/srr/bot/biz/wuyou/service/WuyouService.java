@@ -80,16 +80,16 @@ public class WuyouService {
                     if (fundResponseModel.getErrCode() == 0 && fundResponseModel.isSuccess() && fundResponseModel.getDatas().size() == 1) {
                         FundInfoResponseModel.FundInfo fundInfo = fundResponseModel.getDatas().get(0);
                         if (fundInfo.getChangeRate().startsWith("-")) {
-                            text += "炉火纯青，当收放自如。";
+                            text += "恩人，炉火纯青，当收放自如。";
                         } else {
-                            text += "不愧是阁下，英明的决断！";
+                            text += "不愧是恩人，英明的决断！";
                         }
                         text += "\n";
                         text += "基金代码：" + fundInfo.getFundCode() + "，基金名称：" + fundInfo.getFundName() + "。\n";
-                        text += "基金净值：" + fundInfo.getNetValue() + "（" + fundInfo.getChangeRate() + "%），累计净值：" + fundInfo.getAccNetValue() + "。\n";
+                        text += "净值日期：" + fundInfo.getValueDate() + "，基金净值：" + fundInfo.getNetValue() + "（" + fundInfo.getChangeRate() + "%），累计净值：" + fundInfo.getAccNetValue() + "。\n";
                         botResponseModel.setText(text);
                     } else {
-                        botResponseModel.setText("嚯，你倒是先输入正确的基金代码啊。");
+                        botResponseModel.setText("嚯，恩人您倒是先输入正确的基金代码啊。");
                     }
                 } catch (Exception e) {
                     botResponseModel.setText("众人拾柴火焰高，咱们齐心协力，倒真能烧出个满天红霞来，不错不错。");
@@ -97,11 +97,11 @@ public class WuyouService {
                     e.printStackTrace();
                 }
             } else {
-                botResponseModel.setText("月有阴晴，扇有开合。穷寇莫追，焦虑未到。");
+                botResponseModel.setText("恩人，月有阴晴，扇有开合。穷寇莫追，焦虑未到。");
                 log.error("Error happened in 'fundBiz': COMMAND_NOT_KNOWN: " + botRequestModel.getText());
             }
         } catch (Exception e) {
-            botResponseModel.setText("气定，神闲。");
+            botResponseModel.setText("气定，神闲，恩人。");
             log.error("Error happened in 'fundBiz': " + e.getMessage());
             e.printStackTrace();
         }
