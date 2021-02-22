@@ -36,6 +36,12 @@ public class FundInfoResponseModel {
         String accNetValue;
         @SerializedName("NAVCHGRT")
         String changeRate;
+        @SerializedName("GSZ")
+        String estValue;
+        @SerializedName("GSZZL")
+        String estRate;
+        @SerializedName("GZTIME")
+        String estTime;
 
     }
 

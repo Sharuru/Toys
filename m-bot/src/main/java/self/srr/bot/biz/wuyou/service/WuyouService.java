@@ -52,7 +52,7 @@ public class WuyouService {
         String text = "" +
                 "专业焦虑贩子，童叟无欺！\n" +
                 "使用方法：\n" +
-                "`/jl jj 基金代码` 查询对应基金的相关信息，数据延迟 5~10 分钟。\n" +
+                "`/jl jj 基金代码` 查询对应基金的相关信息，数据延迟 5~10 分钟。多个基金同时查询时，使用半角逗号进行分割。\n" +
                 "在指令后追加 s 表示将本次响应公开。";
 
         botResponseModel.setText(text);
@@ -77,16 +77,18 @@ public class WuyouService {
                     // request api
                     FundInfoResponseModel fundResponseModel = WuyouUtils.requestFundInfo(fundCode);
                     String text = "";
-                    if (fundResponseModel.getErrCode() == 0 && fundResponseModel.isSuccess() && fundResponseModel.getDatas().size() == 1) {
-                        FundInfoResponseModel.FundInfo fundInfo = fundResponseModel.getDatas().get(0);
-                        if (fundInfo.getChangeRate().startsWith("-")) {
+                    if (fundResponseModel.getErrCode() == 0 && fundResponseModel.isSuccess() && !fundResponseModel.getDatas().isEmpty()) {
+                        if (fundResponseModel.getDatas().get(0).getChangeRate().startsWith("-")) {
                             text += "恩人，炉火纯青，当收放自如。";
                         } else {
                             text += "不愧是恩人，英明的决断！";
                         }
                         text += "\n";
-                        text += "基金代码：" + fundInfo.getFundCode() + "，基金名称：" + fundInfo.getFundName() + "。\n";
-                        text += "净值日期：" + fundInfo.getValueDate() + "，基金净值：" + fundInfo.getNetValue() + "（" + fundInfo.getChangeRate() + "%），累计净值：" + fundInfo.getAccNetValue() + "。\n";
+                        for (FundInfoResponseModel.FundInfo fundInfo : fundResponseModel.getDatas()) {
+                            text += "**基金代码：" + fundInfo.getFundCode() + "**，基金名称：" + fundInfo.getFundName() + "。\n";
+                            text += "净值日期：" + fundInfo.getValueDate() + "，基金净值：" + fundInfo.getNetValue() + "（" + fundInfo.getChangeRate() + "%），累计净值：" + fundInfo.getAccNetValue() + "。\n";
+                            text += "估算净值：" + fundInfo.getEstValue() + "（" + fundInfo.getEstRate() + "%），估算日期：" + fundInfo.getEstTime() + "。\n";
+                        }
                         botResponseModel.setText(text);
                     } else {
                         botResponseModel.setText("嚯，恩人您倒是先输入正确的基金代码啊。");
