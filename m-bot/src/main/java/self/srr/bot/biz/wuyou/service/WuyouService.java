@@ -34,6 +34,8 @@ public class WuyouService {
             botResponseModel = helpMsgBiz(botResponseModel);
         } else if ("jj".equalsIgnoreCase(action)) {
             botResponseModel = fundBiz(botResponseModel, args);
+        } else{
+            botResponseModel.setText("气定，神闲，恩人。");
         }
 
         botResponseModel.appendAtWho(botRequestModel.getUser_name());
@@ -85,6 +87,7 @@ public class WuyouService {
                         }
                         text += "\n";
                         for (FundInfoResponseModel.FundInfo fundInfo : fundResponseModel.getDatas()) {
+                            text += fundInfo.getEstRate().startsWith("-") ? ":chart_with_downwards_trend: " : ":chart_with_upwards_trend: ";
                             text += "**基金代码：" + fundInfo.getFundCode() + "**，基金名称：" + fundInfo.getFundName() + "。\n";
                             text += "净值日期：" + fundInfo.getValueDate() + "，基金净值：" + fundInfo.getNetValue() + "（" + fundInfo.getChangeRate() + "%），累计净值：" + fundInfo.getAccNetValue() + "。\n";
                             text += "估算净值：" + fundInfo.getEstValue() + "（" + fundInfo.getEstRate() + "%），估算日期：" + fundInfo.getEstTime() + "。\n";
