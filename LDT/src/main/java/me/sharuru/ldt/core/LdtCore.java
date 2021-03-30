@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,16 +28,16 @@ public class LdtCore {
         List<MetaTaskInfo> testSuites = new ArrayList<>(0);
 
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(inputLogPath))) {
-            MetaTaskInfo baseModel = null;
-            MetaTaskInfo subModel = null;
+            MetaTaskInfo testSuiteInfo = null;
+            MetaTaskInfo testCaseInfo = null;
             String line;
             while ((line = reader.readLine()) != null) {
                 if (isTargetLogLine(line)) {
-                    log.debug("Found target log: {}", line);
+                    log.debug("Found target log line: {}", line);
                     Pattern pattern = Pattern.compile(LOG_REGEXP);
                     Matcher matcher = pattern.matcher(line);
                     if (!matcher.matches()) {
-                        log.error("Shouldn't go into this condition: {}", line);
+                        log.info("Unmatched log line found: {}", line);
                     } else {
                         // get details from line
                         LocalDateTime logDateTime = LocalDateTime.parse(matcher.group(1), DATE_TIME_FORMATTER);
@@ -45,42 +46,64 @@ public class LdtCore {
 
                         if (LdtConstants.KatalonPackageName.TEST_SUITE_EXECUTOR.equals(logPkgName)) {
                             if (logStr.startsWith(LdtConstants.LogKeyword.START)) {
-                                baseModel = new MetaTaskInfo();
-                                baseModel.setType(LdtConstants.LogType.TEST_SUITE);
-                                baseModel.setLogText(logStr);
-                                baseModel.setTaskIdentifier(logStr.substring(logStr.indexOf(LdtConstants.LogKeyword.START) + LdtConstants.LogKeyword.START.length() + 1));
-                                baseModel.setStartedTime(logDateTime);
-                            } else if (logStr.startsWith(LdtConstants.LogKeyword.END)) {
-                                baseModel.setFinishedTime(logDateTime);
-                                testSuites.add(baseModel);
+                                testSuiteInfo = new MetaTaskInfo();
+                                testSuiteInfo.setType(LdtConstants.LogType.TEST_SUITE);
+                                testSuiteInfo.setLogText(logStr);
+                                testSuiteInfo.setTaskIdentifier(logStr.substring(logStr.indexOf(LdtConstants.LogKeyword.START) + LdtConstants.LogKeyword.START.length() + 1));
+                                testSuiteInfo.setStartedTime(logDateTime);
+                            } else if (logStr.startsWith(LdtConstants.LogKeyword.END) && testSuiteInfo != null) {
+                                testSuiteInfo.setFinishedTime(logDateTime);
+                                testSuites.add(testSuiteInfo);
                             }
                         } else if (LdtConstants.KatalonPackageName.TEST_CASE_EXECUTOR.equals(logPkgName)) {
                             if (logStr.startsWith(LdtConstants.LogKeyword.START)) {
-                                subModel = new MetaTaskInfo();
-                                subModel.setLogText(logStr);
-                                subModel.setType(LdtConstants.LogType.TEST_CASE);
-                                subModel.setTaskIdentifier(logStr.substring(logStr.indexOf(LdtConstants.LogKeyword.START) + LdtConstants.LogKeyword.START.length()).trim());
-                                subModel.setStartedTime(logDateTime);
-                            } else if (logStr.startsWith(LdtConstants.LogKeyword.END) && !logStr.startsWith(LdtConstants.LogKeyword.END_CALL)) {
-                                subModel.setFinishedTime(logDateTime);
-                                baseModel.getChildTasks().add(subModel);
+                                testCaseInfo = new MetaTaskInfo();
+                                testCaseInfo.setLogText(logStr);
+                                testCaseInfo.setType(LdtConstants.LogType.TEST_CASE);
+                                testCaseInfo.setTaskIdentifier(logStr.substring(logStr.indexOf(LdtConstants.LogKeyword.START) + LdtConstants.LogKeyword.START.length()).trim());
+                                testCaseInfo.setStartedTime(logDateTime);
+                            } else if (logStr.startsWith(LdtConstants.LogKeyword.END) && !logStr.startsWith(LdtConstants.LogKeyword.END_CALL) && testSuiteInfo != null && testCaseInfo != null) {
+                                testCaseInfo.setFinishedTime(logDateTime);
+                                testSuiteInfo.getChildTasks().add(testCaseInfo);
                             }
                         }
 
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            log.error("Error happened. {}", ex.getMessage());
         }
 
-        testSuites.forEach(s -> {
-            log.info("Get Suite: {}, time: {}s, sum: {}s", s.getTaskIdentifier(), s.getExecutionTime(), s.getTotalExecutionTime());
-            s.getChildTasks().forEach(a -> {
-                log.info("    With case: {}, time: {}s", a.getTaskIdentifier(), a.getExecutionTime());
-            });
-        });
+        //
+//        testSuites.forEach(s -> {
+//            log.info("Get Suite: {}, time: {}s, sum: {}s", s.getTaskIdentifier(), s.getExecutionTime(), s.getTotalExecutionTime());
+//            s.getChildTasks().forEach(a -> {
+//                log.info("    With case: {}, time: {}s", a.getTaskIdentifier(), a.getExecutionTime());
+//            });
+//        });
         return testSuites;
+    }
+
+    public void write(List<MetaTaskInfo> testSuites, String outputPath, String outputFilename){
+        writeHumanReadableResult(testSuites, outputPath, outputFilename);
+    }
+
+    private void writeHumanReadableResult(List<MetaTaskInfo> testSuites, String outputPath, String outputFilename){
+        log.info("Writing the human readable results...");
+        log.info("-----");
+        AtomicInteger suiteNo = new AtomicInteger(1);
+        testSuites.forEach(suits -> {
+            log.info("[    S{}] {}, Execution time: {}s, Calculated execution time: {}s.", String.format("%02d", suiteNo.get()), String.format("%1$-60s", suits.getTaskIdentifier()), suits.getExecutionTime(), suits.getTotalExecutionTime());
+            AtomicInteger caseNo = new AtomicInteger(1);
+            suits.getChildTasks().forEach(cases -> {
+                log.info("[S{}C{}] {}, Execution time: {}s.", String.format("%02d", suiteNo.get()), String.format("%03d", caseNo.getAndIncrement()), String.format("%1$-60s", cases.getTaskIdentifier()), cases.getExecutionTime());
+            });
+            suiteNo.getAndIncrement();
+            caseNo.set(0);
+            log.info("-----");
+        });
+
     }
 
     private boolean isTargetLogLine(String rawText) {
