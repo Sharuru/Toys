@@ -1,1 +1,8 @@
 
+---
+spring:
+  config:
+    activate:
+      on-profile: development
+
+#logging.level.me.sharuru: DEBUG
