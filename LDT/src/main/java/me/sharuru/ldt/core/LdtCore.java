@@ -132,7 +132,7 @@ public class LdtCore {
             log.error("Error happened, the detail is:");
             ex.printStackTrace();
         }
-        log.info("Write finished.");
+        log.info("Write data result finished to: {}", outputFilePath);
     }
 
     /**
