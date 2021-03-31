@@ -27,6 +27,11 @@ public class MetaTaskInfo {
     private String type;
 
     /**
+     * If the test task if fully completed without error
+     */
+    private boolean isFullyCompleted = false;
+
+    /**
      * The identifier for determined which the task is it is, usually it equals the path of the test sources
      */
     private String taskIdentifier;

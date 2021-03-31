@@ -12,6 +12,8 @@ import org.springframework.boot.info.BuildProperties;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,6 +34,12 @@ public class LdtApplication implements CommandLineRunner {
      */
     @Value("${inputPath:}")
     String inputPath;
+
+    /**
+     * The paths of the input file for diagnostic
+     */
+    @Value("${mixedInputPaths:}")
+    String mixedInputPaths;
 
     /**
      * The output path of the diagnostic result
@@ -58,14 +66,30 @@ public class LdtApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("Starting LDT v{}...", buildProperties.getVersion());
-        inputPath = inputPath.isEmpty() ? System.getProperty("user.dir") + File.separator + DEFAULT_INPUT_FILENAME : inputPath;
-        log.info("inputPath: {}", inputPath);
+
+        // decide the input path
+        List<String> inputPaths = new ArrayList<>(0);
+        if(!mixedInputPaths.isEmpty()){
+            log.info("`mixedInputPaths` is provided, this is an EXPERIMENTAL function.");
+            log.info("inputPath: {}", mixedInputPaths);
+            inputPaths.addAll(Arrays.asList(mixedInputPaths.split(",")));
+        } else{
+            inputPath = inputPath.isEmpty() ? System.getProperty("user.dir") + File.separator + DEFAULT_INPUT_FILENAME : inputPath;
+            log.info("inputPath: {}", inputPath);
+            inputPaths.add(inputPath);
+        }
+
+        // decide the output path
         outputPath = outputPath.isEmpty() ? System.getProperty("user.dir") : outputPath;
         if(Files.isDirectory(new File(outputPath).toPath())){
             outputPath = outputPath +  File.separator + (outputFileName.isEmpty() ? DEFAULT_RESULT_FILENAME : outputFileName);
         }
         log.info("outputPath: {}", outputPath);
-        List<MetaTaskInfo> testSuites = ldtCore.diagnostic(inputPath);
+
+        // LDT logic start
+        List<MetaTaskInfo> testSuites = ldtCore.diagnostic(inputPaths);
+
+        // not empty, write to file
         if(!testSuites.isEmpty()){
             ldtCore.write(testSuites, outputPath);
         }
