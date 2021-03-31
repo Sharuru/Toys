@@ -93,5 +93,7 @@ public class LdtApplication implements CommandLineRunner {
         if(!testSuites.isEmpty()){
             ldtCore.write(testSuites, outputPath);
         }
+
+        log.info("LDT finished");
     }
 }

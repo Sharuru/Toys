@@ -27,9 +27,19 @@ public class MetaTaskInfo {
     private String type;
 
     /**
-     * If the test task if fully completed without error
+     * If the test task is fully completed without error
      */
     private boolean isFullyCompleted = false;
+
+    /**
+     * The path of the log file(used for location)
+     */
+    private String logPath;
+
+    /**
+     * The line no of the log text(used for location)
+     */
+    private long logLineNo;
 
     /**
      * The identifier for determined which the task is it is, usually it equals the path of the test sources
