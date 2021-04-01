@@ -6,6 +6,8 @@ import me.sharuru.ldt.core.common.MetaTaskInfo;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,10 +40,10 @@ public class LdtCore {
         MetaTaskInfo testSuiteInfo = null;
         MetaTaskInfo testCaseInfo = null;
 
-        for (String inputLogPath : inputPaths) {
+        for (String inputPath : inputPaths) {
             long logLineNo = 0L;
-            log.info("Diagnostic on log file: {} started", inputLogPath);
-            try (BufferedReader reader = Files.newBufferedReader(Paths.get(inputLogPath))) {
+            log.info("Diagnostic on log file: {} started", inputPath);
+            try (BufferedReader reader = Files.newBufferedReader(Paths.get(inputPath))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     logLineNo++;
@@ -52,39 +54,43 @@ public class LdtCore {
                         Matcher matcher = pattern.matcher(line);
                         // not a standard log line, maybe the regexp is outdated
                         if (!matcher.matches()) {
-                            log.info("Not standard log line found: {}", line);
+                            log.warn("Not standard log line found: {}", line);
                         } else {
                             // get details from the log line
                             LocalDateTime logDateTime = LocalDateTime.parse(matcher.group(1), DATE_TIME_FORMATTER);
                             String logPkgName = matcher.group(3).trim();
                             String logStr = matcher.group(4);
-
+                            // decide package
                             if (LdtConstants.KatalonPackageName.TEST_SUITE_EXECUTOR.equals(logPkgName)) {
                                 // test suite started
                                 if (logStr.startsWith(LdtConstants.LogKeyword.START)) {
                                     String taskIdentifier = getTaskIdentifier(logStr, LdtConstants.LogKeyword.START);
                                     if (testSuiteInfo != null && testSuiteInfo.getFinishedTime() == null) {
-                                        log.warn("Broken test suite dropped(unfinished) {} from {} at line {}, replaced by: {} from {} at line {}", testSuiteInfo.getTaskIdentifier(), testSuiteInfo.getLogPath(),
-                                                testSuiteInfo.getLogLineNo(), taskIdentifier, inputLogPath, logLineNo);
+                                        log.warn("Broken test suite dropped(unfinished) {} from {} at line {}, replaced by: {} from {} at line {}",
+                                                testSuiteInfo.getTaskIdentifier(), testSuiteInfo.getLogPath(), testSuiteInfo.getLogLineNo(),
+                                                taskIdentifier, inputPath, logLineNo);
                                         testSuiteInfo.setFullyCompleted(false);
                                         testSuites.add(testSuiteInfo);
                                     }
                                     for (MetaTaskInfo testSuite : testSuites) {
                                         if (testSuite.getTaskIdentifier().equals(taskIdentifier) && testSuite.isFullyCompleted()) {
-                                            log.warn("Broken test suite dropped(retried): {} from {} at line {}", testSuite.getTaskIdentifier(), testSuiteInfo.getLogPath(),
-                                                    testSuiteInfo.getLogLineNo());
+                                            log.warn("Broken test suite dropped(retried): {} from {} at line {}, retried as: {} from {} at line {}",
+                                                    testSuite.getTaskIdentifier(), testSuite.getLogPath(), testSuite.getLogLineNo(),
+                                                    taskIdentifier, inputPath, logLineNo);
                                             testSuite.setFullyCompleted(false);
                                         }
                                     }
                                     testSuiteInfo = new MetaTaskInfo();
                                     testSuiteInfo.setType(LdtConstants.LogType.TEST_SUITE);
                                     testSuiteInfo.setLogText(logStr);
-                                    testSuiteInfo.setLogPath(inputLogPath);
+                                    testSuiteInfo.setLogPath(inputPath);
                                     testSuiteInfo.setLogLineNo(logLineNo);
                                     testSuiteInfo.setTaskIdentifier(taskIdentifier);
                                     testSuiteInfo.setStartedTime(logDateTime);
                                     // test suite ended
-                                } else if (logStr.startsWith(LdtConstants.LogKeyword.END) && testSuiteInfo != null && testSuiteInfo.getTaskIdentifier().equals(getTaskIdentifier(logStr, LdtConstants.LogKeyword.END))) {
+                                } else if (logStr.startsWith(LdtConstants.LogKeyword.END)
+                                        && testSuiteInfo != null
+                                        && testSuiteInfo.getTaskIdentifier().equals(getTaskIdentifier(logStr, LdtConstants.LogKeyword.END))) {
                                     testSuiteInfo.setFinishedTime(logDateTime);
                                     testSuiteInfo.setFullyCompleted(true);
                                     testSuites.add(testSuiteInfo);
@@ -94,8 +100,9 @@ public class LdtCore {
                                 if (logStr.startsWith(LdtConstants.LogKeyword.START)) {
                                     String taskIdentifier = getTaskIdentifier(logStr, LdtConstants.LogKeyword.START);
                                     if (testCaseInfo != null && testCaseInfo.getFinishedTime() == null) {
-                                        log.warn("Broken test case dropped(unfinished): {} from {} at line {}, replaced by: {} from {} at line {}", testCaseInfo.getTaskIdentifier(), testCaseInfo.getLogPath(),
-                                                testCaseInfo.getLogLineNo(), taskIdentifier, inputLogPath, logLineNo);
+                                        log.warn("Broken test case dropped(unfinished): {} from {} at line {}, replaced by: {} from {} at line {}",
+                                                testCaseInfo.getTaskIdentifier(), testCaseInfo.getLogPath(), testCaseInfo.getLogLineNo(),
+                                                taskIdentifier, inputPath, logLineNo);
                                         testCaseInfo.setFullyCompleted(false);
                                         if (testSuiteInfo != null) {
                                             testSuiteInfo.getChildTasks().add(testSuiteInfo);
@@ -103,13 +110,16 @@ public class LdtCore {
                                     }
                                     testCaseInfo = new MetaTaskInfo();
                                     testCaseInfo.setLogText(logStr);
-                                    testCaseInfo.setLogPath(inputLogPath);
+                                    testCaseInfo.setLogPath(inputPath);
                                     testCaseInfo.setLogLineNo(logLineNo);
                                     testCaseInfo.setType(LdtConstants.LogType.TEST_CASE);
                                     testCaseInfo.setTaskIdentifier(taskIdentifier);
                                     testCaseInfo.setStartedTime(logDateTime);
                                     // test case ended
-                                } else if (logStr.startsWith(LdtConstants.LogKeyword.END) && !logStr.startsWith(LdtConstants.LogKeyword.END_CALL) && testSuiteInfo != null && testCaseInfo != null && testCaseInfo.getTaskIdentifier().equals(getTaskIdentifier(logStr, LdtConstants.LogKeyword.END))) {
+                                } else if (logStr.startsWith(LdtConstants.LogKeyword.END)
+                                        && !logStr.startsWith(LdtConstants.LogKeyword.END_CALL)
+                                        && testSuiteInfo != null && testCaseInfo != null
+                                        && testCaseInfo.getTaskIdentifier().equals(getTaskIdentifier(logStr, LdtConstants.LogKeyword.END))) {
                                     testCaseInfo.setFinishedTime(logDateTime);
                                     testSuiteInfo.getChildTasks().add(testCaseInfo);
                                     testCaseInfo.setFullyCompleted(true);
@@ -123,7 +133,7 @@ public class LdtCore {
                 log.error("Error happened, the detail is:");
                 ex.printStackTrace();
             }
-            log.info("Diagnostic on log file: {} finished", inputLogPath);
+            log.info("Diagnostic on log file: {} finished", inputPath);
         }
 
         log.info("All diagnostic finished");
@@ -178,19 +188,19 @@ public class LdtCore {
             }
 
         });
-//        try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath)) {
-//            outputs.forEach(line -> {
-//                try {
-//                    writer.write(line + System.lineSeparator());
-//                } catch (IOException ex) {
-//                    log.error("Error happened, the detail is:");
-//                    ex.printStackTrace();
-//                }
-//            });
-//        } catch (IOException ex) {
-//            log.error("Error happened, the detail is:");
-//            ex.printStackTrace();
-//        }
+        try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath)) {
+            outputs.forEach(line -> {
+                try {
+                    writer.write(line + System.lineSeparator());
+                } catch (IOException ex) {
+                    log.error("Error happened, the detail is:");
+                    ex.printStackTrace();
+                }
+            });
+        } catch (IOException ex) {
+            log.error("Error happened, the detail is:");
+            ex.printStackTrace();
+        }
         log.info("Finished writing data result to: {}", outputFilePath);
     }
 
@@ -203,6 +213,5 @@ public class LdtCore {
     private boolean isTargetLogLine(String rawText) {
         return rawText.contains(LdtConstants.KatalonPackageName.TEST_SUITE_EXECUTOR) || rawText.contains(LdtConstants.KatalonPackageName.TEST_CASE_EXECUTOR);
     }
-
-
+    
 }

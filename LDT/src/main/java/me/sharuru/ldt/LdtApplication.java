@@ -53,6 +53,9 @@ public class LdtApplication implements CommandLineRunner {
     @Value("${outputFilename:}")
     String outputFileName;
 
+    /**
+     * Build properties
+     */
     @Autowired
     BuildProperties buildProperties;
 
@@ -69,11 +72,11 @@ public class LdtApplication implements CommandLineRunner {
 
         // decide the input path
         List<String> inputPaths = new ArrayList<>(0);
-        if(!mixedInputPaths.isEmpty()){
+        if (!mixedInputPaths.isEmpty()) {
             log.info("`mixedInputPaths` is provided, this is an EXPERIMENTAL function.");
             log.info("inputPath: {}", mixedInputPaths);
             inputPaths.addAll(Arrays.asList(mixedInputPaths.split(",")));
-        } else{
+        } else {
             inputPath = inputPath.isEmpty() ? System.getProperty("user.dir") + File.separator + DEFAULT_INPUT_FILENAME : inputPath;
             log.info("inputPath: {}", inputPath);
             inputPaths.add(inputPath);
@@ -81,8 +84,8 @@ public class LdtApplication implements CommandLineRunner {
 
         // decide the output path
         outputPath = outputPath.isEmpty() ? System.getProperty("user.dir") : outputPath;
-        if(Files.isDirectory(new File(outputPath).toPath())){
-            outputPath = outputPath +  File.separator + (outputFileName.isEmpty() ? DEFAULT_RESULT_FILENAME : outputFileName);
+        if (Files.isDirectory(new File(outputPath).toPath())) {
+            outputPath = outputPath + File.separator + (outputFileName.isEmpty() ? DEFAULT_RESULT_FILENAME : outputFileName);
         }
         log.info("outputPath: {}", outputPath);
 
@@ -90,7 +93,7 @@ public class LdtApplication implements CommandLineRunner {
         List<MetaTaskInfo> testSuites = ldtCore.diagnostic(inputPaths);
 
         // not empty, write to file
-        if(!testSuites.isEmpty()){
+        if (!testSuites.isEmpty()) {
             ldtCore.write(testSuites, outputPath);
         }
 
