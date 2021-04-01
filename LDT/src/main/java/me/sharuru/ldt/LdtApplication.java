@@ -50,7 +50,7 @@ public class LdtApplication implements CommandLineRunner {
     /**
      * The output name of the diagnostic result
      */
-    @Value("${outputFilename:}")
+    @Value("${outputFileName:}")
     String outputFileName;
 
     /**
