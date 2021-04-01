@@ -213,5 +213,5 @@ public class LdtCore {
     private boolean isTargetLogLine(String rawText) {
         return rawText.contains(LdtConstants.KatalonPackageName.TEST_SUITE_EXECUTOR) || rawText.contains(LdtConstants.KatalonPackageName.TEST_CASE_EXECUTOR);
     }
-    
+
 }
