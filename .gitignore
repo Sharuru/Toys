@@ -287,3 +287,4 @@ fabric.properties
 /MSUM/src/main/resources/application.yml
 /MSUM/msum.log.*.gz
 /DatuiPrer/out
+**/application.yml
