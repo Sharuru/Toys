@@ -21,8 +21,8 @@ import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Roll service
@@ -63,6 +63,9 @@ public class RollService {
             botResponseModel = pyBiz(botResponseModel);
         } else if ("dice".equalsIgnoreCase(action)) {
             botResponseModel = diceBiz(botResponseModel, args);
+        } else if ("qd".equalsIgnoreCase(action)){
+            botResponseModel = quickDiceBiz(botResponseModel, args);
+            return botResponseModel;
         } else {
             botResponseModel = rollBiz(botResponseModel);
         }
@@ -92,6 +95,7 @@ public class RollService {
                 "`/roll charge 10` 充值 10 " + BotContrast.BOT_CRYSTAL_TEXT + "（6 元）；\n" +
                 "`/roll py` 和路西法进行 PY 交易以获得免费" + BotContrast.BOT_COIN_TEXT + "与" + BotContrast.BOT_CRYSTAL_TEXT + "；\n" +
                 "`/roll dice 3D6` 投掷 3 个 6 面骰子；\n" +
+                "`/roll qd D6+D100-10` 投掷 3 个骰子，并精简输出（支持简单加减计算，如示例的结果为 6 面骰 + 100 面骰 - 10 的总和）。；\n" +
                 "目前卡池抽取概率：N 卡 40%，R 卡 30%，SR 卡 20%，SSR 卡 5%，UR 卡 1%（概率近似取得）；\n" +
                 "在指令后追加 s 表示将本次响应公开；";
 
@@ -431,6 +435,71 @@ public class RollService {
         } catch (Exception e) {
             botResponseModel.setText("这骰子掷不起，告辞。");
             log.error("Error happened in 'diceBiz': " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return botResponseModel;
+    }
+
+    /**
+     * Quick dice biz
+     *
+     * @param botResponseModel prev.response
+     * @param args             parameters
+     * @return
+     */
+    private BotResponseModel quickDiceBiz(BotResponseModel botResponseModel, String[] args) {
+        try {
+            String argStr = args[1];
+            String regExp = "(D\\d+)";
+            Pattern pattern = Pattern.compile(regExp);
+            Matcher matcher = pattern.matcher(argStr);
+            int finalResult = 0;
+            int matcherLastIndex = -1;
+
+            List<Integer> resultList = new ArrayList<>();
+            List<String> operationList = new ArrayList<>();
+
+            StringBuilder resultText = new StringBuilder();
+
+            while (matcher.find()) {
+                Integer number = new Random().nextInt(Integer.parseInt(matcher.group().split("D")[1])) + 1;
+                resultList.add(number);
+
+                matcherLastIndex = matcher.end();
+                if (matcherLastIndex == argStr.length()) {
+                    resultText.append(matcher.group()).append("(").append(number).append(")");
+                } else {
+                    String operation = argStr.substring(matcherLastIndex, matcherLastIndex + 1);
+                    operationList.add(operation);
+                    resultText.append(matcher.group()).append("(").append(number).append(")").append(operation);
+                }
+            }
+            if (matcherLastIndex != -1 && matcherLastIndex != argStr.length()) {
+                Integer number = Integer.parseInt(argStr.substring(matcherLastIndex + 1));
+                resultList.add(number);
+                resultText.append(number);
+            }
+
+            for (int i = 0; i < resultList.size(); i++) {
+                if (i == 0) {
+                    finalResult = resultList.get(0);
+                } else {
+                    if (operationList.get(i - 1).equals("+")) {
+                        finalResult = finalResult + resultList.get(i);
+                    } else {
+                        finalResult = finalResult - resultList.get(i);
+                    }
+                }
+            }
+
+            String responseText = "**ROLL: " + argStr + "**=";
+            responseText = responseText + resultText + "=**" + finalResult + "**";
+
+            botResponseModel.setText(responseText);
+        } catch (Exception e) {
+            botResponseModel.setText("这骰子掷不起，告辞。");
+            log.error("Error happened in 'quickDiceBiz': " + e.getMessage());
             e.printStackTrace();
         }
 
