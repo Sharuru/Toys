@@ -118,7 +118,7 @@ public class EventController {
                             responseMsgList.add("mofumofu，谢谢你！");
                             responseMsgList.add("不，不要碰我！......你会受伤的。");
                             responseMsgList.add("唔啊......好困......干脆一起打个盹吧......");
-                            responseMsgList.add("为了能让你 rua 的舒服以点，如如我天天都有在好好的做着护理哦~");
+                            responseMsgList.add("为了能让你 rua 的舒服一点，如如我天天都有在好好的做着护理哦~");
                             responseMsgList.add("（丢人的声音）");
 
                             messagePayload.setText(responseMsgList.get(new Random().nextInt(responseMsgList.size())));
