@@ -152,12 +152,12 @@ public class EventController {
 
                     if (ThreadLocalRandom.current().nextInt(1, 11) <= 3) {
                         MessageChainModel messagePicPayload = new MessageChainModel();
-                        messagePicPayload.setText("Image");
+                        messagePicPayload.setType("Image");
                         messagePicPayload.setUrl("https://i.loli.net/2021/08/01/yYjqiP2pCblKrfc.png");
                         groupMessageRequestModel.getMessageChain().add(messagePayload);
                     } else if (ThreadLocalRandom.current().nextInt(1, 11) >= 7) {
                         MessageChainModel messagePicPayload = new MessageChainModel();
-                        messagePicPayload.setText("Image");
+                        messagePicPayload.setType("Image");
                         messagePicPayload.setUrl("https://i.loli.net/2021/08/01/TUSd289tXP6bHpq.png");
                         groupMessageRequestModel.getMessageChain().add(messagePayload);
                     }
