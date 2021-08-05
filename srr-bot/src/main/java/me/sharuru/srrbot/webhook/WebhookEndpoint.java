@@ -28,11 +28,11 @@ public class WebhookEndpoint {
     @ResponseBody
     @RequestMapping
     public WebhookResponseModel<? extends CommandModel> webhook(@RequestBody WebhookRequestModel requestModel) {
-        log.info(requestModel.toString());
 
         if (BotConstants.EVENT_TYPE_GROUP_MESSAGE.equals(requestModel.getType())
                 && targetQQGroup == requestModel.getSender().getGroup().getId()
                 && BotConstants.MSG_TYPE_PLAIN.equals(requestModel.getBaseMessageChain().getType())) {
+            log.info("Target: {}", requestModel);
             return messageService.messageHandler(requestModel);
         }
 
