@@ -1,11 +1,11 @@
-package me.sharuru.srrbot.business.event.model;
+package me.sharuru.srrbot.webhook.model.webhook;
 
 import lombok.Data;
 
 @Data
 public class GroupInfoModel {
 
-    private Long id;
+    private long id;
     private String name;
     private String permission;
 
