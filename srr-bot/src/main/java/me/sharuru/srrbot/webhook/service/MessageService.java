@@ -55,10 +55,10 @@ public class MessageService {
             case "晚安。": {
                 return this.generalResponse(BotConstants.COMM_NIGHT_RURU, requestModel);
             }
-            case "投喂F5": {
+            case "投喂f5": {
                 return this.generalResponse(BotConstants.COMM_FEED_LELE, requestModel);
             }
-            case "抢F5投喂": {
+            case "抢f5投喂": {
                 return this.generalResponse(BotConstants.COMM_ROB_LELE, requestModel);
             }
             case "如如养成":
