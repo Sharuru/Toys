@@ -2,7 +2,15 @@ server:
   port: 9991
 
 srrBot:
-  authKey: "AUTHKEY"
-  botQq: "10000"
-  targetQqGroup: "20000"
-  apiEndpoint: "http://127.0.0.1:8080"
+  targetQQGroup: "GROUPCODE"
+
+spring:
+  datasource:
+    url: jdbc:sqlite:sample.db
+    username:
+    password:
+    driver-class-name: org.sqlite.JDBC
+
+logging:
+  level:
+    com.desire.dao: debug

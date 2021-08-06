@@ -288,3 +288,6 @@ fabric.properties
 /MSUM/msum.log.*.gz
 /DatuiPrer/out
 **/application.yml
+/srr-bot/src/main/resources/rebel.xml
+/srr-bot/srrbot.db
+/srr-bot/rebel.xml
