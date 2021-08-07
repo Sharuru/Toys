@@ -43,9 +43,12 @@ public class FeedService {
             } else if (userInfo.getScore() >= 50 && userInfo.getScore() < 100) {
                 trust = userInfo.getScore() + "%";
                 rating = "如如觉得你值得信赖。";
-            } else if (userInfo.getScore() >= 100 && userInfo.getScore() < 200) {
+            } else if (userInfo.getScore() >= 100 && userInfo.getScore() < 150) {
                 trust = userInfo.getScore() + "%";
                 rating = "昨天晚上，如如好像梦到你了哦~";
+            } else if (userInfo.getScore() >= 150 && userInfo.getScore() < 200) {
+                trust = userInfo.getScore() + "%";
+                rating = "如如……有点话……想和你说……";
             } else if (userInfo.getScore() >= 200) {
                 trust = "200%";
                 rating = "如如喜欢你哦~！啾！";

@@ -2,8 +2,6 @@ package me.sharuru.srrbot.webhook;
 
 import lombok.extern.slf4j.Slf4j;
 import me.sharuru.srrbot.common.BotConstants;
-import me.sharuru.srrbot.entity.MaterialEntity;
-import me.sharuru.srrbot.mapper.MaterialMapper;
 import me.sharuru.srrbot.webhook.model.command.CommandModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookRequestModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookResponseModel;
@@ -14,8 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Slf4j
 @Controller

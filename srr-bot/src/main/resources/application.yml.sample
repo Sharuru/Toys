@@ -10,7 +10,3 @@ spring:
     username:
     password:
     driver-class-name: org.sqlite.JDBC
-
-logging:
-  level:
-    com.desire.dao: debug
