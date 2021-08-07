@@ -30,7 +30,7 @@ public class MessageService {
     private FeedService feedService;
 
     @Autowired
-    private InMemoryInteractiveQuotaLimiter quotaLimiter;
+    private InMemoryQuotaLimiter quotaLimiter;
 
     public WebhookResponseModel<SendGroupMessageModel> messageHandler(WebhookRequestModel requestModel) {
 
@@ -40,7 +40,7 @@ public class MessageService {
         switch (msgText) {
             case "投喂如如":
             case "投喂ruru": {
-                if (!quotaLimiter.isInteractiveLimited(senderNumber, BotConstants.COMM_FEED_RURU)) {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_FEED_RURU)) {
                     return this.generalResponse(BotConstants.COMM_FEED_RURU, requestModel);
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
@@ -49,7 +49,7 @@ public class MessageService {
             }
             case "抢如如投喂":
             case "抢ruru投喂": {
-                if (!quotaLimiter.isInteractiveLimited(senderNumber, BotConstants.COMM_ROB_RURU)) {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_ROB_RURU)) {
                     return this.generalResponse(BotConstants.COMM_ROB_RURU, requestModel);
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
@@ -58,7 +58,7 @@ public class MessageService {
             }
             case "恰ruru":
             case "恰如如": {
-                if (!quotaLimiter.isInteractiveLimited(senderNumber, BotConstants.COMM_EAT_RURU)) {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_EAT_RURU)) {
                     return this.generalResponse(BotConstants.COMM_EAT_RURU, requestModel);
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
@@ -67,7 +67,7 @@ public class MessageService {
             }
             case "ruaruru":
             case "rua如如": {
-                if (!quotaLimiter.isInteractiveLimited(senderNumber, BotConstants.COMM_RUA_RURU)) {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_RUA_RURU)) {
                     return this.generalResponse(BotConstants.COMM_RUA_RURU, requestModel);
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
@@ -76,7 +76,7 @@ public class MessageService {
             }
             case "晚安":
             case "晚安。": {
-                if (!quotaLimiter.isInteractiveLimited(senderNumber, BotConstants.COMM_NIGHT_RURU)) {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_NIGHT_RURU)) {
                     return this.generalResponse(BotConstants.COMM_NIGHT_RURU, requestModel);
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
@@ -84,18 +84,24 @@ public class MessageService {
 
             }
             case "投喂f5": {
-                if (!quotaLimiter.isInteractiveLimited(senderNumber, BotConstants.COMM_FEED_LELE)) {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_FEED_LELE)) {
                     return this.generalResponse(BotConstants.COMM_FEED_LELE, requestModel);
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
                 }
             }
             case "抢f5投喂": {
-                if (!quotaLimiter.isInteractiveLimited(senderNumber, BotConstants.COMM_ROB_LELE)) {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_ROB_LELE)) {
                     return this.generalResponse(BotConstants.COMM_ROB_LELE, requestModel);
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
                 }
+            }
+            case "如如猫猫":
+            case "ruru猫猫":
+            case "猫猫如如":
+            case "猫猫ruru": {
+                return this.generalResponse(BotConstants.COMM_MAO_RURU, requestModel);
             }
             case "如如养成":
             case "ruru养成":
@@ -134,8 +140,14 @@ public class MessageService {
 
         userMapper.upsertUserInfo(userInfo.getNumber(), userInfo.getScore());
 
-        messagePayload.setType(BotConstants.MSG_TYPE_PLAIN);
-        messagePayload.setText(selectedMaterial.getContext());
+        if (BotConstants.MSG_TYPE_PLAIN.equals(selectedMaterial.getType())) {
+            messagePayload.setType(BotConstants.MSG_TYPE_PLAIN);
+            messagePayload.setText(selectedMaterial.getContext());
+        } else if (BotConstants.MSG_TYPE_IMAGE.equals(selectedMaterial.getType())) {
+            messagePayload.setType(BotConstants.MSG_TYPE_IMAGE);
+            messagePayload.setUrl(selectedMaterial.getContext());
+        }
+
         groupMessageModel.getMessageChain().add(messagePayload);
 
         responseModel.setContent(groupMessageModel);

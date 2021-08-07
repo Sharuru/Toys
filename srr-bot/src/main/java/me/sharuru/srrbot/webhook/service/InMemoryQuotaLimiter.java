@@ -11,12 +11,12 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class InMemoryInteractiveQuotaLimiter {
+public class InMemoryQuotaLimiter {
 
     private List<QuotaInfo> quotaInfos = new ArrayList<>(0);
     private final int dailyLimit = 5;
 
-    public boolean isInteractiveLimited(String number, String type) {
+    public boolean isLimited(String number, String type) {
         QuotaInfo quota = this.quotaInfos.stream().filter(q ->
                 number.equals(q.getNumber()) && type.equals(q.getType())
         ).findFirst().orElse(null);

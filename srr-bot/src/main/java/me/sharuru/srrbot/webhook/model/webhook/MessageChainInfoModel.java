@@ -9,5 +9,6 @@ public class MessageChainInfoModel {
     private long id;
     private long time;
     private String text;
+    private String url;
 
 }
