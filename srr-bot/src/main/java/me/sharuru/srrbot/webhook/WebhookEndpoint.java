@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/webhook")
@@ -21,17 +24,15 @@ public class WebhookEndpoint {
     @Autowired
     MessageService messageService;
 
-    @Value("${srrBot.targetQQGroup}")
-    private Long targetQQGroup;
-
-
+    @Value("${srrBot.targetQQGroups}")
+    private List<String> targetQQGroups = new ArrayList<>(0);
 
     @ResponseBody
     @RequestMapping
     public WebhookResponseModel<? extends CommandModel> webhook(@RequestBody WebhookRequestModel requestModel) {
 
         if (BotConstants.EVENT_TYPE_GROUP_MESSAGE.equals(requestModel.getType())
-                && targetQQGroup == requestModel.getSender().getGroup().getId()
+                && targetQQGroups.contains(String.valueOf(requestModel.getSender().getGroup().getId()))
                 && BotConstants.MSG_TYPE_PLAIN.equals(requestModel.getBaseMessageChain().getType())) {
             log.info("Target: {}", requestModel);
             return messageService.messageHandler(requestModel);

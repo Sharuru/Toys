@@ -2,7 +2,8 @@ server:
   port: 9991
 
 srrBot:
-  targetQQGroup: "GROUPCODE"
+  targetQQGroups: "GROUPCODE, OTHERGROUP"
+  masterQQ: "MASTERQQ"
 
 spring:
   datasource:

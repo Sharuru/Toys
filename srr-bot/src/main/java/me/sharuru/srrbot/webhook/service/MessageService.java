@@ -11,6 +11,7 @@ import me.sharuru.srrbot.webhook.model.webhook.MessageChainInfoModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookRequestModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,9 @@ import java.util.Random;
 @Slf4j
 @Service
 public class MessageService {
+
+    @Value("${srrBot.masterQQ}")
+    private String masterQQ;
 
     @Autowired
     private MaterialMapper materialMapper;
@@ -45,7 +49,6 @@ public class MessageService {
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
                 }
-
             }
             case "抢如如投喂":
             case "抢ruru投喂": {
@@ -54,7 +57,6 @@ public class MessageService {
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
                 }
-
             }
             case "恰ruru":
             case "恰如如": {
@@ -63,7 +65,6 @@ public class MessageService {
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
                 }
-
             }
             case "ruaruru":
             case "rua如如": {
@@ -72,7 +73,6 @@ public class MessageService {
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
                 }
-
             }
             case "晚安":
             case "晚安。": {
@@ -81,7 +81,6 @@ public class MessageService {
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
                 }
-
             }
             case "投喂f5": {
                 if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_FEED_LELE)) {
@@ -102,6 +101,14 @@ public class MessageService {
             case "猫猫如如":
             case "猫猫ruru": {
                 return this.generalResponse(BotConstants.COMM_MAO_RURU, requestModel);
+            }
+            case "来张煌图":
+            case "补充喵喵能量": {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_BLAZE_POWER)) {
+                    return this.generalResponse(BotConstants.COMM_BLAZE_POWER, requestModel);
+                } else {
+                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
+                }
             }
             case "如如养成":
             case "ruru养成":
@@ -149,6 +156,13 @@ public class MessageService {
         }
 
         groupMessageModel.getMessageChain().add(messagePayload);
+
+        if (masterQQ.equals(userNumber) && !BotConstants.COMM_BLAZE_POWER.equals(catalog)) {
+            MessageChainInfoModel additionalPayload = new MessageChainInfoModel();
+            additionalPayload.setType(BotConstants.MSG_TYPE_PLAIN);
+            additionalPayload.setText("【自动如如】");
+            groupMessageModel.getMessageChain().add(additionalPayload);
+        }
 
         responseModel.setContent(groupMessageModel);
 

@@ -16,6 +16,7 @@ public class BotConstants {
     public static final String COMM_FEED_LELE = "FEED_LELE";
     public static final String COMM_ROB_LELE = "ROB_LELE";
     public static final String COMM_MAO_RURU = "MAO_RURU";
+    public static final String COMM_BLAZE_POWER = "BLAZE_POWER";
     public static final String COMM_OVER_QUOTA = "OVER_QUOTA";
 
 }
