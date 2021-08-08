@@ -291,3 +291,4 @@ fabric.properties
 /srr-bot/src/main/resources/rebel.xml
 /srr-bot/srrbot.db
 /srr-bot/rebel.xml
+/srr-bot/materials/**
