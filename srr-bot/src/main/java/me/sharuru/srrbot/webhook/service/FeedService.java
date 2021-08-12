@@ -47,7 +47,7 @@ public class FeedService {
             if (userInfo.getScore() > 200) {
                 int eliteLevel = 1;
                 // 等级计算（难度系数）
-                int level = (userInfo.getScore() - 200) / 35;
+                int level = (userInfo.getScore() - 200) / 25;
                 // 精一升精二
                 if (level >= 80) {
                     eliteLevel = 2;
@@ -109,7 +109,7 @@ public class FeedService {
         if(userInfo != null){
             if(userInfo.getPotential() < 6){
                 int probability = ThreadLocalRandom.current().nextInt(1, 101);
-                if (probability + userInfo.getPotential() <= 7 - userInfo.getPotential()) {
+                if (probability + userInfo.getPotential() <= 17 - userInfo.getPotential()) {
                     MaterialEntity selectedMaterial = botUtils.getRandomSelectedMaterial(BotConstants.COMM_GACHA_RURU, 0);
                     String selectedContext = botUtils.fillNickname(selectedMaterial.getContext(), requestModel.getSender().getMemberName());
                     messagePayload.setType(selectedMaterial.getType());
