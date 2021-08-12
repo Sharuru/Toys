@@ -124,7 +124,7 @@ public class MessageRouter {
             }
             case "透如如":
             case "透ruru": {
-                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_GACHA_RURU, 60)) {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_GACHA_RURU, 10)) {
                     return feedService.gacha(requestModel);
                 } else {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
