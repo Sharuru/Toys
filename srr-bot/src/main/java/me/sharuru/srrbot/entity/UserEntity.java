@@ -7,4 +7,5 @@ public class UserEntity {
     private int id;
     private String number;
     private int score;
+    private int potential;
 }

@@ -1,31 +1,33 @@
-package me.sharuru.srrbot.webhook.service;
+package me.sharuru.srrbot.webhook;
 
 import lombok.extern.slf4j.Slf4j;
 import me.sharuru.srrbot.common.BotConstants;
+import me.sharuru.srrbot.common.BotUtils;
 import me.sharuru.srrbot.entity.MaterialEntity;
 import me.sharuru.srrbot.entity.UserEntity;
-import me.sharuru.srrbot.mapper.MaterialMapper;
 import me.sharuru.srrbot.mapper.UserMapper;
 import me.sharuru.srrbot.webhook.model.command.SendGroupMessageModel;
 import me.sharuru.srrbot.webhook.model.webhook.MessageChainInfoModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookRequestModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookResponseModel;
+import me.sharuru.srrbot.webhook.service.FeedService;
+import me.sharuru.srrbot.common.InMemoryQuotaLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @Service
-public class MessageService {
+public class MessageRouter {
 
     @Value("${srrBot.masterQQ}")
     private String masterQQ;
 
     @Autowired
-    private MaterialMapper materialMapper;
+    private BotUtils botUtils;
 
     @Autowired
     private UserMapper userMapper;
@@ -36,7 +38,7 @@ public class MessageService {
     @Autowired
     private InMemoryQuotaLimiter quotaLimiter;
 
-    public WebhookResponseModel<SendGroupMessageModel> messageHandler(WebhookRequestModel requestModel) {
+    public WebhookResponseModel<SendGroupMessageModel> dispatcher(WebhookRequestModel requestModel) {
 
         String msgText = requestModel.getBaseMessageChain().getText().replaceAll("\\s+", "").toLowerCase();
         String senderNumber = String.valueOf(requestModel.getSender().getId());
@@ -114,7 +116,19 @@ public class MessageService {
             case "ruru养成":
             case "养成如如":
             case "养成ruru": {
-                return feedService.feedInfo(requestModel);
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_RURU_INFO, 5)) {
+                    return feedService.getFeedInfo(requestModel);
+                } else {
+                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
+                }
+            }
+            case "透如如":
+            case "透ruru": {
+                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_GACHA_RURU, 60)) {
+                    return feedService.gacha(requestModel);
+                } else {
+                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
+                }
             }
             default:
                 return null;
@@ -139,17 +153,35 @@ public class MessageService {
             userInfo = new UserEntity();
             userInfo.setNumber(userNumber);
             userInfo.setScore(0);
+            userInfo.setPotential(1);
         }
 
-        List<MaterialEntity> materials = materialMapper.findAllByCatalogAndThreshold(catalog, materialThreshold);
-        MaterialEntity selectedMaterial = materials.get(new Random().nextInt(materials.size()));
-        userInfo.setScore(userInfo.getScore() + selectedMaterial.getScore());
+        MaterialEntity selectedMaterial = botUtils.getRandomSelectedMaterial(catalog, materialThreshold);
+
+        // 满信赖后基于潜能加值
+        String additionalContext = "";
+        if (userInfo.getScore() > 200 && userInfo.getPotential() > 1) {
+            int probability = ThreadLocalRandom.current().nextInt(1, 101);
+            // 20%~25% 概率获得加值
+            if (probability + userInfo.getPotential() <= 25) {
+                // 基础加值 * 潜能等级
+                MaterialEntity additionalMaterial = botUtils.getRandomSelectedMaterial(BotConstants.COMM_ADDITION_SCORE, 0);
+                int additionalScore = additionalMaterial.getScore() * userInfo.getPotential();
+                userInfo.setScore(userInfo.getScore() + selectedMaterial.getScore() + additionalScore);
+                additionalContext = botUtils.fillNickname(additionalMaterial.getContext(), requestModel.getSender().getMemberName());
+                additionalContext += "\n" + "（额外增加了" + additionalScore + "点经验）";
+            }
+        } else {
+            userInfo.setScore(userInfo.getScore() + selectedMaterial.getScore());
+        }
 
         userMapper.upsertUserInfo(userInfo.getNumber(), userInfo.getScore());
 
         if (BotConstants.MSG_TYPE_PLAIN.equals(selectedMaterial.getType())) {
             messagePayload.setType(BotConstants.MSG_TYPE_PLAIN);
-            messagePayload.setText(selectedMaterial.getContext());
+            String selectedContextText = botUtils.fillNickname(selectedMaterial.getContext(), requestModel.getSender().getMemberName());
+            String contextText = StringUtils.hasText(additionalContext) ? selectedContextText + "\n" + additionalContext : selectedContextText;
+            messagePayload.setText(contextText);
         } else if (BotConstants.MSG_TYPE_IMAGE.equals(selectedMaterial.getType())) {
             messagePayload.setType(BotConstants.MSG_TYPE_IMAGE);
             messagePayload.setUrl(selectedMaterial.getContext());
@@ -157,6 +189,7 @@ public class MessageService {
 
         groupMessageModel.getMessageChain().add(messagePayload);
 
+        // 主人自己发送消息时加入署名方便区分
         if (masterQQ.equals(userNumber) && !BotConstants.COMM_BLAZE_POWER.equals(catalog)) {
             MessageChainInfoModel additionalPayload = new MessageChainInfoModel();
             additionalPayload.setType(BotConstants.MSG_TYPE_PLAIN);
@@ -168,5 +201,6 @@ public class MessageService {
 
         return responseModel;
     }
+
 
 }

@@ -5,7 +5,6 @@ import me.sharuru.srrbot.common.BotConstants;
 import me.sharuru.srrbot.webhook.model.command.CommandModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookRequestModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookResponseModel;
-import me.sharuru.srrbot.webhook.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,7 +21,7 @@ import java.util.List;
 public class WebhookEndpoint {
 
     @Autowired
-    MessageService messageService;
+    MessageRouter messageRouter;
 
     @Value("${srrBot.targetQQGroups}")
     private List<String> targetQQGroups = new ArrayList<>(0);
@@ -35,7 +34,7 @@ public class WebhookEndpoint {
                 && targetQQGroups.contains(String.valueOf(requestModel.getSender().getGroup().getId()))
                 && BotConstants.MSG_TYPE_PLAIN.equals(requestModel.getBaseMessageChain().getType())) {
             log.info("Target: {}", requestModel);
-            return messageService.messageHandler(requestModel);
+            return messageRouter.dispatcher(requestModel);
         }
 
         return new WebhookResponseModel<>();
