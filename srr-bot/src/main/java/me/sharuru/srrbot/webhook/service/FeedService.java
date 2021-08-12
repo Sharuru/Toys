@@ -84,6 +84,9 @@ public class FeedService {
                 msgText += trust + "\n";
                 msgText += ratingText;
             }
+        } else{
+            msgText += trust + "\n";
+            msgText += ratingText;
         }
 
         messagePayload.setType(BotConstants.MSG_TYPE_PLAIN);
