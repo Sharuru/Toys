@@ -57,6 +57,7 @@ public class FeedService {
                     // 精二满级
                     if (level >= 90) {
                         level = 90;
+                        levelPercentage = 100;
                     }
                 }
                 msgText += "200%\n";
