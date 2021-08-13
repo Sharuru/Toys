@@ -47,7 +47,9 @@ public class FeedService {
             if (userInfo.getScore() > 200) {
                 int eliteLevel = 1;
                 // 等级计算（难度系数）
-                int level = (userInfo.getScore() - 200) / 25;
+                final int diffFact = 25;
+                int level = ((userInfo.getScore() - 200) / diffFact) + 1;
+                int levelPercentage = (int) (((double) (userInfo.getScore() - 200) % diffFact / diffFact) * 100);
                 // 精一升精二
                 if (level >= 80) {
                     eliteLevel = 2;
@@ -58,7 +60,7 @@ public class FeedService {
                     }
                 }
                 msgText += "200%\n";
-                msgText += "【等级】" + (level == 0 ? 1 : level) + "\n" +
+                msgText += "【等级】" + level + "（" + levelPercentage + "%）" + "\n" +
                         "【精英阶段】" + botUtils.convertToRomanNumerals(eliteLevel) + "\n" +
                         "【潜能】" + botUtils.convertToRomanNumerals(userInfo.getPotential()) + "\n";
                 MaterialEntity additionalMaterial = botUtils.getRandomSelectedMaterial(BotConstants.COMM_ADDITION_SCORE, 0);
