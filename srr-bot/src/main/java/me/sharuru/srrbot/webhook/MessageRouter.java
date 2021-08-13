@@ -3,6 +3,7 @@ package me.sharuru.srrbot.webhook;
 import lombok.extern.slf4j.Slf4j;
 import me.sharuru.srrbot.common.BotConstants;
 import me.sharuru.srrbot.common.BotUtils;
+import me.sharuru.srrbot.common.InMemoryQuotaLimiter;
 import me.sharuru.srrbot.entity.MaterialEntity;
 import me.sharuru.srrbot.entity.UserEntity;
 import me.sharuru.srrbot.mapper.UserMapper;
@@ -11,7 +12,6 @@ import me.sharuru.srrbot.webhook.model.webhook.MessageChainInfoModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookRequestModel;
 import me.sharuru.srrbot.webhook.model.webhook.WebhookResponseModel;
 import me.sharuru.srrbot.webhook.service.FeedService;
-import me.sharuru.srrbot.common.InMemoryQuotaLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -160,7 +160,7 @@ public class MessageRouter {
 
         // 满信赖后基于潜能加值
         String additionalContext = "";
-        if (userInfo.getScore() > 200 && userInfo.getPotential() > 1) {
+        if (userInfo.getScore() > 200 && userInfo.getPotential() > 1 && !BotConstants.COMM_OVER_QUOTA.equals(catalog)) {
             int probability = ThreadLocalRandom.current().nextInt(1, 101);
             // 20%~25% 概率获得加值
             if (probability + userInfo.getPotential() <= 25) {
