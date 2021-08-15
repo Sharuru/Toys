@@ -47,7 +47,7 @@ public class FeedService {
             if (userInfo.getScore() > 200) {
                 int eliteLevel = 1;
                 // 等级计算（难度系数）
-                final int diffFact = 25;
+                final int diffFact = 20;
                 int level = ((userInfo.getScore() - 200) / diffFact) + 1;
                 int levelPercentage = (int) (((double) (userInfo.getScore() - 200) % diffFact / diffFact) * 100);
                 // 精一升精二
@@ -112,24 +112,29 @@ public class FeedService {
         String userNumber = String.valueOf(requestModel.getSender().getId());
         UserEntity userInfo = userMapper.findOneByNumber(userNumber);
 
-        if(userInfo != null){
-            if(userInfo.getPotential() < 6){
-                int probability = ThreadLocalRandom.current().nextInt(1, 101);
-                if (probability + userInfo.getPotential() <= 17 - userInfo.getPotential()) {
+        if (userInfo != null) {
+            int probability = ThreadLocalRandom.current().nextInt(1, 101);
+            if (probability + userInfo.getPotential() <= 20 - userInfo.getPotential()) {
+                if (userInfo.getPotential() < 6) {
                     MaterialEntity selectedMaterial = botUtils.getRandomSelectedMaterial(BotConstants.COMM_GACHA_RURU, 0);
                     String selectedContext = botUtils.fillNickname(selectedMaterial.getContext(), requestModel.getSender().getMemberName());
                     messagePayload.setType(selectedMaterial.getType());
                     messagePayload.setText(selectedContext);
                     userMapper.updateUserPotential(userNumber, userInfo.getPotential() + 1);
                 } else {
+                    messagePayload.setType(BotConstants.MSG_TYPE_PLAIN);
+                    messagePayload.setText(requestModel.getSender().getMemberName() + "的办公桌上已经放不下更多来自如如的信物了，唔……");
+                }
+            } else {
+                if (userInfo.getPotential() < 6) {
                     MaterialEntity selectedMaterial = botUtils.getRandomSelectedMaterial(BotConstants.COMM_GACHA_RURU_X, 0);
                     String selectedContext = botUtils.fillNickname(selectedMaterial.getContext(), requestModel.getSender().getMemberName());
                     messagePayload.setType(selectedMaterial.getType());
                     messagePayload.setText(selectedContext);
+                } else {
+                    messagePayload.setType(BotConstants.MSG_TYPE_PLAIN);
+                    messagePayload.setText("如如已经达到最大潜能等级。");
                 }
-            } else {
-                messagePayload.setType(BotConstants.MSG_TYPE_PLAIN);
-                messagePayload.setText("已经达到最大潜能等级。");
             }
         } else {
             messagePayload.setType(BotConstants.MSG_TYPE_PLAIN);
