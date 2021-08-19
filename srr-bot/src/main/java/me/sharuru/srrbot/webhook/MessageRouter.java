@@ -44,30 +44,30 @@ public class MessageRouter {
         String senderNumber = String.valueOf(requestModel.getSender().getId());
 
         switch (msgText) {
-            case "投喂如如":
-            case "投喂ruru": {
-                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_FEED_RURU)) {
-                    return this.generalResponse(BotConstants.COMM_FEED_RURU, requestModel);
-                } else {
-                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-                }
-            }
-            case "抢如如投喂":
-            case "抢ruru投喂": {
-                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_ROB_RURU)) {
-                    return this.generalResponse(BotConstants.COMM_ROB_RURU, requestModel);
-                } else {
-                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-                }
-            }
-            case "恰ruru":
-            case "恰如如": {
-                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_EAT_RURU)) {
-                    return this.generalResponse(BotConstants.COMM_EAT_RURU, requestModel);
-                } else {
-                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-                }
-            }
+//            case "投喂如如":
+//            case "投喂ruru": {
+//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_FEED_RURU)) {
+//                    return this.generalResponse(BotConstants.COMM_FEED_RURU, requestModel);
+//                } else {
+//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
+//                }
+//            }
+//            case "抢如如投喂":
+//            case "抢ruru投喂": {
+//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_ROB_RURU)) {
+//                    return this.generalResponse(BotConstants.COMM_ROB_RURU, requestModel);
+//                } else {
+//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
+//                }
+//            }
+//            case "恰ruru":
+//            case "恰如如": {
+//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_EAT_RURU)) {
+//                    return this.generalResponse(BotConstants.COMM_EAT_RURU, requestModel);
+//                } else {
+//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
+//                }
+//            }
             case "ruaruru":
             case "rua如如": {
                 if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_RUA_RURU)) {
@@ -84,34 +84,34 @@ public class MessageRouter {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
                 }
             }
-            case "投喂f5": {
-                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_FEED_LELE)) {
-                    return this.generalResponse(BotConstants.COMM_FEED_LELE, requestModel);
-                } else {
-                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-                }
-            }
-            case "抢f5投喂": {
-                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_ROB_LELE)) {
-                    return this.generalResponse(BotConstants.COMM_ROB_LELE, requestModel);
-                } else {
-                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-                }
-            }
+//            case "投喂f5": {
+//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_FEED_LELE)) {
+//                    return this.generalResponse(BotConstants.COMM_FEED_LELE, requestModel);
+//                } else {
+//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
+//                }
+//            }
+//            case "抢f5投喂": {
+//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_ROB_LELE)) {
+//                    return this.generalResponse(BotConstants.COMM_ROB_LELE, requestModel);
+//                } else {
+//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
+//                }
+//            }
             case "如如猫猫":
             case "ruru猫猫":
             case "猫猫如如":
             case "猫猫ruru": {
                 return this.generalResponse(BotConstants.COMM_MAO_RURU, requestModel);
             }
-            case "来张煌图":
-            case "补充喵喵能量": {
-                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_BLAZE_POWER)) {
-                    return this.generalResponse(BotConstants.COMM_BLAZE_POWER, requestModel);
-                } else {
-                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-                }
-            }
+//            case "来张煌图":
+//            case "补充喵喵能量": {
+//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_BLAZE_POWER)) {
+//                    return this.generalResponse(BotConstants.COMM_BLAZE_POWER, requestModel);
+//                } else {
+//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
+//                }
+//            }
             case "如如养成":
             case "ruru养成":
             case "养成如如":
