@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Webhook处理路由
+ */
 @Slf4j
 @Controller
 @RequestMapping("/webhook")

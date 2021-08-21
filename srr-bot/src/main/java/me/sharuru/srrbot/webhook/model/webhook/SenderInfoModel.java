@@ -2,6 +2,9 @@ package me.sharuru.srrbot.webhook.model.webhook;
 
 import lombok.Data;
 
+/**
+ * 发信人信息对象
+ */
 @Data
 public class SenderInfoModel {
 

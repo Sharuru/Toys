@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * 养成信息服务类
+ */
 @Slf4j
 @Service
 public class FeedService {
@@ -25,6 +28,12 @@ public class FeedService {
     @Autowired
     private BotUtils botUtils;
 
+    /**
+     * 取得养成信息
+     *
+     * @param requestModel 请求信息
+     * @return 响应对象
+     */
     public WebhookResponseModel<SendGroupMessageModel> getFeedInfo(WebhookRequestModel requestModel) {
         WebhookResponseModel<SendGroupMessageModel> responseModel = new WebhookResponseModel<>();
         responseModel.setCommand(BotConstants.COMMAND_SEND_GROUP_MESSAGE);
@@ -87,7 +96,7 @@ public class FeedService {
                 msgText += trust + "\n";
                 msgText += ratingText;
             }
-        } else{
+        } else {
             msgText += trust + "\n";
             msgText += ratingText;
         }
@@ -101,7 +110,13 @@ public class FeedService {
         return responseModel;
     }
 
-    public WebhookResponseModel<SendGroupMessageModel> gacha(WebhookRequestModel requestModel){
+    /**
+     * 提升潜能
+     *
+     * @param requestModel 请求信息
+     * @return 响应对象
+     */
+    public WebhookResponseModel<SendGroupMessageModel> gacha(WebhookRequestModel requestModel) {
         WebhookResponseModel<SendGroupMessageModel> responseModel = new WebhookResponseModel<>();
         responseModel.setCommand(BotConstants.COMMAND_SEND_GROUP_MESSAGE);
 

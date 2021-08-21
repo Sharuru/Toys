@@ -19,6 +19,9 @@ import org.springframework.util.StringUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * 互动指令路由类
+ */
 @Slf4j
 @Service
 public class MessageRouter {
@@ -38,36 +41,18 @@ public class MessageRouter {
     @Autowired
     private InMemoryQuotaLimiter quotaLimiter;
 
+    /**
+     * 指令路由分发
+     *
+     * @param requestModel 请求信息
+     * @return 响应对象
+     */
     public WebhookResponseModel<SendGroupMessageModel> dispatcher(WebhookRequestModel requestModel) {
 
         String msgText = requestModel.getBaseMessageChain().getText().replaceAll("\\s+", "").toLowerCase();
         String senderNumber = String.valueOf(requestModel.getSender().getId());
 
         switch (msgText) {
-//            case "投喂如如":
-//            case "投喂ruru": {
-//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_FEED_RURU)) {
-//                    return this.generalResponse(BotConstants.COMM_FEED_RURU, requestModel);
-//                } else {
-//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-//                }
-//            }
-//            case "抢如如投喂":
-//            case "抢ruru投喂": {
-//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_ROB_RURU)) {
-//                    return this.generalResponse(BotConstants.COMM_ROB_RURU, requestModel);
-//                } else {
-//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-//                }
-//            }
-//            case "恰ruru":
-//            case "恰如如": {
-//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_EAT_RURU)) {
-//                    return this.generalResponse(BotConstants.COMM_EAT_RURU, requestModel);
-//                } else {
-//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-//                }
-//            }
             case "ruaruru":
             case "rua如如": {
                 if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_RUA_RURU)) {
@@ -84,34 +69,12 @@ public class MessageRouter {
                     return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
                 }
             }
-//            case "投喂f5": {
-//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_FEED_LELE)) {
-//                    return this.generalResponse(BotConstants.COMM_FEED_LELE, requestModel);
-//                } else {
-//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-//                }
-//            }
-//            case "抢f5投喂": {
-//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_ROB_LELE)) {
-//                    return this.generalResponse(BotConstants.COMM_ROB_LELE, requestModel);
-//                } else {
-//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-//                }
-//            }
             case "如如猫猫":
             case "ruru猫猫":
             case "猫猫如如":
             case "猫猫ruru": {
                 return this.generalResponse(BotConstants.COMM_MAO_RURU, requestModel);
             }
-//            case "来张煌图":
-//            case "补充喵喵能量": {
-//                if (!quotaLimiter.isLimited(senderNumber, BotConstants.COMM_BLAZE_POWER)) {
-//                    return this.generalResponse(BotConstants.COMM_BLAZE_POWER, requestModel);
-//                } else {
-//                    return this.generalResponse(BotConstants.COMM_OVER_QUOTA, requestModel);
-//                }
-//            }
             case "如如养成":
             case "ruru养成":
             case "养成如如":
@@ -135,6 +98,13 @@ public class MessageRouter {
         }
     }
 
+    /**
+     * 通用响应
+     *
+     * @param catalog      互动类型
+     * @param requestModel 请求信息
+     * @return 响应对象
+     */
     private WebhookResponseModel<SendGroupMessageModel> generalResponse(String catalog, WebhookRequestModel requestModel) {
         WebhookResponseModel<SendGroupMessageModel> responseModel = new WebhookResponseModel<>();
         responseModel.setCommand(BotConstants.COMMAND_SEND_GROUP_MESSAGE);
@@ -190,7 +160,7 @@ public class MessageRouter {
         groupMessageModel.getMessageChain().add(messagePayload);
 
         // 主人自己发送消息时加入署名方便区分
-        if (masterQQ.equals(userNumber) && !BotConstants.COMM_BLAZE_POWER.equals(catalog)) {
+        if (masterQQ.equals(userNumber)) {
             MessageChainInfoModel additionalPayload = new MessageChainInfoModel();
             additionalPayload.setType(BotConstants.MSG_TYPE_PLAIN);
             additionalPayload.setText("【自动如如】");

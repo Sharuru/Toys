@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * 语料表搜索类
+ */
 @Mapper
 @Repository
 public interface MaterialMapper {

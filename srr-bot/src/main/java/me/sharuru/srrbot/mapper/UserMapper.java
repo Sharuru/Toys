@@ -4,6 +4,9 @@ import me.sharuru.srrbot.entity.UserEntity;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+/**
+ * 用户表搜索类
+ */
 @Mapper
 @Repository
 public interface UserMapper {

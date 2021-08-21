@@ -2,6 +2,9 @@ package me.sharuru.srrbot.webhook.model.webhook;
 
 import lombok.Data;
 
+/**
+ * QQ群信息对象
+ */
 @Data
 public class GroupInfoModel {
 

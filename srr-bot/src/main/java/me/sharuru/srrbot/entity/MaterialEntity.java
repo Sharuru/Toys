@@ -2,6 +2,9 @@ package me.sharuru.srrbot.entity;
 
 import lombok.Data;
 
+/**
+ * 语料表实体
+ */
 @Data
 public class MaterialEntity {
     private int id;

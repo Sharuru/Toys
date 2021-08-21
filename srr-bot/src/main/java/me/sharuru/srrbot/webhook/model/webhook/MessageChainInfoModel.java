@@ -2,6 +2,9 @@ package me.sharuru.srrbot.webhook.model.webhook;
 
 import lombok.Data;
 
+/**
+ * 信息链对象
+ */
 @Data
 public class MessageChainInfoModel {
 
