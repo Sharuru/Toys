@@ -9,6 +9,7 @@ Or, they are just a **BACKUP** of my idea.
 
 But still happy if they can help you :smile:
 
+- auto-chrome-uploader: detect and auto download the Chrome standalone installer.
 - dayu-alarm: make a TTS-call with dayu API.
 - DatuiPrer: Generate download link from datui.app.
 - EasyCertManager: (un)register your personal certificate.
@@ -23,6 +24,7 @@ But still happy if they can help you :smile:
 - MarkCourseMacro: I've no idea what is it... :(
 - MSUM: Mattermost Simple User Management for special use.
 - RSA算法示例: example of RSA.
+- srr-bot: QQ bot based on mirai.
 - svn-locker: WIP! try lock SVN files in background.
 - ScreenSaver: Arknights screen saver for Windows.
 - TaiyiBattry: taiyi battery in C#.

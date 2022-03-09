@@ -292,3 +292,4 @@ fabric.properties
 /srr-bot/srrbot.db
 /srr-bot/rebel.xml
 /srr-bot/materials/**
+/auto-chrome-uploader/ChromeStandaloneSetup64_*.exe
