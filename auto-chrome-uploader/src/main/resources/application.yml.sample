@@ -2,4 +2,15 @@ acu:
   apiEndpoint: http://api.mattermost.com/api/v4/posts
   token: accessToken
   channels: channelIds
-  downloadPath:
+  markPath: /path/to/ACU.mark
+  downloadPath: /path/to/download/folder
+
+logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10
+  file:
+    name: ACU.log

@@ -2,6 +2,7 @@ package me.sharuru.acu;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -19,7 +20,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Component
@@ -37,27 +40,30 @@ public class AcuCore {
     @Value("${acu.downloadPath}")
     private String downloadPath;
 
-    private String chromeVersion;
+    @Value("${acu.markPath}")
+    private String markPath;
+
+    private String installerFilename;
 
     private static final String CHROME_VERSION_CHECK_URL = "https://omahaproxy.appspot.com/win";
 
     private static final String CHROME_DOWNLOAD_URL = "https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7BD47E522A-C863-21C2-27BC-3D70BAC9AEA9%7D%26lang%3Dja%26browser%3D5%26usagestats%3D1%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26ap%3Dx64-stable-statsdef_1%26installdataindex%3Dempty/chrome/install/ChromeStandaloneSetup64.exe";
 
+    @Scheduled(cron = "0 0 9 * * *", zone = "Asia/Shanghai")
     public void main() {
         log.info("Starting ACU cycle...");
-
-        log.info("{}, {}, {}, {}", accessToken, notifyChannels, downloadPath, StringUtils.hasText(downloadPath));
-        downloadChrome();
-        try {
-            sendNotification();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        boolean downloadStatus = false;
+        boolean notifyStatus = false;
+        downloadStatus = downloadChrome();
+        if (downloadStatus)
+            notifyStatus = sendNotification();
+        log.info("Download status: {}, notify status: {}", downloadStatus, notifyStatus);
+        log.info("ACU cycle finished.");
     }
 
+
     public boolean downloadChrome() {
-        File versionMarkFile = Path.of(System.getProperty("user.dir") + File.separator + "ACU.mark").toFile();
+        File versionMarkFile = Path.of((StringUtils.hasText(this.markPath) ? this.markPath : System.getProperty("user.dir")) + File.separator + "ACU.mark").toFile();
         if (!versionMarkFile.exists()) {
             log.warn("ACU.mark file is not found under {}, skipping...", versionMarkFile.toPath());
             return false;
@@ -91,13 +97,12 @@ public class AcuCore {
                                     .GET()
                                     .timeout(Duration.ofSeconds(5))
                                     .build();
-
-                            File chromeFile = Path.of(StringUtils.hasText(downloadPath) ? downloadPath : System.getProperty("user.dir") + File.separator + "ChromeStandaloneSetup64_v" + latestChromeVersion + ".exe").toFile();
+                            this.installerFilename = "ChromeStandaloneSetup64_v" + latestChromeVersion + ".exe";
+                            File chromeFile = Path.of((StringUtils.hasText(this.downloadPath) ? this.downloadPath : System.getProperty("user.dir")) + File.separator + installerFilename).toFile();
                             HttpResponse<InputStream> downloadResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
                             Files.copy(downloadResponse.body(), chromeFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-                            log.info("ChromeStandaloneSetup64_v{}.exe download completed to {}", latestChromeVersion, chromeFile.toPath());
-                            chromeVersion = "ChromeStandaloneSetup64_v"+ latestChromeVersion + ".exe";
+                            log.info("{} download completed to {}", this.installerFilename, chromeFile.toPath());
 
                             Files.deleteIfExists(versionMarkFile.toPath());
                             Files.writeString(versionMarkFile.toPath(), latestChromeVersion);
@@ -117,31 +122,37 @@ public class AcuCore {
         return false;
     }
 
-    public void sendNotification() throws IOException, InterruptedException {
+    public boolean sendNotification() {
 
+        AtomicBoolean hasError = new AtomicBoolean(false);
         HttpClient httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
-                .connectTimeout(Duration.ofSeconds(10))
+                .connectTimeout(Duration.ofSeconds(10L))
                 .build();
+        String messageContext = "Chrome 离线安装程序（" + this.installerFilename + "）已上传至下载中心。";
+        Arrays.stream(this.notifyChannels).forEach(channelId -> {
 
-        String message = "Chrome 离线安装程序（"+ chromeVersion + "）已上传至下载中心。" ;
+            String json = "{" +
+                    "\"channel_id\":\"" + channelId + "\"," +
+                    "\"message\":\"" + messageContext + "\"" +
+                    "}";
 
-        String json = "{" +
-                "\"channel_id\":\"" + notifyChannels[0] + "\"," +
-                "\"message\":\"" + message + "\"" +
-                "}";
+            HttpRequest request = HttpRequest.newBuilder()
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .uri(URI.create(this.apiEndpoint))
+                    .header("Authorization", "Bearer " + this.accessToken)
+                    .header("Content-Type", "application/json")
+                    .build();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .POST(HttpRequest.BodyPublishers.ofString(json))
-                .uri(URI.create(apiEndpoint))
-                .header("Authorization", "Bearer " + accessToken)
-                .header("Content-Type", "application/json")
-                .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        log.info("Response with status code: {}\n{}", response.statusCode(), response.body());
-
+            try {
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                log.info("Message sent to {}, response: {}, detail: \n{}", channelId, response.statusCode(), response.body());
+            } catch (IOException | InterruptedException e) {
+                log.error("Error happened...\n{}", e.getMessage());
+                hasError.set(true);
+            }
+        });
+        return !hasError.get();
     }
 
 }
