@@ -1,0 +1,5 @@
+acu:
+  apiEndpoint: http://api.mattermost.com/api/v4/posts
+  token: accessToken
+  channels: channelIds
+  downloadPath:
