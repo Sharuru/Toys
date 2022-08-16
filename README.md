@@ -20,6 +20,7 @@ But still happy if they can help you :smile:
 - LDT: simple log diagnostic for Katalon.
 - m2g: map Microsoft Project.mpp to GitLab issues.
 - m2gg: m2g, GUI version.
+- mew-message-forwarder: simple mew-bot forwarding administrators messages.
 - m-bot: mattermost bot for internal group.
 - MarkCourseMacro: I've no idea what is it... :(
 - MSUM: Mattermost Simple User Management for special use.
