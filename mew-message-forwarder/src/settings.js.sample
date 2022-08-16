@@ -1,0 +1,20 @@
+export const botSettings = {
+    // 订阅节点
+    subcriptionNodes: ["1234567890NODEID0987654321"],
+    // 机器人登录凭据
+    loginToken: "loginLoginLoginTokenAliBABAOpenTheBoyNextDoor",
+    // 黑名单用户（默认为机器人自身）
+    blacklistIds: ["botAccountIdForeverLoop"],
+    // 管理员用户
+    administratorIds: ["AdminAccountId0001", "AdminAccountId0002"],
+
+    // 信息模板（属性为 KEY）
+    messageTemplates: {
+        autoReplyMessage: "" +
+        "你好，这是一条示例消息。\n" +
+        "谢谢。",
+        潜能量: "" +
+        "你好，你好！听得见吗！（下略）\n" +
+        "让我康康！",
+    }
+}

@@ -293,3 +293,4 @@ fabric.properties
 /srr-bot/rebel.xml
 /srr-bot/materials/**
 /auto-chrome-uploader/ChromeStandaloneSetup64_*.exe
+/mew-message-forwarder/src/settings.js

@@ -1,0 +1,14 @@
+{
+  "name": "mew-message-forwarder",
+  "version": "1.0.0",
+  "description": "A simple bot forwarding administrators messages",
+  "type": "module",
+  "scripts": {
+    "bot": "node src/bot.js"
+  },
+  "author": "Sharuru",
+  "license": "MIT",
+  "dependencies": {
+    "mewbot": "^1.0.3"
+  }
+}
