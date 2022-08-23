@@ -63,8 +63,8 @@ client.on('message_create', async (data) => {
                         await client.sendTextMessage(receiverDirect.id, messageContext);
                         // 如果截图文件名不为空，说明有截图，一起发了
                         if (screenshotFilename !== "") {
-                            await client.sendTextMessage(data.topic_id, "相关内容截图：");
-                            await client.sendImageMessage(data.topic_id, screenshotFilename + ".png");
+                            await client.sendTextMessage(receiverDirect.id, "相关内容截图：");
+                            await client.sendImageMessage(receiverDirect.id, screenshotFilename + ".png");
                         }
                         // 响应结果给管理员
                         await client.sendTextMessage(data.topic_id, "消息已发送至：" + receiverInfo.name + "（" + receiverInfo.username + "），内容为：" + messageContext);
