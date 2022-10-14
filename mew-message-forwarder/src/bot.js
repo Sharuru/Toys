@@ -33,12 +33,14 @@ client.on('message_create', async (data) => {
                     messageContext = messageContext.slice(-1) === "。" ? messageContext : messageContext += "。"
                     // TODO 这写的啥玩意儿啊……
                     let messageReceiverId;
+                    let messageThoughtId;
                     // 如果传进来的是想法 LINK 就从中间把用户 ID 扒拉出来，大小写无所谓
                     if (rawMessageRecevier.toLowerCase().includes("://mew.fun/")) {
                         let cleanedMessageRecevier = rawMessageRecevier.toLowerCase();
                         messageReceiverId = cleanedMessageRecevier.substring(cleanedMessageRecevier.indexOf("://mew.fun/") + 11, cleanedMessageRecevier.indexOf("/thoughts/"));
+                        messageThoughtId = cleanedMessageRecevier.substring(cleanedMessageRecevier.indexOf("/thoughts/") + 10).trim();
                         // 顺便试试能不能截图
-                        if (messageTemplateId === "删除" || messageTemplateId === "警告" || messageTemplateId === "禁言") {
+                        if (messageTemplateId === "删除" || messageTemplateId === "删除想法" || messageTemplateId === "警告" || messageTemplateId === "禁言") {
                             // 先取个文件名，方便之后删除
                             screenshotFilename = uuid.v4();
                             await new pageres({ delay: 2, filename: screenshotFilename, launchOptions: { args: ['--no-sandbox', '--disable-setuid-sandbox'] } })
@@ -77,6 +79,11 @@ client.on('message_create', async (data) => {
                     } else {
                         await client.sendTextMessage(data.topic_id, "收件人取得失败，消息未发送。");
                         console.log("收件人获取失败。");
+                    }
+                    // 偷懒，顺便自动删了
+                    if(messageTemplateId === "删除想法"){
+                        await client.deleteThought(messageThoughtId);
+                        await client.sendTextMessage(data.topic_id, "想法已删除。");
                     }
                 } else {
                     await client.sendTextMessage(data.topic_id, "消息模板不正确，消息未发送。");
