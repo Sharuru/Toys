@@ -11,31 +11,41 @@
 /** @type {Array<CarouselItem>} */
 // thumbnail 和 href 在下面的 for 迴圈 做賦值處理
 let carouselList = [
-  { serial: '01', title: '第二把赤霄', desc: '#决战#', thumbnail: '', href: '' },
-  { serial: '02', title: '笔记', desc: '#企鹅物流的秘密#', thumbnail: '', href: '' },
-  { serial: '03', title: '安洁莉娜', desc: '#信使#', thumbnail: '', href: '' },
-  { serial: '04', title: '莱茵生命', desc: '#科研#', thumbnail: '', href: '' },
-  { serial: '05', title: '端午', desc: '#炎国水乡#', thumbnail: '', href: '' },
-  { serial: '06', title: '龙门', desc: '#邻街一角#', thumbnail: '', href: '' },
-  { serial: '07', title: '谜团', desc: '#源石#', thumbnail: '', href: '' },
-  { serial: '08', title: '启航', desc: '#任务外出#', thumbnail: '', href: '' },
-  { serial: '09', title: '企鹅物流', desc: '#办公室#', thumbnail: '', href: '' },
-  { serial: '10', title: '启示', desc: '#大厅#', thumbnail: '', href: '' },
-  { serial: '11', title: '死灰复燃', desc: '#不死的黑蛇#', thumbnail: '', href: '' },
-  { serial: '12', title: '苏醒', desc: '#石棺之间#', thumbnail: '', href: '' },
-  { serial: '13', title: '乌萨斯学生自治团', desc: '#回忆中的教室#', thumbnail: '', href: '' },
-  { serial: '14', title: '瑕光', desc: '#胜利的荣光#', thumbnail: '', href: '' },
-  { serial: '15', title: '谢拉格', desc: '#喀兰贸易#', thumbnail: '', href: '' },
-  { serial: '16', title: '预备组', desc: '#行动预备组A4#', thumbnail: '', href: '' },
-  { serial: '17', title: '整装出发', desc: '#印象图#', thumbnail: '', href: '' },
-  { serial: '18', title: '追忆', desc: '#过去的村庄#', thumbnail: '', href: '' },
+  { serial: '01', title: 'TITLE X', desc: '#Original#', thumbnail: 'img/thumbnail/ORIGINAL_01_thumbnail.png', href: 'img/ORIGINAL_01.png' },
+  { serial: '02', title: 'TITLE X', desc: '#Original#', thumbnail: 'img/thumbnail/ORIGINAL_02_thumbnail.png', href: 'img/ORIGINAL_02.png' },
+  { serial: '03', title: 'TITLE X', desc: '#Original#', thumbnail: 'img/thumbnail/ORIGINAL_03_thumbnail.png', href: 'img/ORIGINAL_03.png' },
+  { serial: '04', title: 'TITLE X', desc: '#Original#', thumbnail: 'img/thumbnail/ORIGINAL_04_thumbnail.png', href: 'img/ORIGINAL_04.png' },
+  { serial: '05', title: 'TITLE X', desc: '#Original#', thumbnail: 'img/thumbnail/ORIGINAL_05_thumbnail.png', href: 'img/ORIGINAL_05.png' },
+  { serial: '06', title: 'TITLE X', desc: '#Operator#', thumbnail: 'img/thumbnail/OPERATOR_01_thumbnail.png', href: 'img/OPERATOR_01.png' },
+  { serial: '07', title: 'TITLE X', desc: '#Operator#', thumbnail: 'img/thumbnail/OPERATOR_02_thumbnail.png', href: 'img/OPERATOR_02.png' },
+  { serial: '08', title: 'TITLE X', desc: '#Operator#', thumbnail: 'img/thumbnail/OPERATOR_03_thumbnail.png', href: 'img/OPERATOR_03.png' },
+  { serial: '09', title: 'TITLE X', desc: '#Operator#', thumbnail: 'img/thumbnail/OPERATOR_04_thumbnail.png', href: 'img/OPERATOR_04.png' },
+  { serial: '10', title: 'TITLE X', desc: '#Operator#', thumbnail: 'img/thumbnail/OPERATOR_05_thumbnail.png', href: 'img/OPERATOR_05.png' },
+  { serial: '11', title: 'TITLE X', desc: '#Operator#', thumbnail: 'img/thumbnail/OPERATOR_06_thumbnail.png', href: 'img/OPERATOR_06.png' },
+  { serial: '12', title: 'TITLE X', desc: '#Operator#', thumbnail: 'img/thumbnail/OPERATOR_07_thumbnail.png', href: 'img/OPERATOR_07.png' },
+  { serial: '13', title: 'TITLE X', desc: '#Operator#', thumbnail: 'img/thumbnail/OPERATOR_08_thumbnail.png', href: 'img/OPERATOR_08.png' },
+  { serial: '14', title: 'TITLE X', desc: '#Operator#', thumbnail: 'img/thumbnail/OPERATOR_09_thumbnail.png', href: 'img/OPERATOR_09.png' },
+  { serial: '15', title: 'TITLE X', desc: '#Autumn#', thumbnail: 'img/thumbnail/AUTUMN_01_thumbnail.png', href: 'img/AUTUMN_01.png' },
+  { serial: '16', title: 'TITLE X', desc: '#Autumn#', thumbnail: 'img/thumbnail/AUTUMN_02_thumbnail.png', href: 'img/AUTUMN_02.png' },
+  { serial: '17', title: 'TITLE X', desc: '#Autumn#', thumbnail: 'img/thumbnail/AUTUMN_03_thumbnail.png', href: 'img/AUTUMN_03.png' },
+  { serial: '18', title: 'TITLE X', desc: '#Autumn#', thumbnail: 'img/thumbnail/AUTUMN_04_thumbnail.png', href: 'img/AUTUMN_04.png' },
+  { serial: '19', title: 'A第二把赤霄', desc: '#决战#', thumbnail: '', href: '' },
+  { serial: '20', title: 'A笔记', desc: '#企鹅物流的秘密#', thumbnail: '', href: '' },
+  { serial: '21', title: 'A安洁莉娜', desc: '#信使#', thumbnail: '', href: '' },
+  { serial: '22', title: 'A莱茵生命', desc: '#科研#', thumbnail: '', href: '' },
+  { serial: '23', title: 'A端午', desc: '#炎国水乡#', thumbnail: '', href: '' },
+  { serial: '24', title: 'A龙门', desc: '#邻街一角#', thumbnail: '', href: '' },
+  { serial: '25', title: 'A谜团', desc: '#源石#', thumbnail: '', href: '' },
+  { serial: '26', title: 'A启航', desc: '#任务外出#', thumbnail: '', href: '' },
+  { serial: '27', title: 'A企鹅物流', desc: '#办公室#', thumbnail: '', href: '' },
+  { serial: '28', title: 'A启示', desc: '#大厅#', thumbnail: '', href: '' },
+  { serial: '29', title: 'A死灰复燃', desc: '#不死的黑蛇#', thumbnail: '', href: '' },
+  { serial: '30', title: 'A苏醒', desc: '#石棺之间#', thumbnail: '', href: '' },
+  { serial: '31', title: 'A乌萨斯学生自治团', desc: '#回忆中的教室#', thumbnail: '', href: '' },
+  { serial: '32', title: 'A瑕光', desc: '#胜利的荣光#', thumbnail: '', href: '' },
+  { serial: '33', title: 'A谢拉格', desc: '#喀兰贸易#', thumbnail: '', href: '' },
+  { serial: '34', title: 'A预备组', desc: '#行动预备组A4#', thumbnail: '', href: '' },
 ]
-
-// 對輪播圖的圖片和網頁跳轉進行賦值
-for (let i = 0; i < carouselList.length; i++) {
-  carouselList[i].thumbnail = `img/carousel_${i + 1}.png`
-  carouselList[i].href = `https://cdn.jsdelivr.net/gh/hakadao/ArknightsParallaxCarousel@main/img/carousel_${i + 1}.png`
-}
 
 // 初始化輪播圖基礎佈局
 carouselList.forEach((item, index) => {
