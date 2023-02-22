@@ -213,11 +213,25 @@ class Cursor {
             this.outer.width = '36px';
             this.outer.background = "unset";
         };
+        this.iframeIn = () => {
+            this.outer.opacity = '0';
+        };
+        this.iframeOut = () => {
+            this.outer.height = '36px';
+            this.outer.width = '36px';
+            this.outer.opacity = '1';
+        };
         this.pushHolder = () => {
             document.querySelectorAll(this.attention).forEach(item => {
                 if (!item.classList.contains('is--active')) {
                     item.addEventListener('mouseover', this.hold, { passive: true });
                     item.addEventListener('mouseout', this.relax, { passive: true });
+                }
+            });
+            document.querySelectorAll("iframe").forEach(item => {
+                if (!item.classList.contains('is--active')) {
+                    item.addEventListener('mouseover', this.iframeIn, { passive: true });
+                    item.addEventListener('mouseout', this.iframeOut, { passive: true });
                 }
             });
         };

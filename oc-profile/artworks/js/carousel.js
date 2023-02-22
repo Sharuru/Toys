@@ -161,10 +161,10 @@ function carouselItemSwitching(index, direction) {
   // 激活當前選中的輪播指示標
   layerFront.querySelector(`.media-nav-item:nth-child(${index + 1})`).setAttribute('active', 'true')
 
-  imageZoom(0.25, direction, carouselList[index].thumbnail, carouselList[index].href).then(() => {})
-  slideInText(mediaSerial, direction, 0.2, 0.4, carouselList[index].serial).then(() => {})
-  slideInText(mediaTitle, direction, 0.2, 0.5, carouselList[index].title).then(() => {})
-  slideInText(mediaDetail, direction, 0.2, 0.6, carouselList[index].desc).then(() => {})
+  imageZoom(0.25, direction, carouselList[index].thumbnail, carouselList[index].href).then(() => { })
+  slideInText(mediaSerial, direction, 0.2, 0.4, carouselList[index].serial).then(() => { })
+  slideInText(mediaTitle, direction, 0.2, 0.5, carouselList[index].title).then(() => { })
+  slideInText(mediaDetail, direction, 0.2, 0.6, carouselList[index].desc).then(() => { })
   setSlidePosition(index)
 }
 
@@ -299,9 +299,8 @@ function setSlidePosition(activeIndex) {
     if (activeIndex >= carouselList.length - 2) {
       let a = activeIndex % 3
       for (let j = 0; j < 2; j++) {
-        mediaList.querySelector(`.media-list-item:nth-child(${j + 1})`).style.transform = `translateX(${
-          xWidth * (4 - a + j)
-        }px)`
+        mediaList.querySelector(`.media-list-item:nth-child(${j + 1})`).style.transform = `translateX(${xWidth * (4 - a + j)
+          }px)`
       }
 
       if (activeIndex === carouselList.length - 2) {
@@ -317,4 +316,134 @@ function setSlidePosition(activeIndex) {
       }
     }
   }
+}
+
+class Cursor {
+  constructor() {
+    this.now = new MouseEvent('');
+    this.first = true;
+    this.last = 0;
+    this.moveIng = false;
+    this.fadeIng = false;
+    this.nowX = 0;
+    this.nowY = 0;
+    this.attention = "a,input,button,textarea,.code-header,.gt-user-inner,.navBtnIcon,.wl-sort>li,.vicon,.clickable,.arrowBtn,.media-list-item,.media-nav-item";
+    this.set = (X = this.nowX, Y = this.nowY) => {
+      this.outer.transform =
+        `translate(calc(${X.toFixed(2)}px - 50%),
+                calc(${Y.toFixed(2)}px - 50%))`;
+    };
+    this.move = (timestamp) => {
+      if (this.now !== undefined) {
+        let delX = this.now.x - this.nowX, delY = this.now.y - this.nowY;
+        this.nowX += delX * Math.min(0.025 * (timestamp - this.last), 1);
+        this.nowY += delY * Math.min(0.025 * (timestamp - this.last), 1);
+        this.set();
+        this.last = timestamp;
+        if (Math.abs(delX) > 0.1 || Math.abs(delY) > 0.1) {
+          window.requestAnimationFrame(this.move);
+        }
+        else {
+          this.set(this.now.x, this.now.y);
+          this.moveIng = false;
+        }
+      }
+    };
+    this.reset = (mouse) => {
+      this.outer.top = '0';
+      this.outer.left = '0';
+      if (!this.moveIng) {
+        this.moveIng = true;
+        window.requestAnimationFrame(this.move);
+      }
+      this.now = mouse;
+      if (this.first) {
+        this.first = false;
+        this.nowX = this.now.x;
+        this.nowY = this.now.y;
+        this.set();
+      }
+    };
+    this.Aeffect = (mouse) => {
+      if (this.fadeIng == false) {
+        this.fadeIng = true;
+        this.effecter.left = String(mouse.x) + 'px';
+        this.effecter.top = String(mouse.y) + 'px';
+        this.effecter.transition =
+          'transform .5s cubic-bezier(0.22, 0.61, 0.21, 1)\
+      ,opacity .5s cubic-bezier(0.22, 0.61, 0.21, 1)';
+        this.effecter.transform = 'translate(-50%, -50%) scale(1)';
+        this.effecter.opacity = '0';
+        setTimeout(() => {
+          this.fadeIng = false;
+          this.effecter.transition = '';
+          this.effecter.transform = 'translate(-50%, -50%) scale(0)';
+          this.effecter.opacity = '1';
+        }, 500);
+      }
+    };
+    this.hold = () => {
+      this.outer.height = '24px';
+      this.outer.width = '24px';
+      this.outer.background = "var(--theme-cursor-bg)";
+    };
+    this.relax = () => {
+      this.outer.height = '36px';
+      this.outer.width = '36px';
+      this.outer.background = "unset";
+    };
+    this.iframeOut = () => {
+      this.outer.opacity = '0';
+    };
+    this.iframeIn = () => {
+      this.outer.height = '36px';
+      this.outer.width = '36px';
+      this.outer.opacity = '1';
+    };
+    this.pushHolder = () => {
+      document.querySelectorAll(this.attention).forEach(item => {
+        if (!item.classList.contains('is--active')) {
+          item.addEventListener('mouseover', this.hold, { passive: true });
+          item.addEventListener('mouseout', this.relax, { passive: true });
+        }
+      });
+      document.addEventListener('mouseover', (e) => {
+        e = e ? e : window.event;
+        var from = e.relatedTarget || e.toElement;
+        if (!from || from.nodeName == "SECTION") {
+          this.iframeIn();
+        }
+      }, { passive: true });
+      document.addEventListener('mouseout', (e) => {
+        e = e ? e : window.event;
+        var from = e.relatedTarget || e.toElement;
+        if (!from || from.nodeName == "HTML") {
+          this.iframeOut();
+        }
+      }, { passive: true });
+    };
+    let node = document.createElement('div');
+    node.id = 'cursor-container';
+    node.innerHTML = `<div id="cursor-outer"></div><div id="cursor-effect"></div>`;
+    document.body.appendChild(node);
+    this.outer = getElement('#cursor-outer', node).style;
+    this.outer.top = '-100%';
+    this.effecter = getElement('#cursor-effect', node).style;
+    this.effecter.transform = 'translate(-50%, -50%) scale(0)';
+    this.effecter.opacity = '1';
+    window.addEventListener('mousemove', this.reset, { passive: true });
+    window.addEventListener('click', this.Aeffect, { passive: true });
+    this.pushHolder();
+    const observer = new MutationObserver(this.pushHolder);
+    observer.observe(document, { childList: true, subtree: true });
+  }
+}
+window.onload = () => new Cursor();
+
+function getElement(string, item = document.documentElement) {
+  let tmp = item.querySelector(string);
+  if (tmp === null) {
+    throw new Error("Unknown HTML");
+  }
+  return tmp;
 }
