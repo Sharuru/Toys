@@ -18,9 +18,13 @@ requestAnimationFrame(function movement() {
   document.querySelector(
     '#media-layer-view'
   ).style.transform = `translate3d(${xValue}px, ${yValue}px, 0) rotateX(${-yValue}deg) rotateY(${xValue}deg)`
-  document.querySelector('#media-layer-front').style.transform = `translate3d(${xValue * 7.7
-    }px, ${yValue * 3}px, 50px) rotateX(${-yValue}deg) rotateY(${xValue
-    }deg)`
+  document.querySelector(
+    '#media-layer-front'
+  ).style.transform = `translate3d(${xValue * 7.7}px, ${yValue * 3}px, 50px) rotateX(${-yValue}deg) rotateY(${xValue}deg)`
+
+  document.querySelector(
+    '#media-layer-view-dot'
+  ).style.transform = `translate3d(${-xValue * 6}px, ${-yValue * 3}px, 50px) rotateX(${-yValue}deg) rotateY(${xValue}deg)`
 
   requestAnimationFrame(movement)
 })

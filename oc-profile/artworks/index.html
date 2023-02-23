@@ -33,28 +33,31 @@
 
     <!-- #region 輪播圖 -->
     <div class="media-container-box" style="perspective: 5000px">
-      <div class="media-main-view" id="media-layer-view">
-        <div class="media-current">
-          <div class="media-main-pic">
-            <a target="_blank" class="media-img"></a>
-          </div>
+      <div id="media-layer-view-dot" style="background-image: url(img/dot.png); background-repeat: no-repeat; position: absolute; width:600px; height: 300px; margin-top:-10px; margin-left: 20px; float: left;">
+      </div>
+        <div class="media-main-view" id="media-layer-view">
+          <div class="media-current">
+            <div class="media-main-pic">
+              <a target="_blank" class="media-img"></a>
+            </div>
 
-          <div class="media-user-interactive" id="media-layer-front">
-            <div class="media-current-info">
-              <div class="media-info-wrapper">
-                <div class="media-info-serial"></div>
-                <div class="media-info-title"></div>
-                <div class="media-info-detail">
-                  <div class="media-detail-desc"></div>
+            <div class="media-user-interactive" id="media-layer-front">
+              <div class="media-current-info">
+                <div class="media-info-wrapper">
+                  <div class="media-info-serial"></div>
+                  <div class="media-info-title"></div>
+                  <div class="media-info-detail">
+                    <div class="media-detail-desc"></div>
+                  </div>
                 </div>
-              </div>
 
-              <div class="media-nav-wrapper"></div>
+                <div class="media-nav-wrapper"></div>
+              </div>
             </div>
           </div>
+          <div class="media-list-wrapper" id="media-list"></div>
         </div>
-        <div class="media-list-wrapper" id="media-list"></div>
-      </div>
+
     </div>
     <!-- #endregion -->
 
