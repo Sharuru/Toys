@@ -29,22 +29,22 @@ let carouselList = [
   { serial: '16', title: 'TITLE X', desc: '#Autumn#', thumbnail: 'img/thumbnail/AUTUMN_02_thumbnail.png', href: 'img/AUTUMN_02.png' },
   { serial: '17', title: 'TITLE X', desc: '#Autumn#', thumbnail: 'img/thumbnail/AUTUMN_03_thumbnail.png', href: 'img/AUTUMN_03.png' },
   { serial: '18', title: 'TITLE X', desc: '#Autumn#', thumbnail: 'img/thumbnail/AUTUMN_04_thumbnail.png', href: 'img/AUTUMN_04.png' },
-  { serial: '19', title: 'A第二把赤霄', desc: '#决战#', thumbnail: '', href: '' },
-  { serial: '20', title: 'A笔记', desc: '#企鹅物流的秘密#', thumbnail: '', href: '' },
-  { serial: '21', title: 'A安洁莉娜', desc: '#信使#', thumbnail: '', href: '' },
-  { serial: '22', title: 'A莱茵生命', desc: '#科研#', thumbnail: '', href: '' },
-  { serial: '23', title: 'A端午', desc: '#炎国水乡#', thumbnail: '', href: '' },
-  { serial: '24', title: 'A龙门', desc: '#邻街一角#', thumbnail: '', href: '' },
-  { serial: '25', title: 'A谜团', desc: '#源石#', thumbnail: '', href: '' },
-  { serial: '26', title: 'A启航', desc: '#任务外出#', thumbnail: '', href: '' },
-  { serial: '27', title: 'A企鹅物流', desc: '#办公室#', thumbnail: '', href: '' },
-  { serial: '28', title: 'A启示', desc: '#大厅#', thumbnail: '', href: '' },
-  { serial: '29', title: 'A死灰复燃', desc: '#不死的黑蛇#', thumbnail: '', href: '' },
-  { serial: '30', title: 'A苏醒', desc: '#石棺之间#', thumbnail: '', href: '' },
-  { serial: '31', title: 'A乌萨斯学生自治团', desc: '#回忆中的教室#', thumbnail: '', href: '' },
-  { serial: '32', title: 'A瑕光', desc: '#胜利的荣光#', thumbnail: '', href: '' },
-  { serial: '33', title: 'A谢拉格', desc: '#喀兰贸易#', thumbnail: '', href: '' },
-  { serial: '34', title: 'A预备组', desc: '#行动预备组A4#', thumbnail: '', href: '' },
+  { serial: '19', title: 'TITLE X', desc: '#Urban#', thumbnail: 'img/thumbnail/URBAN_01_thumbnail.png', href: 'img/URBAN_01.png' },
+  { serial: '20', title: 'TITLE X', desc: '#Urban#', thumbnail: 'img/thumbnail/URBAN_02_thumbnail.png', href: 'img/URBAN_02.png' },
+  { serial: '21', title: 'TITLE X', desc: '#Urban#', thumbnail: 'img/thumbnail/URBAN_03_thumbnail.png', href: 'img/URBAN_03.png' },
+  { serial: '22', title: 'TITLE X', desc: '#Urban#', thumbnail: 'img/thumbnail/URBAN_04_thumbnail.png', href: 'img/URBAN_04.png' },
+  { serial: '23', title: 'TITLE X', desc: '#Urban#', thumbnail: 'img/thumbnail/URBAN_05_thumbnail.png', href: 'img/URBAN_05.png' },
+  { serial: '24', title: 'TITLE X', desc: '#Urban#', thumbnail: 'img/thumbnail/URBAN_06_thumbnail.png', href: 'img/URBAN_06.png' },
+  { serial: '25', title: 'TITLE X', desc: '#Urban#', thumbnail: 'img/thumbnail/URBAN_07_thumbnail.png', href: 'img/URBAN_07.png' },
+  { serial: '26', title: 'TITLE X', desc: '#Urban#', thumbnail: 'img/thumbnail/URBAN_08_thumbnail.png', href: 'img/URBAN_08.png' },
+  { serial: '27', title: 'TITLE X', desc: '#Ancient#', thumbnail: 'img/thumbnail/ANCIENT_01_thumbnail.png', href: 'img/ANCIENT_01.png' },
+  { serial: '28', title: 'TITLE X', desc: '#Fashion#', thumbnail: 'img/thumbnail/FASHION_01_thumbnail.png', href: 'img/FASHION_01.png' },
+  { serial: '29', title: 'TITLE X', desc: '#Other#', thumbnail: 'img/thumbnail/OTHER_01_thumbnail.png', href: 'img/OTHER_01.png' },
+  { serial: '30', title: 'TITLE X', desc: '#Other#', thumbnail: 'img/thumbnail/OTHER_02_thumbnail.png', href: 'img/OTHER_02.png' },
+  { serial: '31', title: 'TITLE X', desc: '#Other#', thumbnail: 'img/thumbnail/OTHER_03_thumbnail.png', href: 'img/OTHER_03.png' },
+  { serial: '32', title: 'TITLE X', desc: '#Other#', thumbnail: 'img/thumbnail/OTHER_04_thumbnail.png', href: 'img/OTHER_04.png' },
+  { serial: '33', title: 'TITLE X', desc: '#Other#', thumbnail: 'img/thumbnail/OTHER_05_thumbnail.png', href: 'img/OTHER_05.png' },
+  { serial: '34', title: 'TITLE X', desc: '#Other#', thumbnail: 'img/thumbnail/OTHER_06_thumbnail.png', href: 'img/OTHER_06.png' },
 ]
 
 // 初始化輪播圖基礎佈局
@@ -109,14 +109,7 @@ for (let i = 0; i < carouselList.length; i++) {
   let xWidth = (parseFloat(mediaListItemWidth) + parseFloat(mediaListItemPaddingRight) * 2).toFixed(0)
 
   // 顯示前邊四張圖片，其他隱藏
-  if (i <= 3) {
-    mediaItem.style.transform = `translateX(${xWidth * i}px)`
-    mediaItem.style.opacity = '1'
-  } else {
-    mediaItem.style.transform = `translateX(${xWidth * 3}px)`
-    mediaItem.style.opacity = '0'
-    mediaItem.style.pointerEvents = 'none'
-  }
+  setSlidePosition(0);
 
   // 輪播列表 輪播指示標同時添加點擊處理器
   let array = [mediaItem, navItem]
@@ -241,7 +234,35 @@ async function imageZoom(duration, direction, newImg, href) {
   mediaMainPic.innerHTML = mediaNewImg.outerHTML
 }
 
+/**
+ * 重构后更符合官网风格的轮播
+ * @param {number} activeIndex 当前选中的索引
+ */
 function setSlidePosition(activeIndex) {
+
+  let displayArea = new Array(6);
+  let listIndex = activeIndex + 1;
+
+  // 可显示区域
+  for (i = 2; i < 6; i++) {
+    if (listIndex > carouselList.length) {
+      listIndex = 1;
+    }
+    displayArea[i] = mediaList.querySelector(`.media-list-item:nth-child(${listIndex})`);
+    listIndex++;
+  }
+
+  // 区域边缘
+  if (activeIndex == 0) {
+    displayArea[0] = mediaList.querySelector('.media-list-item:nth-last-child(2)');
+    displayArea[1] = mediaList.querySelector('.media-list-item:nth-last-child(1)');
+  } else {
+    displayArea[0] = (carouselList.length - activeIndex + 2 > carouselList.length) ?
+      mediaList.querySelector(`.media-list-item:nth-last-child(1)`)
+      : mediaList.querySelector(`.media-list-item:nth-last-child(${carouselList.length - activeIndex + 2})`);
+    displayArea[1] = mediaList.querySelector(`.media-list-item:nth-last-child(${carouselList.length - activeIndex + 1})`);
+  }
+
   for (let i = 0; i < carouselList.length; i++) {
     let mediaItem = mediaList.querySelector(`.media-list-item:nth-child(${i + 1})`)
 
@@ -252,71 +273,41 @@ function setSlidePosition(activeIndex) {
     // 計算x位移之闊度 = media-list-item 的 width + 左右padding
     let xWidth = (parseFloat(mediaListItemWidth) + parseFloat(mediaListItemPaddingRight) * 2).toFixed(0)
 
-    let xPosition = xWidth * i - xWidth * (activeIndex - 1)
+    let inSlide = false;
+    displayArea.forEach(image => {
+      // 查找正在显示的图片
+      if (image.dataset.index == mediaItem.dataset.index) {
+        if (image.dataset.index == displayArea[0].dataset.index) {    // 左边缘
+          mediaItem.style.transform = `translateX(${-xWidth}px)`
+          mediaItem.style.opacity = '0'
+          mediaItem.style.pointerEvents = 'none'
+        } else if (image.dataset.index == displayArea[displayArea.length - 1].dataset.index) {    // 右边缘
+          mediaItem.style.transform = `translateX(${xWidth * 5}px)`
+          mediaItem.style.opacity = '0'
+          mediaItem.style.pointerEvents = 'none'
+        } else {    // 正常显示
+          let flag = displayArea.indexOf(image);
+          mediaItem.style.transform = `translateX(${xWidth * (flag - 1)}px)`
+          mediaItem.style.opacity = '1'
+          mediaItem.style.pointerEvents = 'auto'
+        }
+        inSlide = true;
+      }
+    });
 
-    if (xPosition <= -xWidth) {
-      mediaItem.style.transform = `translateX(${-xWidth}px)`
+    // 不显示的图片根据位置关系预先设定好位置
+    if (!inSlide) {
+      if (mediaItem.dataset.index < displayArea[0].dataset.index) {
+        mediaItem.style.transform = `translateX(${-xWidth}px)`;
+      } else {
+        mediaItem.style.transform = `translateX(${xWidth * 5}px)`;
+      }
       mediaItem.style.opacity = '0'
-      mediaItem.style.pointerEvents = 'none'
-    } else if (xPosition >= xWidth * 4) {
-      mediaItem.style.transform = `translateX(${xWidth * 4}px)`
-      mediaItem.style.opacity = '0'
-      mediaItem.style.pointerEvents = 'none'
-    } else {
-      mediaItem.style.transform = `translateX(${xWidth * i - xWidth * (activeIndex - 1)}px)`
-      mediaItem.style.opacity = '1'
       mediaItem.style.pointerEvents = 'auto'
-    }
-
-    if (activeIndex === 0) {
-      for (let j = 0; j < 2; j++) {
-        mediaList.querySelector(
-          `.media-list-item:nth-child(${carouselList.length - j})`
-        ).style.transform = `translateX(${xWidth * -j}px)`
-        mediaList.querySelector(`.media-list-item:nth-child(${carouselList.length})`).style.opacity = '1'
-        mediaList.querySelector(`.media-list-item:nth-child(${carouselList.length})`).style.pointerEvents = 'auto'
-      }
-    }
-
-    if (activeIndex === 1) {
-      for (let j = 0; j < 2; j++) {
-        mediaList.querySelector(
-          `.media-list-item:nth-child(${carouselList.length - j})`
-        ).style.transform = `translateX(${-xWidth}px)`
-        mediaList.querySelector(`.media-list-item:nth-child(${carouselList.length - j})`).style.opacity = '0'
-        mediaList.querySelector(`.media-list-item:nth-child(${carouselList.length - j})`).style.pointerEvents = 'none'
-      }
-    }
-
-    if (activeIndex >= carouselList.length - 3) {
-      for (let j = 0; j < 3; j++) {
-        mediaList.querySelector(`.media-list-item:nth-child(${j + 1})`).style.transform = `translateX(${xWidth * 4}px)`
-        mediaList.querySelector(`.media-list-item:nth-child(2)`).style.opacity = '0'
-        mediaList.querySelector(`.media-list-item:nth-child(2)`).style.pointerEvents = 'none'
-      }
-    }
-
-    if (activeIndex >= carouselList.length - 2) {
-      let a = activeIndex % 3
-      for (let j = 0; j < 2; j++) {
-        mediaList.querySelector(`.media-list-item:nth-child(${j + 1})`).style.transform = `translateX(${xWidth * (4 - a + j)
-          }px)`
-      }
-
-      if (activeIndex === carouselList.length - 2) {
-        mediaList.querySelector(`.media-list-item:nth-child(1)`).style.opacity = '1'
-        mediaList.querySelector(`.media-list-item:nth-child(1)`).style.pointerEvents = 'auto'
-      }
-
-      if (activeIndex === carouselList.length - 1) {
-        mediaList.querySelector(`.media-list-item:nth-child(1)`).style.opacity = '1'
-        mediaList.querySelector(`.media-list-item:nth-child(2)`).style.opacity = '1'
-        mediaList.querySelector(`.media-list-item:nth-child(1)`).style.pointerEvents = 'auto'
-        mediaList.querySelector(`.media-list-item:nth-child(2)`).style.pointerEvents = 'auto'
-      }
     }
   }
 }
+
 
 class Cursor {
   constructor() {
