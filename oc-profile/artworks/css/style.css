@@ -92,12 +92,6 @@ screen and (max-height: 560px) {
   }
 }
 
-#particles-js {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
 #section-media {
   position: relative;
   display: flex;
@@ -107,6 +101,17 @@ screen and (max-height: 560px) {
   height: 100%;
   color: #e3e3e3;
   transform: translateZ(1px);
+}
+
+#media-layer-view-dot {
+  background-image: url(../img/dot.png);
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 600px;
+  height: 300px;
+  margin-top: -10px;
+  margin-left: 80px;
+  float: left;
 }
 
 /* 箭咀樣式 */
