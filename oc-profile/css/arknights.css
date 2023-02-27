@@ -1826,6 +1826,17 @@ article .recent-excerpt p {
   }
 }
 
+.category-list-item-selected a{
+  color: var(--theme-highlight);
+  border-left: var(--theme-highlight) solid 5px;
+  background-color: var(--theme-bg-soft-hover);
+}
+
+.category-list-item-selected span{
+  color: var(--theme-text-light);
+}
+
+
 .category-list-link {
   width: 100%;
   padding: 6px 40% 6px 10px;
