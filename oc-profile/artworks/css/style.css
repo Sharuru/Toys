@@ -9,8 +9,8 @@
 }
 
 :root {
-  --dark-cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGBAMAAAAS4vJ7AAAAElBMVEX///////////////////////+65XQCAAAABXRSTlPUzXppDN7WmLAAAAAZSURBVAjXY3ASVGEwDQ1mYA0NAGEQGyQGAC9SA/00lbgwAAAAAElFTkSuQmCC");
-  --cursor-data: var(--dark-cursor);
+  --page-cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGBAMAAAAS4vJ7AAAAElBMVEX///////////////////////+65XQCAAAABXRSTlPUzXppDN7WmLAAAAAZSURBVAjXY3ASVGEwDQ1mYA0NAGEQGyQGAC9SA/00lbgwAAAAAElFTkSuQmCC");
+  --cursor-data: var(--page-cursor);
   --theme-cursor: #ccc;
   --theme-cursor-bg: rgba(255, 255, 255, 0.533);
 }
@@ -181,7 +181,7 @@ screen and (max-height: 560px) {
   height: 100%;
   background-size: cover;
   background-position: center;
-  cursor: var(--dark-cursor);
+  cursor: var(--page-cursor);
 }
 
 #section-media .media-main-view .media-main-pic {

@@ -1,4 +1,3 @@
-/// <reference path="enviroment.d.ts" />
 'use strict';
 function getElement(string, item = document.documentElement) {
     let tmp = item.querySelector(string);
@@ -148,7 +147,7 @@ class Cursor {
         this.fadeIng = false;
         this.nowX = 0;
         this.nowY = 0;
-        this.attention = "a,input,button,textarea,.code-header,.gt-user-inner,.navBtnIcon,.wl-sort>li,.vicon,.clickable";
+        this.attention = "a,input,button,textarea,.navBtnIcon,.clickable";
         this.set = (X = this.nowX, Y = this.nowY) => {
             this.outer.transform =
                 `translate(calc(${X.toFixed(2)}px - 50%),
@@ -543,50 +542,3 @@ class Pair {
         this.button = second;
     }
 }
-class Comments {
-    constructor() {
-        this.search = ["valine", "gitalk", "waline"];
-        this.elements = [];
-        this.changeTo = (item) => {
-            if (item === this.nowActive) {
-                return;
-            }
-            this.nowActive.comment.style.display = 'none';
-            this.nowActive.button.classList.remove('active');
-            item.comment.style.display = '';
-            item.button.classList.add('active');
-            this.nowActive = item;
-        };
-        this.setHTML = () => {
-            if (!document.querySelector('#comments'))
-                return;
-            this.elements = [];
-            this.search.forEach((item) => {
-                try {
-                    this.elements.push(new Pair(getElement(`#${item}`), getElement(`.${item}-sel`)));
-                }
-                catch (e) { }
-            });
-            this.elements.forEach((item) => item.comment.style.display = 'none');
-            this.nowActive = this.elements[0];
-            for (let i of this.elements) {
-                i.button.addEventListener('click', () => this.changeTo(i));
-            }
-            this.nowActive.comment.style.display = '';
-            this.nowActive.button.classList.add('active');
-        };
-        this.setHTML();
-        document.addEventListener('pjax:complete', this.setHTML);
-        this.nowActive = this.elements[0];
-    }
-}
-new Comments();
-/// <reference path="include/canvaDust.ts" />
-/// <reference path="include/Code.ts" />
-/// <reference path="include/Cursors.ts" />
-/// <reference path="include/Index.ts" />
-/// <reference path="include/Header.ts" />
-/// <reference path="include/scroll.ts" />
-/// <reference path="include/pjaxSupport.ts" />
-/// <reference path="include/ColorMode.ts" />
-/// <reference path="include/Comments.ts" />
