@@ -160,14 +160,14 @@ namespace Island
             }
 
             // Display
-            splitTextBox.Text = "";
+            matchedTextBox.Text = "";
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < matchedLines.Count; i++)
             {
                 sb.Append(originalTxt[matchedLines[i]] + "\r\n");
                 workingProgressBar.Value++;
             }
-            splitTextBox.Text = sb.ToString();
+            matchedTextBox.Text = sb.ToString();
             workingProgressBar.Value = workingProgressBar.Maximum;
             logTextBox.AppendText(count + " line(s) matched in total.\r\n");
         }
@@ -177,8 +177,7 @@ namespace Island
             workingProgressBar.Value = 0;
             workingProgressBar.Maximum = originalTxt.Count;
 
-            logTextBox.AppendText("Preparing...");
-            logTextBox.AppendText(Environment.NewLine);
+            logTextBox.AppendText("Preparing...\r\n");
             int count = 0;
             workingTextBox.Text = "";
             StringBuilder sb = new StringBuilder();
@@ -196,5 +195,56 @@ namespace Island
             logTextBox.AppendText(count + " line(s) prepraed in total.\r\n");
         }
 
+        private void SplitButton_Click(object sender, EventArgs e)
+        {
+            logTextBox.AppendText("Splitting...\r\n");
+            workingProgressBar.Value = 0;
+            workingProgressBar.Maximum = matchedLines.Count;
+
+            matchedTextBox.Text = "";
+            int count = 0;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < matchedLines.Count; i++)
+            {
+                List<string> matchedOldSplitLine = new List<string>(originalTxt[matchedLines[i]].Split('\t'));
+                string splittedLine = "";
+                int startIndex = 0;
+                string restoredLine = "";
+                for (int j = 0; j < matchedOldSplitLine.Count; j++)
+                {
+                    if (matchedOldSplitLine[j].Length >= int.Parse(oldIndexTextBox.Lines[j]))
+                    {
+                        restoredLine += matchedOldSplitLine[j];
+                    }
+                    else
+                    {
+                        restoredLine += matchedOldSplitLine[j].PadRight(int.Parse(oldIndexTextBox.Lines[j]));
+                    }
+                }
+
+                for (int j = 0; j < splitIndexTextBox.Lines.Length; j++)
+                {
+                    if (!string.IsNullOrEmpty(splitIndexTextBox.Lines[j]))
+                    {
+                        string splitted = restoredLine.Substring(startIndex, int.Parse(splitIndexTextBox.Lines[j]));
+                        if (string.IsNullOrWhiteSpace(splitted))
+                        {
+                            splitted = "";
+                        }
+                        splittedLine += splitted.Trim();
+                        splittedLine += "\t";
+                        startIndex += int.Parse(splitIndexTextBox.Lines[j]);
+                    }
+                }
+                splittedLine = splittedLine.Remove(splittedLine.LastIndexOf("\t"), 1);
+                sb.Append(splittedLine + "\r\n");
+
+                workingProgressBar.Value++;
+                count++;
+            }
+            matchedTextBox.Text = sb.ToString();
+            workingProgressBar.Value = workingProgressBar.Maximum;
+            logTextBox.AppendText(count + " line(s) splitted in total.\r\n");
+        }
     }
 }

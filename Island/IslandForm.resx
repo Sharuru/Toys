@@ -121,7 +121,7 @@
     <value>1. Copy exported TXT to working txt area.
 2. Press shrink to remove the tab.
 3. Enter key or else and press match to find the target line(s).
-4. Follow the SOP.
+4. Follow the SOP or split the matchted txt by new index.
 5. Press next to prepare for the next match.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
