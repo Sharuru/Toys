@@ -64,7 +64,7 @@ namespace Island
                     }
                     else
                     {
-                        anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,character," + lengthTextBox.Lines[i].Trim() + ",,left,,,,,:{rec}." + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",");
+                        anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,character," + lengthTextBox.Lines[i].Trim() + ",,left,,,,,:{rec}.{" + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + "},");
                         count++;
                     }
                 }
