@@ -203,46 +203,53 @@ namespace Island
 
             matchedTextBox.Text = "";
             int count = 0;
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < matchedLines.Count; i++)
+            try
             {
-                List<string> matchedOldSplitLine = new List<string>(originalTxt[matchedLines[i]].Split('\t'));
-                string splittedLine = "";
-                int startIndex = 0;
-                string restoredLine = "";
-                for (int j = 0; j < matchedOldSplitLine.Count; j++)
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < matchedLines.Count; i++)
                 {
-                    if (matchedOldSplitLine[j].Length >= int.Parse(oldIndexTextBox.Lines[j]))
+                    List<string> matchedOldSplitLine = new List<string>(originalTxt[matchedLines[i]].Split('\t'));
+                    string splittedLine = "";
+                    int startIndex = 0;
+                    string restoredLine = "";
+                    for (int j = 0; j < matchedOldSplitLine.Count; j++)
                     {
-                        restoredLine += matchedOldSplitLine[j];
-                    }
-                    else
-                    {
-                        restoredLine += matchedOldSplitLine[j].PadRight(int.Parse(oldIndexTextBox.Lines[j]));
-                    }
-                }
-
-                for (int j = 0; j < splitIndexTextBox.Lines.Length; j++)
-                {
-                    if (!string.IsNullOrEmpty(splitIndexTextBox.Lines[j]))
-                    {
-                        string splitted = restoredLine.Substring(startIndex, int.Parse(splitIndexTextBox.Lines[j]));
-                        if (string.IsNullOrWhiteSpace(splitted))
+                        if (matchedOldSplitLine[j].Length >= int.Parse(oldIndexTextBox.Lines[j]))
                         {
-                            splitted = "";
+                            restoredLine += matchedOldSplitLine[j];
                         }
-                        splittedLine += splitted.Trim();
-                        splittedLine += "\t";
-                        startIndex += int.Parse(splitIndexTextBox.Lines[j]);
+                        else
+                        {
+                            restoredLine += matchedOldSplitLine[j].PadRight(int.Parse(oldIndexTextBox.Lines[j]));
+                        }
                     }
-                }
-                splittedLine = splittedLine.Remove(splittedLine.LastIndexOf("\t"), 1);
-                sb.Append(splittedLine + "\r\n");
 
-                workingProgressBar.Value++;
-                count++;
+                    for (int j = 0; j < splitIndexTextBox.Lines.Length; j++)
+                    {
+                        if (!string.IsNullOrEmpty(splitIndexTextBox.Lines[j]))
+                        {
+                            string splitted = restoredLine.Substring(startIndex, int.Parse(splitIndexTextBox.Lines[j]));
+                            if (string.IsNullOrWhiteSpace(splitted))
+                            {
+                                splitted = "";
+                            }
+                            splittedLine += splitted.Trim();
+                            splittedLine += "\t";
+                            startIndex += int.Parse(splitIndexTextBox.Lines[j]);
+                        }
+                    }
+                    splittedLine = splittedLine.Remove(splittedLine.LastIndexOf("\t"), 1);
+                    sb.Append(splittedLine + "\r\n");
+
+                    workingProgressBar.Value++;
+                    count++;
+                }
+                matchedTextBox.Text = sb.ToString();
             }
-            matchedTextBox.Text = sb.ToString();
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception.\r\n---\r\n" + ex.Message + "\r\n---");
+            }
             workingProgressBar.Value = workingProgressBar.Maximum;
             logTextBox.AppendText(count + " line(s) splitted in total.\r\n");
         }

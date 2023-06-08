@@ -42,6 +42,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label9 = new System.Windows.Forms.Label();
+            this.oldIndexTextBox = new System.Windows.Forms.TextBox();
             this.splitButton = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.splitIndexTextBox = new System.Windows.Forms.TextBox();
@@ -57,8 +59,6 @@
             this.workingTextBox = new System.Windows.Forms.TextBox();
             this.titleLabel = new System.Windows.Forms.Label();
             this.workingProgressBar = new System.Windows.Forms.ProgressBar();
-            this.oldIndexTextBox = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.mainTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -85,7 +85,7 @@
             this.label1.BackColor = System.Drawing.Color.Plum;
             this.label1.Location = new System.Drawing.Point(6, 83);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(47, 12);
+            this.label1.Size = new System.Drawing.Size(50, 12);
             this.label1.TabIndex = 1;
             this.label1.Text = "1A.Name";
             // 
@@ -95,7 +95,7 @@
             this.label2.BackColor = System.Drawing.Color.Plum;
             this.label2.Location = new System.Drawing.Point(505, 83);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 12);
+            this.label2.Size = new System.Drawing.Size(55, 12);
             this.label2.TabIndex = 3;
             this.label2.Text = "1B.Length";
             // 
@@ -118,7 +118,7 @@
             this.label3.BackColor = System.Drawing.Color.Orange;
             this.label3.Location = new System.Drawing.Point(616, 83);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(125, 12);
+            this.label3.Size = new System.Drawing.Size(106, 12);
             this.label3.TabIndex = 5;
             this.label3.Text = "3.Definition Preview";
             // 
@@ -204,7 +204,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 17);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(317, 48);
+            this.label5.Size = new System.Drawing.Size(274, 48);
             this.label5.TabIndex = 8;
             this.label5.Text = "1. Copy column name and item length from file.\r\n2. Press generate button.\r\n3. Cop" +
     "y definition from area and import to AnyTrans.\r\n4. Follow the SOP.";
@@ -233,6 +233,29 @@
             this.tabPage2.Text = "Output TXT simple matcher";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.BackColor = System.Drawing.Color.DarkTurquoise;
+            this.label9.Location = new System.Drawing.Point(1139, 239);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(75, 12);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "4B.Split index";
+            // 
+            // oldIndexTextBox
+            // 
+            this.oldIndexTextBox.BackColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.oldIndexTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.oldIndexTextBox.Location = new System.Drawing.Point(1139, 109);
+            this.oldIndexTextBox.MaxLength = 2100000000;
+            this.oldIndexTextBox.Multiline = true;
+            this.oldIndexTextBox.Name = "oldIndexTextBox";
+            this.oldIndexTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.oldIndexTextBox.Size = new System.Drawing.Size(103, 127);
+            this.oldIndexTextBox.TabIndex = 19;
+            this.oldIndexTextBox.WordWrap = false;
+            // 
             // splitButton
             // 
             this.splitButton.BackColor = System.Drawing.Color.DarkTurquoise;
@@ -250,7 +273,7 @@
             this.label8.BackColor = System.Drawing.Color.DarkTurquoise;
             this.label8.Location = new System.Drawing.Point(1137, 94);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(89, 12);
+            this.label8.Size = new System.Drawing.Size(78, 12);
             this.label8.TabIndex = 17;
             this.label8.Text = "4A.Align index";
             // 
@@ -326,7 +349,7 @@
             this.label4.BackColor = System.Drawing.Color.LightBlue;
             this.label4.Location = new System.Drawing.Point(4, 94);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(83, 12);
+            this.label4.Size = new System.Drawing.Size(78, 12);
             this.label4.TabIndex = 9;
             this.label4.Text = "1.Working TXT";
             // 
@@ -345,7 +368,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 17);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(389, 60);
+            this.label6.Size = new System.Drawing.Size(323, 60);
             this.label6.TabIndex = 0;
             this.label6.Text = resources.GetString("label6.Text");
             // 
@@ -395,29 +418,6 @@
             this.workingProgressBar.TabIndex = 16;
             this.workingProgressBar.Value = 100;
             // 
-            // oldIndexTextBox
-            // 
-            this.oldIndexTextBox.BackColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.oldIndexTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.oldIndexTextBox.Location = new System.Drawing.Point(1139, 109);
-            this.oldIndexTextBox.MaxLength = 2100000000;
-            this.oldIndexTextBox.Multiline = true;
-            this.oldIndexTextBox.Name = "oldIndexTextBox";
-            this.oldIndexTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.oldIndexTextBox.Size = new System.Drawing.Size(103, 127);
-            this.oldIndexTextBox.TabIndex = 19;
-            this.oldIndexTextBox.WordWrap = false;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.DarkTurquoise;
-            this.label9.Location = new System.Drawing.Point(1139, 239);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(89, 12);
-            this.label9.TabIndex = 20;
-            this.label9.Text = "4B.Split index";
-            // 
             // IslandForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -427,6 +427,7 @@
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.mainTabControl);
             this.Controls.Add(this.logTextBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "IslandForm";
