@@ -75,7 +75,7 @@
             this.columnTextBox.Multiline = true;
             this.columnTextBox.Name = "columnTextBox";
             this.columnTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.columnTextBox.Size = new System.Drawing.Size(493, 352);
+            this.columnTextBox.Size = new System.Drawing.Size(442, 352);
             this.columnTextBox.TabIndex = 0;
             this.columnTextBox.WordWrap = false;
             // 
@@ -93,22 +93,22 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Plum;
-            this.label2.Location = new System.Drawing.Point(505, 83);
+            this.label2.Location = new System.Drawing.Point(452, 83);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 12);
+            this.label2.Size = new System.Drawing.Size(119, 12);
             this.label2.TabIndex = 3;
-            this.label2.Text = "1B.Length";
+            this.label2.Text = "1B.Type | Length (L,)R";
             // 
             // lengthTextBox
             // 
             this.lengthTextBox.BackColor = System.Drawing.Color.LightGoldenrodYellow;
             this.lengthTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lengthTextBox.Location = new System.Drawing.Point(507, 98);
+            this.lengthTextBox.Location = new System.Drawing.Point(454, 98);
             this.lengthTextBox.MaxLength = 2100000000;
             this.lengthTextBox.Multiline = true;
             this.lengthTextBox.Name = "lengthTextBox";
             this.lengthTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.lengthTextBox.Size = new System.Drawing.Size(103, 352);
+            this.lengthTextBox.Size = new System.Drawing.Size(156, 352);
             this.lengthTextBox.TabIndex = 2;
             this.lengthTextBox.WordWrap = false;
             // 
@@ -206,8 +206,8 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(274, 48);
             this.label5.TabIndex = 8;
-            this.label5.Text = "1. Copy column name and item length from file.\r\n2. Press generate button.\r\n3. Cop" +
-    "y definition from area and import to AnyTrans.\r\n4. Follow the SOP.";
+            this.label5.Text = "1. Copy column name, type and length from file.\r\n2. Press generate button.\r\n3. Co" +
+    "py definition from area and import to AnyTrans.\r\n4. Follow the SOP.";
             // 
             // tabPage2
             // 

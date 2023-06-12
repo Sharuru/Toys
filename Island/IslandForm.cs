@@ -33,7 +33,27 @@ namespace Island
             {
                 if (!string.IsNullOrEmpty(columnTextBox.Lines[i]))
                 {
-                    anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,character," + lengthTextBox.Lines[i].Trim() + ",,left");
+                    // Check type
+                    List<string> rawColumnType = new List<string>(lengthTextBox.Lines[i].Trim().Split('\t'));
+                    string columnType = rawColumnType[0].Trim();
+                    string leftLength = rawColumnType.Count >= 2 ? rawColumnType[1].Trim() : lengthTextBox.Lines[i].Trim();
+                    string rightLength = leftLength;
+                    if ("DECIMAL".Equals(columnType))
+                    {
+                        if (leftLength.Contains(","))
+                        {
+                            leftLength = rawColumnType[1].Split(',')[0].Trim();
+                        }
+                        else
+                        {
+                            leftLength = (int.Parse(rightLength) / 2 + 1).ToString();
+                        }
+                        anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,pack," + leftLength + ",\"0\",right");
+                    }
+                    else
+                    {
+                        anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,character," + leftLength + ",,left");
+                    }
                 }
                 workingProgressBar.Value++;
             }
@@ -56,17 +76,34 @@ namespace Island
             {
                 if (!string.IsNullOrEmpty(columnTextBox.Lines[i]))
                 {
-                    if (columnTextBox.Lines[i].Contains("ｱｸｾｽNO"))
+                    // Check type
+                    List<string> rawColumnType = new List<string>(lengthTextBox.Lines[i].Trim().Split('\t'));
+                    string columnType = rawColumnType[0].Trim();
+                    string leftLength = rawColumnType.Count >= 2 ? rawColumnType[1].Trim() : lengthTextBox.Lines[i].Trim();
+                    string rightLength = leftLength;
+                    if ("DECIMAL".Equals(columnType))
                     {
-                        logTextBox.AppendText("Found special item, escaped.\r\n");
-                        anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,character," + lengthTextBox.Lines[i].Trim() + ",,left,,,,,\\\"    \\\",");
+                        if (rawColumnType[1].Contains(","))
+                        {
+                            rightLength = rawColumnType[1].Split(',')[0].Trim();
+                        }
+                        else
+                        {
+                            rightLength = leftLength;
+                        }
+                        anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,zone," + rightLength + ",,right,,45,,OFF,:{rec}.{" + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + "},");
+                    }
+                    else if (columnTextBox.Lines[i].Contains("ｱｸｾｽNO"))
+                    {
+                        logTextBox.AppendText("Found special item: " + columnTextBox.Lines[i] + " escaped.\r\n");
+                        anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,character," + rightLength + ",,left,,,,,\\\"    \\\",");
                         count++;
                     }
                     else
                     {
-                        anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,character," + lengthTextBox.Lines[i].Trim() + ",,left,,,,,:{rec}.{" + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + "},");
-                        count++;
+                        anyTransDefinitions.Add(" ELEMENT                 " + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + ",,OI,character," + rightLength + ",,left,,,,,:{rec}.{" + (i + 1).ToString() + columnTextBox.Lines[i].Trim() + "},");
                     }
+                    count++;
                 }
                 workingProgressBar.Value++;
             }
