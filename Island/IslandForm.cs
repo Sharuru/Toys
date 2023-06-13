@@ -85,7 +85,7 @@ namespace Island
                     {
                         if (rawColumnType[1].Contains(","))
                         {
-                            rightLength = rawColumnType[1].Split(',')[0].Trim();
+                            rightLength = rawColumnType[1].Split(',')[1].Trim();
                         }
                         else
                         {
