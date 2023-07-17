@@ -19,6 +19,7 @@ But still happy if they can help you :smile:
 - HonokaControlPanel: 'Project Honoka'one-key deploy.
 - LDT: simple log diagnostic for Katalon.
 - Island: TSC data convert job helper.
+- mattermost-channel-header-icon: A plugin simply add a icon next to channel title.
 - m2g: map Microsoft Project.mpp to GitLab issues.
 - m2gg: m2g, GUI version.
 - mew-message-forwarder: simple mew-bot forwarding administrators messages.

@@ -1,0 +1,7 @@
+{
+    "id": "me.sharuru.openai-header",
+    "name": "OpenAI Header",
+    "webapp": {
+        "bundle_path": "main.js"
+    }
+}
