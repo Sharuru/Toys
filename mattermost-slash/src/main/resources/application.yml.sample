@@ -1,0 +1,28 @@
+server:
+  port: 8282
+
+slash:
+  translate:
+    openAiKey: sk-token
+    apiBaseUrl: https://api.openai.com/
+    usingModel: gpt-3.5-turbo
+
+logging:
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: slash.log
+  level:
+    org:
+      springframework:
+        web: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql: TRACE
+  logback:
+    rollingpolicy:
+      max-history: 10
+      max-file-size: 10MB
+
