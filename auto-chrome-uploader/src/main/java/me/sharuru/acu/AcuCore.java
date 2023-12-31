@@ -2,6 +2,9 @@ package me.sharuru.acu;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -45,7 +48,7 @@ public class AcuCore {
 
     private String installerFilename;
 
-    private static final String CHROME_VERSION_CHECK_URL = "https://omahaproxy.appspot.com/win";
+    private static final String CHROME_VERSION_CHECK_URL = "https://versionhistory.googleapis.com/v1/chrome/platforms/win64/channels/stable/versions/all/releases?filter=endtime=none";
 
     private static final String CHROME_DOWNLOAD_URL = "https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7BD47E522A-C863-21C2-27BC-3D70BAC9AEA9%7D%26lang%3Dja%26browser%3D5%26usagestats%3D1%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26ap%3Dx64-stable-statsdef_1%26installdataindex%3Dempty/chrome/install/ChromeStandaloneSetup64.exe";
 
@@ -85,7 +88,11 @@ public class AcuCore {
                             .connectTimeout(Duration.ofSeconds(5))
                             .build();
                     HttpResponse<String> versionResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-                    String latestChromeVersion = versionResponse.body().trim();
+                    String responseBodyText = versionResponse.body().trim();
+                    JSONObject jsonObject = new JSONObject(responseBodyText);
+                    JSONArray releasesArray = jsonObject.getJSONArray("releases");
+                    JSONObject releaseObject = releasesArray.getJSONObject(0);
+                    String latestChromeVersion = releaseObject.getString("version");
                     if (!latestChromeVersion.isEmpty()) {
                         log.info("Latest Chrome version is: {}", latestChromeVersion);
                         if (latestChromeVersion.equals(previousChromeVersion)) {
@@ -116,7 +123,7 @@ public class AcuCore {
                     log.warn("Something not right, skipping...");
                 }
             }
-        } catch (InterruptedException | IOException | URISyntaxException e) {
+        } catch (InterruptedException | IOException | URISyntaxException | JSONException e) {
             log.error("Error happened in cycle, skipping...\n{}", e.getMessage());
         }
         return false;
