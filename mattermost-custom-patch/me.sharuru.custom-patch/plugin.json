@@ -1,0 +1,7 @@
+{
+    "id": "me.sharuru.custom-patch",
+    "name": "Custom Patch",
+    "webapp": {
+        "bundle_path": "main.js"
+    }
+}

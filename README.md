@@ -20,6 +20,7 @@ But still happy if they can help you :smile:
 - LDT: simple log diagnostic for Katalon.
 - Island: TSC data convert job helper.
 - mattermost-channel-header-icon: A plugin simply add a icon next to channel title.
+- mattermost-custom-patch: A plugin simply hide 'FREE EDITION' in mattermost main UI after upgrade to v9.9.0.
 - m2g: map Microsoft Project.mpp to GitLab issues.
 - m2gg: m2g, GUI version.
 - mew-message-forwarder: simple mew-bot forwarding administrators messages.
