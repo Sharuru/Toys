@@ -52,7 +52,7 @@ public class AcuCore {
 
     private static final String CHROME_DOWNLOAD_URL = "https://dl.google.com/tag/s/appguid%3D%7B8A69D345-D564-463C-AFF1-A69D9E530F96%7D%26iid%3D%7BD47E522A-C863-21C2-27BC-3D70BAC9AEA9%7D%26lang%3Dja%26browser%3D5%26usagestats%3D1%26appname%3DGoogle%2520Chrome%26needsadmin%3Dprefers%26ap%3Dx64-stable-statsdef_1%26installdataindex%3Dempty/chrome/install/ChromeStandaloneSetup64.exe";
 
-    @Scheduled(cron = "0 0 9 * * *", zone = "Asia/Shanghai")
+    @Scheduled(cron = "0 0 9 ? * MON", zone = "Asia/Shanghai")
     public void main() {
         log.info("Starting ACU cycle...");
         boolean downloadStatus = false;
@@ -91,7 +91,7 @@ public class AcuCore {
                     String responseBodyText = versionResponse.body().trim();
                     JSONObject jsonObject = new JSONObject(responseBodyText);
                     JSONArray releasesArray = jsonObject.getJSONArray("releases");
-                    JSONObject releaseObject = releasesArray.getJSONObject(0);
+                    JSONObject releaseObject = releasesArray.getJSONObject(releasesArray.length() - 1);
                     String latestChromeVersion = releaseObject.getString("version");
                     if (!latestChromeVersion.isEmpty()) {
                         log.info("Latest Chrome version is: {}", latestChromeVersion);
