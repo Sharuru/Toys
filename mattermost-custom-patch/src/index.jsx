@@ -6,7 +6,8 @@ const Patch = ({visible, close, theme, subMenu}) => {
     // Hide FREE EDITION badge in header
     const header = document.querySelector('header');
     if (header) {
-      const badgeDiv = header.querySelector('div[class^="Badge"]');
+      // Search for badge div with dynamically generated class name containing "Badge-"
+      const badgeDiv = header.querySelector('span[class*="Badge-"]');
       if (badgeDiv) {
         badgeDiv.remove();
       }
