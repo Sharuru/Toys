@@ -9,9 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.URI;
@@ -58,8 +56,8 @@ public class AcuCore {
         boolean downloadStatus = false;
         boolean notifyStatus = false;
         downloadStatus = downloadChrome();
-        if (downloadStatus)
-            notifyStatus = sendNotification();
+//        if (downloadStatus)
+//            notifyStatus = sendNotification();
         log.info("Download status: {}, notify status: {}", downloadStatus, notifyStatus);
         log.info("ACU cycle finished.");
     }
@@ -99,21 +97,46 @@ public class AcuCore {
                             log.info("The version is already up-to-date, skipping...");
                         } else {
                             log.info("Upgrade needed, downloading...");
-
                             httpRequest = HttpRequest.newBuilder(new URI(CHROME_DOWNLOAD_URL))
                                     .GET()
-                                    .timeout(Duration.ofSeconds(5))
+                                    .timeout(Duration.ofSeconds(60))
                                     .build();
                             this.installerFilename = "ChromeStandaloneSetup64_v" + latestChromeVersion + ".exe";
-                            File chromeFile = Path.of((StringUtils.hasText(this.downloadPath) ? this.downloadPath : System.getProperty("user.dir")) + File.separator + installerFilename).toFile();
+                            File chromeFile = Path.of((StringUtils.hasText(this.downloadPath) ? this.downloadPath : System.getProperty("user.dir"))
+                                    + File.separator + installerFilename).toFile();
                             HttpResponse<InputStream> downloadResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
-                            Files.copy(downloadResponse.body(), chromeFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                            log.info("{} download completed to {}", this.installerFilename, chromeFile.toPath());
-
+                            long contentLength = -1;
+                            try {
+                                String clHeader = downloadResponse.headers().firstValue("Content-Length").orElse("-1");
+                                contentLength = Long.parseLong(clHeader);
+                            } catch (Exception ex) {
+                            }
+                            if (contentLength <= 0) {
+                                log.warn("Content-Length not available, direct downloading...");
+                                Files.copy(downloadResponse.body(), chromeFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                                log.info("{} download completed to {}", this.installerFilename, chromeFile.toPath());
+                            } else {
+                                try (
+                                        BufferedInputStream bis = new BufferedInputStream(downloadResponse.body());
+                                        FileOutputStream fos = new FileOutputStream(chromeFile)
+                                ) {
+                                    byte[] buffer = new byte[8192];
+                                    long totalRead = 0;
+                                    int read;
+                                    int percentThreshold = 10;
+                                    while ((read = bis.read(buffer)) != -1) {
+                                        fos.write(buffer, 0, read);
+                                        totalRead += read;
+                                        while (totalRead * 100 / contentLength >= percentThreshold && percentThreshold <= 100) {
+                                            log.info("Chrome downloading: {}%", percentThreshold);
+                                            percentThreshold += 10;
+                                        }
+                                    }
+                                    log.info("{} download completed to {}", this.installerFilename, chromeFile.toPath());
+                                }
+                            }
                             Files.deleteIfExists(versionMarkFile.toPath());
                             Files.writeString(versionMarkFile.toPath(), latestChromeVersion);
-
                             return true;
                         }
                     } else {
