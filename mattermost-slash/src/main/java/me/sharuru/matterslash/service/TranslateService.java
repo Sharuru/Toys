@@ -3,6 +3,8 @@ package me.sharuru.matterslash.service;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
+import com.openai.models.chat.completions.ChatCompletion;
+import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
 import lombok.extern.slf4j.Slf4j;
@@ -25,17 +27,15 @@ public class TranslateService {
 
     public String translate(final String userInput) {
 
-        String[] userInputArgs = userInput.split("\\s+");
+        String userInputTxt = userInput.trim();
 
         // 检查输入是否为空
-        if (userInputArgs.length == 0 || userInput.trim().isEmpty()) {
+        if (userInputTxt.isEmpty()) {
             return "输入的命令无法识别，请确认。如需帮助，可使用 `help` 命令。";
         }
 
-        String userCommand = userInputArgs[0].toLowerCase();
-
         // 处理 help 命令
-        if ("help".equals(userCommand)) {
+        if ("help".equals(userInputTxt)) {
             return """
                     翻译功能（OpenAI）的帮助信息：
                     
@@ -62,14 +62,6 @@ public class TranslateService {
                     """;
         }
 
-        // 检查是否有翻译内容
-        if (userInputArgs.length < 2) {
-            return "请输入要翻译的内容。如需帮助，可使用 `help` 命令。";
-        }
-
-        String translateText = Arrays.stream(userInputArgs, 1, userInputArgs.length).collect(Collectors.joining(" "));
-        log.info("[Translate] targetLanguage: {}, translateText: {}", userCommand, translateText);
-
         try {
             // 创建官方SDK客户端，支持自定义API URL
             OpenAIClient client = OpenAIOkHttpClient.builder()
@@ -94,20 +86,17 @@ public class TranslateService {
                     开始前，简要列出本次翻译的主要步骤（3-5条，概括性说明），确保任务完整，并据此执行。
                     """;
 
-            ResponseCreateParams params = ResponseCreateParams.builder()
-                    .input(translateText)
+            ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
+                    .addSystemMessage(instruction)
+                    .addUserMessage(userInputTxt)
                     .model(ChatModel.GPT_4_1)
-                    .instructions(instruction)
                     .build();
-            Response response = client.responses().create(params);
 
             StringBuilder result = new StringBuilder();
-            response.output().stream()
-                    .flatMap(item -> item.message().stream())
-                    .flatMap(message -> message.content().stream())
-                    .flatMap(content -> content.outputText().stream())
-                    .forEach(outputText -> result.append(outputText.text()));
 
+            client.chat().completions().create(params).choices().stream()
+                    .flatMap(choice -> choice.message().content().stream())
+                    .forEach(result::append);
             return result.toString();
 
         } catch (Exception e) {
