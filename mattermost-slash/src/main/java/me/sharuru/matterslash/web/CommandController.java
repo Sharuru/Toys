@@ -21,9 +21,15 @@ public class CommandController {
     @RequestMapping("/translate")
     public CommandResponsePayload translate(final CommandRequestPayload payload) {
         log.info("[Translate] payload: {}", payload.toString());
-        CommandResponsePayload response = new CommandResponsePayload();
-        response.setText(translateService.translate(payload.getText().trim()));
-        log.info("[Translate] returned: {}", response.getText());
-        return response;
+
+        // 立即返回确认消息，避免输入框卡顿
+        CommandResponsePayload immediateResponse = new CommandResponsePayload();
+        immediateResponse.setText("正在翻译中，请稍候...");
+
+        // 异步处理翻译任务
+        translateService.processTranslationAsync(payload);
+
+        log.info("[Translate] returned immediate response");
+        return immediateResponse;
     }
 }

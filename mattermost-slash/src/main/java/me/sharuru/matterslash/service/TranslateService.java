@@ -3,17 +3,21 @@ package me.sharuru.matterslash.service;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
-import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
-import com.openai.models.responses.Response;
-import com.openai.models.responses.ResponseCreateParams;
 import lombok.extern.slf4j.Slf4j;
+import me.sharuru.matterslash.model.CommandRequestPayload;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -63,7 +67,6 @@ public class TranslateService {
         }
 
         try {
-            // 创建官方SDK客户端，支持自定义API URL
             OpenAIClient client = OpenAIOkHttpClient.builder()
                     .apiKey(openAiKey)
                     .baseUrl(apiBaseUrl)
@@ -78,12 +81,12 @@ public class TranslateService {
                     3. 若输入为英文，自动翻译为中文和日语，并同时提供日文平假名读音。
                     4. 若输入为中文，自动翻译为日语和英文，并同时提供日文平假名读音。
                     - 翻译为日语时，确保准确、符合日语语法、保持适度礼貌但不过度，避免使用过于书面化汉字。
+                    仅输出翻译后的内容，不输出任何额外信息。如用户指令不明确，拒绝翻译并提示用户明确需求。
                     【指定目标语言】（如：将XXX翻译成日语，或：翻译成日语：XXX）
                     1. 按用户要求翻译为指定目标语言。
                     2. 若目标语言为日语，同时需提供日文平假名读音。
                     - 翻译为日语时，确保准确、符合日语语法、保持适度礼貌但不过度，避免使用过于书面化汉字。
                     仅输出翻译后的内容，不输出任何额外信息。如用户指令不明确，拒绝翻译并提示用户明确需求。
-                    开始前，简要列出本次翻译的主要步骤（3-5条，概括性说明），确保任务完整，并据此执行。
                     """;
 
             ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
@@ -103,5 +106,58 @@ public class TranslateService {
             log.error("[Translate] Error calling OpenAI API", e);
             return "翻译服务暂时不可用，请稍后重试。";
         }
+    }
+
+    /**
+     * 通过 Mattermost webhook 发送响应
+     */
+    public void sendWebhookResponse(String responseUrl, String text) {
+        if (responseUrl == null || responseUrl.trim().isEmpty()) {
+            log.warn("[Translate] Response URL is null or empty, cannot send webhook response");
+            return;
+        }
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            // 构建响应数据
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("response_type", "ephemeral");
+            responseData.put("text", text);
+
+            // 设置请求头
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(responseData, headers);
+
+            // 发送 POST 请求到 Mattermost response_url
+            restTemplate.postForObject(responseUrl, request, String.class);
+
+            log.info("[Translate] Webhook response sent successfully");
+        } catch (Exception e) {
+            log.error("[Translate] Error sending webhook response to URL: {}", responseUrl, e);
+        }
+    }
+
+    /**
+     * 异步处理翻译任务
+     */
+    @Async("translateTaskExecutor")
+    public CompletableFuture<Void> processTranslationAsync(CommandRequestPayload payload) {
+        try {
+            String translationResult = translate(payload.getText().trim());
+
+            // 通过 response_url 发送翻译结果
+            sendWebhookResponse(payload.getResponse_url(), translationResult);
+
+            log.info("[Translate] async translation completed and sent via webhook");
+        } catch (Exception e) {
+            log.error("[Translate] Error in async translation", e);
+            // 发送错误消息
+            sendWebhookResponse(payload.getResponse_url(), "翻译服务暂时不可用，请稍后重试。");
+        }
+
+        return CompletableFuture.completedFuture(null);
     }
 }
