@@ -24,9 +24,9 @@ public class CommandController {
 
         // 立即返回确认消息，避免输入框卡顿
         CommandResponsePayload immediateResponse = new CommandResponsePayload();
-        immediateResponse.setText("正在翻译中，请稍候...");
+        immediateResponse.setText("翻译请求已提交，请留意后续信息...");
 
-        // 异步处理翻译任务
+        // 异步处理翻译任务，使用 OpenAI 官方异步 API
         translateService.processTranslationAsync(payload);
 
         log.info("[Translate] returned immediate response");
