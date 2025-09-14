@@ -58,6 +58,13 @@ public class TranslateService {
             """;
 
     /**
+     * 获取帮助信息
+     */
+    public String getHelpMessage() {
+        return HELP_MESSAGE;
+    }
+
+    /**
      * 异步翻译方法，使用 OpenAI 官方异步 API
      */
     public CompletableFuture<String> translateAsync(final String userInput) {

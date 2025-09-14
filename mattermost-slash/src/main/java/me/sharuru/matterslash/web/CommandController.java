@@ -22,6 +22,16 @@ public class CommandController {
     public CommandResponsePayload translate(final CommandRequestPayload payload) {
         log.info("[Translate] payload: {}", payload.toString());
 
+        // 检查是否为 help 命令
+        String userInput = payload.getText() != null ? payload.getText().trim() : "";
+        if ("help".equals(userInput)) {
+            // 直接返回帮助信息，不走异步流程
+            CommandResponsePayload helpResponse = new CommandResponsePayload();
+            helpResponse.setText(translateService.getHelpMessage());
+            log.info("[Translate] returned help response immediately");
+            return helpResponse;
+        }
+
         // 立即返回确认消息，避免输入框卡顿
         CommandResponsePayload immediateResponse = new CommandResponsePayload();
         immediateResponse.setText("翻译请求已提交，请留意后续信息...");
