@@ -3,6 +3,7 @@ package me.sharuru.matterslash.web;
 import lombok.extern.slf4j.Slf4j;
 import me.sharuru.matterslash.model.CommandRequestPayload;
 import me.sharuru.matterslash.model.CommandResponsePayload;
+import me.sharuru.matterslash.service.AttendanceCalculatorService;
 import me.sharuru.matterslash.service.TranslateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,9 @@ public class CommandController {
 
     @Autowired
     TranslateService translateService;
+
+    @Autowired
+    AttendanceCalculatorService attendanceCalculatorService;
 
     @ResponseBody
     @RequestMapping("/translate")
@@ -41,5 +45,16 @@ public class CommandController {
 
         log.info("[Translate] returned immediate response");
         return immediateResponse;
+    }
+
+    @ResponseBody
+    @RequestMapping("/attendance")
+    public CommandResponsePayload attendance(final CommandRequestPayload payload) {
+        log.info("[Attendance] payload: {}", payload.toString());
+
+        CommandResponsePayload response = new CommandResponsePayload();
+        response.setText(attendanceCalculatorService.payload(payload.getText().trim()));
+        log.info("[Attendance] returned response");
+        return response;
     }
 }
