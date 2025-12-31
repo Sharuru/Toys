@@ -49,37 +49,40 @@ public class AttendanceCalculatorService {
             // 情况一：正常时段打卡 (<= 09:30)
             if (!arrivalTime.isAfter(NORMAL_PERIOD_END_TIME)) {
                 LocalTime endTime = arrivalTime.plus(REQUIRED_WORK_DURATION).plus(LUNCH_DURATION);
-                return "正常打卡，" + endTime.format(OUTPUT_FORMATTER) + " 下班";
+                return "勤务排程正常。预计结束时间：" + endTime.format(OUTPUT_FORMATTER) + "。";
             }
             // 情况二：迟到时段打卡 (> 09:30)
             else {
                 StringBuilder result = new StringBuilder();
+                result.append("检测到勤务排程偏移，正在为您生成应急预案...\n\n");
                 // --- 策略一：请假补齐 ---
-                result.append("策略一：请假补齐\n");
+                result.append("[应急预案 I: “时间校正”协议]\n");
+                result.append("通过申请离岗许可，弥补勤务时长缺口。\n");
                 double leaveHoursFor1730 = calculateRequiredLeaveHours(arrivalTime, LocalTime.of(17, 30));
                 double leaveHoursFor1800 = calculateRequiredLeaveHours(arrivalTime, LocalTime.of(18, 0));
                 if (leaveHoursFor1730 == leaveHoursFor1800) {
                     // 智能推荐：成本相同，选最早下班的
                     String coverage = formatLeaveCoverage(leaveHoursFor1730);
-                    result.append(String.format("最优方案：请假 %.1f 小时 %s，17:30 下班。\n", leaveHoursFor1730, coverage));
+                    result.append(String.format("  \\>\\> [最高优先级] 申请许可 %.1f 小时 %s，于 17:30 结束勤务。\n", leaveHoursFor1730, coverage));
                 } else {
                     // 存在权衡，提供两个选项
                     String coverageA = formatLeaveCoverage(leaveHoursFor1730);
-                    result.append(String.format("方案A: 请假 %.1f 小时 %s，17:30 下班。\n", leaveHoursFor1730, coverageA));
+                    result.append(String.format("  \\>\\> [效率路径] 申请许可 %.1f 小时 %s，于 17:30 结束勤务。(优先确保休息时间)\n", leaveHoursFor1730, coverageA));
 
                     String coverageB = formatLeaveCoverage(leaveHoursFor1800);
-                    result.append(String.format("方案B: 请假 %.1f 小时 %s，18:00 下班。\n", leaveHoursFor1800, coverageB));
+                    result.append(String.format("  \\>\\> [资源保全路径] 申请许可 %.1f 小时 %s，于 18:00 结束勤务。(节约许可时长)\n", leaveHoursFor1800, coverageB));
                 }
                 result.append("\n"); // 增加空行，使格式更清晰
                 // --- 策略二：工时顺延 ---
-                result.append("策略二：工时顺延\n");
+                result.append("[应急预案 II: “勤务平移”协议]\n");
+                result.append("将勤务时段整体向后平移，以确保总时长达标。\n");
                 LocalTime lateEndTime = arrivalTime.plus(REQUIRED_WORK_DURATION).plus(LUNCH_DURATION);
-                result.append("下班时间：").append(lateEndTime.format(OUTPUT_FORMATTER))
-                        .append(" (此方案可能产生迟到记录)");
+                result.append("  \\>\\> 预计结束时间：").append(lateEndTime.format(OUTPUT_FORMATTER))
+                        .append("\n  [警告: 此协议将记录为一次‘勤务排程偏移’事件，具体影响请参照人事部最新条例。]");
                 return result.toString();
             }
         } catch (DateTimeParseException e) {
-            return "输入格式错误，请输入4位数字时间，例如 '0945'。";
+            return "[错误] :: 时间戳格式无法解析。请输入有效的4位数字时间，例如 '0945'。";
         }
     }
 
