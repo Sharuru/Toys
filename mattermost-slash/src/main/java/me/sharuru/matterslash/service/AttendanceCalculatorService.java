@@ -48,7 +48,9 @@ public class AttendanceCalculatorService {
             LocalTime arrivalTime = LocalTime.parse(arrivalTimeStr, INPUT_FORMATTER);
             // 情况一：正常时段打卡 (<= 09:30)
             if (!arrivalTime.isAfter(NORMAL_PERIOD_END_TIME)) {
-                LocalTime endTime = arrivalTime.plus(REQUIRED_WORK_DURATION).plus(LUNCH_DURATION);
+                // 早于标准上班时间的，按标准时间 08:30 计算
+                LocalTime effectiveStartTime = arrivalTime.isBefore(STANDARD_START_TIME) ? STANDARD_START_TIME : arrivalTime;
+                LocalTime endTime = effectiveStartTime.plus(REQUIRED_WORK_DURATION).plus(LUNCH_DURATION);
                 return "勤务排程正常。预计结束时间：" + endTime.format(OUTPUT_FORMATTER) + "。";
             }
             // 情况二：迟到时段打卡 (> 09:30)
