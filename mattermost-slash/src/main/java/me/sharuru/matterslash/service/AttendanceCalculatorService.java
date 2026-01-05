@@ -67,6 +67,7 @@ public class AttendanceCalculatorService {
     public String calculate(String arrivalTimeStr) {
         try {
             LocalTime arrivalTime = LocalTime.parse(arrivalTimeStr, INPUT_FORMATTER);
+
             // 情况一：正常时段打卡 (<= 09:30)
             if (!arrivalTime.isAfter(NORMAL_PERIOD_END_TIME)) {
                 // 早于标准上班时间的，按标准时间 08:30 计算
@@ -120,51 +121,111 @@ public class AttendanceCalculatorService {
      * @return 请假策略，包含请假时长和时段
      */
     private LeaveStrategy calculateLeaveStrategyEarlyStart(LocalTime arrivalTime, LocalTime targetEndTime) {
-        // 1. 计算实际在岗工作时长（扣除午休）
-        Duration onSiteDuration = Duration.between(arrivalTime, targetEndTime);
-        if (arrivalTime.isBefore(LUNCH_END_TIME) && targetEndTime.isAfter(LUNCH_START_TIME)) {
-            onSiteDuration = onSiteDuration.minus(LUNCH_DURATION);
-        }
-
-        // 2. 计算工时缺口
-        Duration shortFall = REQUIRED_WORK_DURATION.minus(onSiteDuration);
-        if (shortFall.isNegative() || shortFall.isZero()) {
-            // 无需请假
+        double leaveHours = calculateRequiredLeaveHours(arrivalTime, targetEndTime);
+        if (leaveHours == 0.0) {
             return new LeaveStrategy(0.0, STANDARD_START_TIME, STANDARD_START_TIME);
         }
 
-        // 3. 将缺口时长转换为请假小时数（应用凑整规则）
-        double theoreticalHours = shortFall.toMinutes() / 60.0;
-        double leaveHours = roundLeaveHours(theoreticalHours);
-
-        // 4. 计算请假时段，确保请假结束时间不早于实际打卡时间
+        // 请假从 08:30 开始，计算请假结束时间
         long leaveMinutes = (long) (leaveHours * 60);
         LocalTime leaveEnd = STANDARD_START_TIME.plusMinutes(leaveMinutes);
 
         // 如果请假结束时间早于打卡时间，需要增加请假时长以覆盖到打卡时间
         if (leaveEnd.isBefore(arrivalTime)) {
-            // 计算从标准时间到打卡时间需要多少分钟
             long minutesNeeded = Duration.between(STANDARD_START_TIME, arrivalTime).toMinutes();
-            double hoursNeeded = minutesNeeded / 60.0;
-            // 应用凑整规则
-            leaveHours = roundLeaveHours(hoursNeeded);
+            leaveHours = roundLeaveHours(minutesNeeded / 60.0);
             leaveMinutes = (long) (leaveHours * 60);
             leaveEnd = STANDARD_START_TIME.plusMinutes(leaveMinutes);
         }
 
-        // 请假从标准上班时间开始
         return new LeaveStrategy(leaveHours, STANDARD_START_TIME, leaveEnd);
     }
 
     /**
-     * 计算资源节约策略：通过延后下班时间来减少请假时长
-     * 注意：请假时段仍从 08:30 开始，但通过延长工作时间来减少请假需求
+     * 计算资源节约策略：灵活调整请假起始时间，尽可能延后请假时段
      *
      * @param arrivalTime   实际打卡时间
      * @param targetEndTime 目标下班时间（18:00）
      * @return 请假策略，包含请假时长和时段
      */
     private LeaveStrategy calculateLeaveStrategyFlexibleStart(LocalTime arrivalTime, LocalTime targetEndTime) {
+        double leaveHours = calculateRequiredLeaveHours(arrivalTime, targetEndTime);
+        if (leaveHours == 0.0) {
+            return new LeaveStrategy(0.0, STANDARD_START_TIME, STANDARD_START_TIME);
+        }
+
+        // 计算请假结束时间：必须覆盖到打卡时间，并向上对齐到半小时整点
+        LocalTime requiredLeaveEnd = alignToHalfHourUp(arrivalTime);
+
+        // 从结束时间往回推请假时长，得到起始时间
+        long leaveMinutes = (long) (leaveHours * 60);
+        LocalTime leaveStart = requiredLeaveEnd.minusMinutes(leaveMinutes);
+
+        // 请假起始时间必须向下取整到半小时整点
+        leaveStart = alignToHalfHour(leaveStart);
+
+        // 请假起始时间不能早于标准上班时间 08:30
+        if (leaveStart.isBefore(STANDARD_START_TIME)) {
+            leaveStart = STANDARD_START_TIME;
+        }
+
+        // 重新计算请假结束时间
+        LocalTime leaveEnd = leaveStart.plusMinutes(leaveMinutes);
+
+        // 确保请假结束时间覆盖到打卡时间
+        if (leaveEnd.isBefore(requiredLeaveEnd)) {
+            leaveEnd = requiredLeaveEnd;
+            // 重新计算实际请假时长
+            leaveMinutes = Duration.between(leaveStart, leaveEnd).toMinutes();
+            leaveHours = leaveMinutes / 60.0;
+        }
+
+        return new LeaveStrategy(leaveHours, leaveStart, leaveEnd);
+    }
+
+    /**
+     * 将时间向下取整到最近的半小时整点
+     * 例如：10:52 → 10:30, 10:15 → 10:00, 09:30 → 09:30
+     *
+     * @param time 原始时间
+     * @return 对齐后的时间
+     */
+    private LocalTime alignToHalfHour(LocalTime time) {
+        int minute = time.getMinute();
+        int alignedMinute = (minute / 30) * 30; // 向下取整到 0 或 30
+        return LocalTime.of(time.getHour(), alignedMinute);
+    }
+
+    /**
+     * 将时间向上取整到最近的半小时整点
+     * 例如：10:52 → 11:00, 10:15 → 10:30, 09:30 → 09:30
+     *
+     * @param time 原始时间
+     * @return 对齐后的时间
+     */
+    private LocalTime alignToHalfHourUp(LocalTime time) {
+        int minute = time.getMinute();
+        if (minute == 0 || minute == 30) {
+            // 已经对齐，直接返回
+            return time;
+        }
+        // 向上取整
+        int alignedMinute = ((minute + 29) / 30) * 30;
+        if (alignedMinute >= 60) {
+            // 需要进位到下一个小时
+            return LocalTime.of(time.getHour(), 0).plusHours(1);
+        }
+        return LocalTime.of(time.getHour(), alignedMinute);
+    }
+
+    /**
+     * 计算为了在目标时间下班所需的请假时长
+     *
+     * @param arrivalTime   实际打卡时间
+     * @param targetEndTime 目标下班时间
+     * @return 请假小时数（已应用凑整规则），无需请假时返回 0.0
+     */
+    private double calculateRequiredLeaveHours(LocalTime arrivalTime, LocalTime targetEndTime) {
         // 1. 计算实际在岗工作时长（扣除午休）
         Duration onSiteDuration = Duration.between(arrivalTime, targetEndTime);
         if (arrivalTime.isBefore(LUNCH_END_TIME) && targetEndTime.isAfter(LUNCH_START_TIME)) {
@@ -174,36 +235,12 @@ public class AttendanceCalculatorService {
         // 2. 计算工时缺口
         Duration shortFall = REQUIRED_WORK_DURATION.minus(onSiteDuration);
         if (shortFall.isNegative() || shortFall.isZero()) {
-            // 无需请假
-            return new LeaveStrategy(0.0, STANDARD_START_TIME, STANDARD_START_TIME);
+            return 0.0;
         }
 
         // 3. 将缺口时长转换为请假小时数（应用凑整规则）
         double theoreticalHours = shortFall.toMinutes() / 60.0;
-        double leaveHours = roundLeaveHours(theoreticalHours);
-
-        // 4. 尝试通过延后请假时段来实现"节省请假"的效果
-        // 策略：让请假时段尽可能晚开始，但仍要覆盖到打卡时间
-        long leaveMinutes = (long) (leaveHours * 60);
-
-        // 从打卡时间往回推，计算最晚的请假起始时间
-        LocalTime latestLeaveStart = arrivalTime.minusMinutes(leaveMinutes);
-
-        // 但请假起始时间不能早于标准上班时间 08:30
-        LocalTime leaveStart;
-        LocalTime leaveEnd;
-
-        if (latestLeaveStart.isBefore(STANDARD_START_TIME)) {
-            // 如果最晚起始时间早于 08:30，则从 08:30 开始
-            leaveStart = STANDARD_START_TIME;
-            leaveEnd = STANDARD_START_TIME.plusMinutes(leaveMinutes);
-        } else {
-            // 否则，从计算出的最晚时间开始
-            leaveStart = latestLeaveStart;
-            leaveEnd = arrivalTime;
-        }
-
-        return new LeaveStrategy(leaveHours, leaveStart, leaveEnd);
+        return roundLeaveHours(theoreticalHours);
     }
 
     /**
