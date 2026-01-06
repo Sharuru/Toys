@@ -80,7 +80,7 @@ public class AttendanceCalculatorService {
                 StringBuilder result = new StringBuilder();
                 result.append("检测到勤务排程偏移，正在为您生成应急预案...\n\n");
                 // --- 策略一：请假补齐 ---
-                result.append("[应急预案 I: "时间校正"协议]\n");
+                result.append("[应急预案 I: \"时间校正\"协议]\n");
                 result.append("通过申请离岗许可，弥补勤务时长缺口。\n");
 
                 // 计算两种不同的请假策略
@@ -101,7 +101,7 @@ public class AttendanceCalculatorService {
                 }
                 result.append("\n"); // 增加空行，使格式更清晰
                 // --- 策略二：工时顺延 ---
-                result.append("[应急预案 II: "勤务平移"协议]\n");
+                result.append("[应急预案 II: \"勤务平移\"协议]\n");
                 result.append("将勤务时段整体向后平移，以确保总时长达标。\n");
                 LocalTime lateEndTime = arrivalTime.plus(REQUIRED_WORK_DURATION).plus(LUNCH_DURATION);
                 result.append("  \\>\\> 预计结束时间：").append(lateEndTime.format(OUTPUT_FORMATTER))

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'me.sharuru'
-version = '0.3.7-SNAPSHOT'
+version = '0.3.8-SNAPSHOT'
 
 java {
     sourceCompatibility = '17'
