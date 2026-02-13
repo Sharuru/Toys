@@ -3,6 +3,7 @@ package me.sharuru.matterslash.service;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
+import com.openai.models.ReasoningEffort;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import lombok.extern.slf4j.Slf4j;
@@ -151,7 +152,8 @@ public class TranslateService {
             ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
                     .addSystemMessage(instruction)
                     .addUserMessage(userInputTxt)
-                    .model(ChatModel.GPT_4_1_MINI)
+                    .model(ChatModel.GPT_5_MINI)
+                    .reasoningEffort(ReasoningEffort.MINIMAL)
                     .build();
 
             // 使用 OpenAI 官方异步 API
