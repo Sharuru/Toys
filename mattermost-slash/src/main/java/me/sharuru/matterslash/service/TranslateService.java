@@ -152,8 +152,7 @@ public class TranslateService {
             ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
                     .addSystemMessage(instruction)
                     .addUserMessage(userInputTxt)
-                    .model(ChatModel.GPT_5_MINI)
-                    .reasoningEffort(ReasoningEffort.MINIMAL)
+                    .model(ChatModel.GPT_5_4_MINI)
                     .build();
 
             // 使用 OpenAI 官方异步 API

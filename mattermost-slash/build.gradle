@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'me.sharuru'
-version = '0.4.2-SNAPSHOT'
+version = '0.5.0-SNAPSHOT'
 
 java {
     sourceCompatibility = '17'
@@ -27,7 +27,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.openai:openai-java:4.20.0'
+    implementation 'com.openai:openai-java:4.29.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
